@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "com.github.reoseah.magisterium.Magisterium"
+    ],
+    "client": [
+      "com.github.reoseah.magisterium.Magisterium$Client"
     ]
   },
   "mixins": [

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gwg",
+    "lxl",
+    "geg"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:book"
+    },
+    "g": {
+      "item": "minecraft:gold_nugget"
+    },
+    "l": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "e": {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    "w": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+  "result": {
+    "item": "magisterium:magisterium"
+  }
+}
