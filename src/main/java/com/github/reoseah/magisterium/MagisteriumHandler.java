@@ -38,4 +38,8 @@ public class MagisteriumHandler extends ScreenHandler {
 			super(syncId, inventory.player, buf.readInt());
 		}
 	}
+
+	public MagisteriumFold getFold() {
+		return MagisteriumFold.TEST_PAGE_0;
+	}
 }

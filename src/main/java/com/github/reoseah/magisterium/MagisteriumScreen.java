@@ -44,5 +44,16 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 
 		RenderSystem.setShaderTexture(0, PLAYER_SLOTS);
 		this.drawTexture(matrices, this.x + 41, this.y + 180 + 4, 0, 0, 176, 100);
+
+		this.handler.getFold().drawBackground(this, matrices, delta, mouseX, mouseY);
+
+	}
+
+	public int getX() {
+		return this.x;
+	}
+
+	public int getY() {
+		return this.y;
 	}
 }
