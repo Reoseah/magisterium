@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
@@ -12,11 +13,25 @@ public class MagisteriumHandler extends ScreenHandler {
 	private final ItemStack stack;
 	private final int slot;
 
+	protected int page = 1;
+
 	public MagisteriumHandler(int syncId, PlayerEntity player, int slot) {
 		super(Magisterium.MAGISTERIUM_SCREEN, syncId);
 		this.player = player;
 		this.slot = slot;
 		this.stack = player.getInventory().getStack(slot);
+
+		this.addProperty(new Property() {
+			@Override
+			public void set(int value) {
+				MagisteriumHandler.this.page = value;
+			}
+
+			@Override
+			public int get() {
+				return MagisteriumHandler.this.page;
+			}
+		});
 
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 9; x++) {
@@ -39,7 +54,11 @@ public class MagisteriumHandler extends ScreenHandler {
 		}
 	}
 
-	public MagisteriumFold getFold() {
-		return MagisteriumFold.TEST_PAGE_0;
+	public int getPageIndex() {
+		return this.page;
+	}
+
+	public MagisteriumPage getPage() {
+		return MagisteriumPage.values()[this.page];
 	}
 }

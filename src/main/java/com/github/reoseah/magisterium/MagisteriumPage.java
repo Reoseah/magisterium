@@ -7,7 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public enum MagisteriumFold {
+public enum MagisteriumPage {
 	TEST_PAGE_0(Magisterium.createId("textures/gui/test_page_0.png")) {
 	},
 	TEST_PAGE_1(Magisterium.createId("textures/gui/test_page_1.png")) {
@@ -23,7 +23,7 @@ public enum MagisteriumFold {
 
 	protected final Identifier texture;
 
-	private MagisteriumFold(Identifier texture) {
+	private MagisteriumPage(Identifier texture) {
 		this.texture = texture;
 	}
 
