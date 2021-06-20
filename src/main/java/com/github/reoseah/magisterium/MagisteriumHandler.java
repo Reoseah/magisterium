@@ -43,22 +43,38 @@ public class MagisteriumHandler extends ScreenHandler {
 		}
 	}
 
-	@Override
-	public boolean canUse(PlayerEntity player) {
-		return player.getInventory().getStack(this.slot) == this.stack;
-	}
-
 	public static class Client extends MagisteriumHandler {
 		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
 			super(syncId, inventory.player, buf.readInt());
 		}
 	}
 
+	@Override
+	public boolean canUse(PlayerEntity player) {
+		return player.getInventory().getStack(this.slot) == this.stack;
+	}
+
 	public int getPageIndex() {
 		return this.page;
 	}
 
+	public void setPageIndex(int value) {
+		this.page = value;
+	}
+
 	public MagisteriumPage getPage() {
 		return MagisteriumPage.values()[this.page];
+	}
+
+	public boolean onButtonClick(PlayerEntity player, int id) {
+		if (id == 0 && this.page > 0) {
+			this.page--;
+			return true;
+		}
+		if (id == 1 && this.page < MagisteriumPage.values().length - 1) {
+			this.page++;
+			return true;
+		}
+		return false;
 	}
 }

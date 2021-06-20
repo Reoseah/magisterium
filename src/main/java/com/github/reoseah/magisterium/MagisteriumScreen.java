@@ -2,6 +2,7 @@ package com.github.reoseah.magisterium;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -56,18 +57,14 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	protected void goToPreviousPage() {
-//		      if (this.pageIndex > 0) {
-//		         --this.pageIndex;
-//		      }
-
+		this.client.interactionManager.clickButton(this.handler.syncId, 0);
+		this.handler.setPageIndex(this.handler.getPageIndex() - 1);
 		this.updatePageButtons();
 	}
 
 	protected void goToNextPage() {
-//		      if (this.pageIndex < this.getPageCount() - 1) {
-//		         ++this.pageIndex;
-//		      }
-
+		this.client.interactionManager.clickButton(this.handler.syncId, 1);
+		this.handler.setPageIndex(this.handler.getPageIndex() + 1);
 		this.updatePageButtons();
 	}
 
@@ -101,11 +98,20 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 		this.handler.getPage().drawBackground(this, matrices, delta, mouseX, mouseY);
 	}
 
+	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
+		super.drawForeground(matrices, mouseX, mouseY);
+		this.handler.getPage().drawForeground(this, matrices, mouseX, mouseY);
+	}
+
 	public int getX() {
 		return this.x;
 	}
 
 	public int getY() {
 		return this.y;
+	}
+
+	public TextRenderer getTextRenderer() {
+		return this.textRenderer;
 	}
 }

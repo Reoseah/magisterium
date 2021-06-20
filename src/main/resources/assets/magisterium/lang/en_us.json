@@ -1,3 +1,7 @@
 {
-  "item.magisterium.magisterium": "Enchanter's Tome"
+  "item.magisterium.magisterium": "Enchanter's Tome",
+  
+  "container.magisterium.witches_barrier": "Witch's Barrier",
+  "container.magisterium.witches_barrier.desc0": "Creates a magical barrier that cannot be entered by monsters.",
+  "container.magisterium.witches_barrier.desc2": "The spell dissipates after a certain time has passed."
 }
