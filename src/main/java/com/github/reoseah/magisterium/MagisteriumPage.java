@@ -13,15 +13,15 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public enum MagisteriumPage {
-	TEST_PAGE_0(Magisterium.createId("textures/gui/test_page_0.png")) {
+	TEST_PAGE_0(0, Magisterium.createId("textures/gui/test_page_0.png")) {
 	},
-	TEST_PAGE_1(Magisterium.createId("textures/gui/test_page_1.png")) {
+	TEST_PAGE_1(0, Magisterium.createId("textures/gui/test_page_1.png")) {
 	},
-	TEST_PAGE_2(Magisterium.createId("textures/gui/test_page_2.png")) {
+	TEST_PAGE_2(0, Magisterium.createId("textures/gui/test_page_2.png")) {
 	},
-	TEST_PAGE_3(Magisterium.createId("textures/gui/test_page_3.png")) {
+	TEST_PAGE_3(0, Magisterium.createId("textures/gui/test_page_3.png")) {
 	},
-	WITCHES_BARRIER(Magisterium.createId("textures/gui/witches_barrier.png")) {
+	WITCHES_BARRIER(2, Magisterium.createId("textures/gui/witches_barrier.png")) {
 		public final TranslatableText title = new TranslatableText("container.magisterium.witches_barrier");
 		public final TranslatableText desc0 = new TranslatableText("container.magisterium.witches_barrier.desc0");
 		public final TranslatableText desc1 = new TranslatableText("container.magisterium.witches_barrier.desc1");
@@ -37,6 +37,8 @@ public enum MagisteriumPage {
 			for (int i = 0; i < wrappedDesc0.size(); i++) {
 				tr.draw(matrices, wrappedDesc0.get(i), LEFT_X_OFFSET, 32 + i * 9, 0x000000);
 			}
+
+			tr.drawWithShadow(matrices, "5", X_CENTER - tr.getWidth("5") / 2, 95, 0x80FF20);
 		}
 	};
 
@@ -46,8 +48,10 @@ public enum MagisteriumPage {
 	protected static final int X_CENTER = 68;
 
 	protected final Identifier texture;
+	public final int slots;
 
-	private MagisteriumPage(Identifier texture) {
+	private MagisteriumPage(int slots, Identifier texture) {
+		this.slots = slots;
 		this.texture = texture;
 	}
 
