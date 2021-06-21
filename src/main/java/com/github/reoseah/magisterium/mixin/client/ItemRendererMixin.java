@@ -56,28 +56,28 @@ public class ItemRendererMixin {
 			VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		if (!stack.isEmpty() && stack.getItem() == Magisterium.MAGISTERIUM) {
 			matrices.push();
-			boolean bl2 = mode == ModelTransformation.Mode.GUI;
-			boolean bl3 = bl2 || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED;
-			if (bl3) {
+			boolean gui = mode == ModelTransformation.Mode.GUI;
+			boolean notInHand = gui || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED;
+			if (notInHand) {
 				model = this.models.getModelManager()
 						.getModel(new ModelIdentifier("magisterium:magisterium#inventory"));
 			}
 			model.getTransformation().getTransformation(mode).apply(leftHanded, matrices);
 			matrices.translate(-0.5D, -0.5D, -0.5D);
-			if (!model.isBuiltin() && bl3) {
-				RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
+			if (!model.isBuiltin() && notInHand) {
+				RenderLayer layer = RenderLayers.getItemLayer(stack, true);
 				RenderLayer renderLayer3;
-				if (bl2 && Objects.equals(renderLayer, TexturedRenderLayers.getEntityTranslucentCull())) {
+				if (gui && Objects.equals(layer, TexturedRenderLayers.getEntityTranslucentCull())) {
 					renderLayer3 = TexturedRenderLayers.getEntityTranslucentCull();
 				} else {
-					renderLayer3 = renderLayer;
+					renderLayer3 = layer;
 				}
 
 				VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, renderLayer3,
 						true, stack.hasGlint());
 				this.renderBakedItemModel(model, stack, light, overlay, matrices, vertexConsumer);
 			} else {
-				builtinModelItemRenderer.render(stack, mode, matrices, vertexConsumers, light, overlay);
+				this.builtinModelItemRenderer.render(stack, mode, matrices, vertexConsumers, light, overlay);
 			}
 			matrices.pop();
 			ci.cancel();

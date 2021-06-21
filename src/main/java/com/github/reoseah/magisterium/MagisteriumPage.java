@@ -1,46 +1,21 @@
 package com.github.reoseah.magisterium;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.github.reoseah.magisterium.mixined.MutableSlot;
+import com.github.reoseah.magisterium.pages.WitchsBarrierPage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-public enum MagisteriumPage {
-	TEST_PAGE_0(0, Magisterium.createId("textures/gui/test_page_0.png")) {
-	},
-	TEST_PAGE_1(0, Magisterium.createId("textures/gui/test_page_1.png")) {
-	},
-	TEST_PAGE_2(0, Magisterium.createId("textures/gui/test_page_2.png")) {
-	},
-	TEST_PAGE_3(0, Magisterium.createId("textures/gui/test_page_3.png")) {
-	},
-	WITCHES_BARRIER(2, Magisterium.createId("textures/gui/witches_barrier.png")) {
-		public final TranslatableText title = new TranslatableText("container.magisterium.witches_barrier");
-		public final TranslatableText desc0 = new TranslatableText("container.magisterium.witches_barrier.desc0");
-		public final TranslatableText desc1 = new TranslatableText("container.magisterium.witches_barrier.desc1");
+public class MagisteriumPage {
+	private static final List<MagisteriumPage> ALL = new ArrayList<>();
 
-		@Override
-		public void drawForeground(MagisteriumScreen screen, MatrixStack matrices, int mouseX, int mouseY) {
-			super.drawForeground(screen, matrices, mouseX, mouseY);
-			TextRenderer tr = screen.getTextRenderer();
-			int titleX = X_CENTER - tr.getWidth(this.title) / 2;
-			tr.draw(matrices, this.title, titleX, Y_OFFSET + 4, 0x000000);
-
-			List<OrderedText> wrappedDesc0 = tr.wrapLines(this.desc0, 114);
-			for (int i = 0; i < wrappedDesc0.size(); i++) {
-				tr.draw(matrices, wrappedDesc0.get(i), LEFT_X_OFFSET, 32 + i * 9, 0x000000);
-			}
-
-			tr.drawWithShadow(matrices, "5", X_CENTER - tr.getWidth("5") / 2, 95, 0x80FF20);
-		}
-	};
+	public static final MagisteriumPage WITCHES_BARRIER = new WitchsBarrierPage(2, "textures/gui/witches_barrier.png");
 
 	protected static final int LEFT_X_OFFSET = 20;
 	protected static final int RIGHT_X_OFFSET = 140;
@@ -50,9 +25,21 @@ public enum MagisteriumPage {
 	protected final Identifier texture;
 	public final int slots;
 
-	private MagisteriumPage(int slots, Identifier texture) {
+	protected MagisteriumPage(int slots, String texture) {
 		this.slots = slots;
-		this.texture = texture;
+		this.texture = Magisterium.createId(texture);
+		ALL.add(this);
+	}
+
+	public void onSelected(MagisteriumHandler handler) {
+		for (int i = this.slots; i < 16; i++) {
+			((MutableSlot) handler.getSlot(i)).setPos(Integer.MIN_VALUE, Integer.MIN_VALUE);
+		}
+	}
+
+	@Environment(EnvType.CLIENT)
+	public void onSelected(MagisteriumScreen screen) {
+		screen.getConfirmButton().visible = false;
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -61,7 +48,16 @@ public enum MagisteriumPage {
 		screen.drawTexture(matrices, screen.getX(), screen.getY(), 0, 0, 256, 180);
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void drawForeground(MagisteriumScreen magisteriumScreen, MatrixStack matrices, int mouseX, int mouseY) {
 
+	}
+
+	public static List<MagisteriumPage> all() {
+		return ALL;
+	}
+
+	public static MagisteriumPage fromIndex(int i) {
+		return ALL.get(i);
 	}
 }

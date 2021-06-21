@@ -1,7 +1,10 @@
 package com.github.reoseah.magisterium;
 
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.Property;
@@ -11,15 +14,20 @@ import net.minecraft.screen.slot.Slot;
 public class MagisteriumHandler extends ScreenHandler {
 	private final PlayerEntity player;
 	private final ItemStack stack;
-	private final int slot;
+	private final int bookSlot;
 
-	protected int page = 1;
+	protected int page;
 
-	public MagisteriumHandler(int syncId, PlayerEntity player, int slot) {
+	protected Inventory inventory = new SimpleInventory(16);
+
+	public MagisteriumHandler(int syncId, PlayerEntity player, int bookSlot) {
 		super(Magisterium.MAGISTERIUM_SCREEN, syncId);
 		this.player = player;
-		this.slot = slot;
-		this.stack = player.getInventory().getStack(slot);
+		this.bookSlot = bookSlot;
+		this.stack = player.getInventory().getStack(bookSlot);
+		if (this.stack.hasTag() && this.stack.getTag().contains("Page", NbtType.INT)) {
+			this.page = Math.min(this.stack.getTag().getInt("Page"), MagisteriumPage.all().size() - 1);
+		}
 
 		this.addProperty(new Property() {
 			@Override
@@ -32,6 +40,9 @@ public class MagisteriumHandler extends ScreenHandler {
 				return MagisteriumHandler.this.page;
 			}
 		});
+		for (int i = 0; i < 16; i++) {
+			this.addSlot(new MagisteriumSlot(this, this.inventory, i, Integer.MIN_VALUE, Integer.MIN_VALUE));
+		}
 
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 9; x++) {
@@ -41,17 +52,68 @@ public class MagisteriumHandler extends ScreenHandler {
 		for (int x = 0; x < 9; x++) {
 			this.addSlot(new Slot(player.getInventory(), x, 49 + x * 18, 260));
 		}
-	}
 
-	public static class Client extends MagisteriumHandler {
-		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
-			super(syncId, inventory.player, buf.readInt());
-		}
+		this.setPageIndex(this.page);
 	}
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return player.getInventory().getStack(this.slot) == this.stack;
+		return player.getInventory().getStack(this.bookSlot) == this.stack;
+	}
+
+	@Override
+	public ItemStack transferSlot(PlayerEntity player, int index) {
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasStack()) {
+			ItemStack stack = slot.getStack();
+			ItemStack previous = stack.copy();
+			if (index < 16) {
+				if (!this.insertItem(stack, 16, 16 + 36, true)) {
+					return ItemStack.EMPTY;
+				}
+				slot.onQuickTransfer(stack, previous);
+			} else {
+//				for (Map.Entry<Predicate<ItemStack>, Slot> entry : this.quickTransferMap.entrySet()) {
+//					if (entry.getKey().test(stack)) {
+//						if (!this.insertItem(stack, entry.getValue().id, entry.getValue().id + 1, false)) {
+//							return ItemStack.EMPTY;
+//						}
+//						break;
+//					}
+//				}
+				if (index < 16 + 27) {
+					if (!this.insertItem(stack, 16 + 27, 16 + 36, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else {
+					if (!this.insertItem(stack, 16, 16 + 27, false)) {
+						return ItemStack.EMPTY;
+					}
+				}
+			}
+
+			if (stack.isEmpty()) {
+				slot.setStack(ItemStack.EMPTY);
+			} else {
+				slot.markDirty();
+			}
+
+			if (stack.getCount() == previous.getCount()) {
+				return ItemStack.EMPTY;
+			}
+
+			slot.onTakeItem(player, stack);
+
+			return previous;
+		}
+
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public void close(PlayerEntity player) {
+		super.close(player);
+		this.stack.getOrCreateTag().putInt("Page", this.page);
 	}
 
 	public int getPageIndex() {
@@ -60,21 +122,29 @@ public class MagisteriumHandler extends ScreenHandler {
 
 	public void setPageIndex(int value) {
 		this.page = value;
+		this.getPage().onSelected(this);
 	}
 
 	public MagisteriumPage getPage() {
-		return MagisteriumPage.values()[this.page];
+		return MagisteriumPage.fromIndex(this.page);
 	}
 
+	@Override
 	public boolean onButtonClick(PlayerEntity player, int id) {
 		if (id == 0 && this.page > 0) {
-			this.page--;
+			this.setPageIndex(this.page - 1);
 			return true;
 		}
-		if (id == 1 && this.page < MagisteriumPage.values().length - 1) {
-			this.page++;
+		if (id == 1 && this.page < MagisteriumPage.all().size() - 1) {
+			this.setPageIndex(this.page + 1);
 			return true;
 		}
 		return false;
+	}
+
+	public static class Client extends MagisteriumHandler {
+		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
+			super(syncId, inventory.player, buf.readInt());
+		}
 	}
 }

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -17,6 +18,9 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 
 	private PageTurnWidget nextPageButton;
 	private PageTurnWidget previousPageButton;
+	private TexturedButtonWidget confirmButton;
+
+	private int pageIndex = -1;
 
 	public MagisteriumScreen(MagisteriumHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -35,6 +39,10 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	protected void addPageButtons() {
+		this.confirmButton = this.addDrawableChild(new TexturedButtonWidget(Integer.MIN_VALUE, Integer.MIN_VALUE, 16,
+				16, 48, 192, 16, MAIN, 256, 256, button -> {
+					// TODO
+				}));
 		this.nextPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 206, this.y + 156, true, button -> {
 			this.goToNextPage();
 		}, true));
@@ -45,12 +53,16 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	private void updatePageButtons() {
-		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.values().length - 1;
+		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1;
 		this.previousPageButton.visible = this.handler.getPageIndex() > 0;
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		if (this.handler.getPageIndex() != this.pageIndex) {
+			this.pageIndex = this.handler.getPageIndex();
+			this.handler.getPage().onSelected(this);
+		}
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		this.drawMouseoverTooltip(matrices, mouseX, mouseY);
@@ -68,20 +80,20 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 		this.updatePageButtons();
 	}
 
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (super.keyPressed(keyCode, scanCode, modifiers)) {
 			return true;
-		} else {
-			switch (keyCode) {
-			case 266:
-				this.previousPageButton.onPress();
-				return true;
-			case 267:
-				this.nextPageButton.onPress();
-				return true;
-			default:
-				return false;
-			}
+		}
+		switch (keyCode) {
+		case 266:
+			this.previousPageButton.onPress();
+			return true;
+		case 267:
+			this.nextPageButton.onPress();
+			return true;
+		default:
+			return false;
 		}
 	}
 
@@ -98,6 +110,7 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 		this.handler.getPage().drawBackground(this, matrices, delta, mouseX, mouseY);
 	}
 
+	@Override
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		super.drawForeground(matrices, mouseX, mouseY);
 		this.handler.getPage().drawForeground(this, matrices, mouseX, mouseY);
@@ -113,5 +126,9 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 
 	public TextRenderer getTextRenderer() {
 		return this.textRenderer;
+	}
+
+	public TexturedButtonWidget getConfirmButton() {
+		return this.confirmButton;
 	}
 }

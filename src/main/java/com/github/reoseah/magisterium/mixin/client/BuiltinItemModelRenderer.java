@@ -1,8 +1,5 @@
 package com.github.reoseah.magisterium.mixin.client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,14 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.github.reoseah.magisterium.Magisterium;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.SkullBlockEntityRenderer;
 import net.minecraft.client.render.entity.model.BookModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.ShieldEntityModel;
-import net.minecraft.client.render.entity.model.TridentEntityModel;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;

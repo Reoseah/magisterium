@@ -4,6 +4,7 @@
   "package": "com.github.reoseah.magisterium.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "SlotMixin"
   ],
   "client": [
     "client.BuiltinItemModelRenderer",
