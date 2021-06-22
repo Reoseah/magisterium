@@ -1,5 +1,6 @@
 package com.github.reoseah.magisterium;
 
+import com.github.reoseah.magisterium.pages.MagisteriumPage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.font.TextRenderer;
@@ -36,6 +37,7 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	protected void init() {
 		super.init();
 		this.addPageButtons();
+		this.handler.getPage().updateWidgets(this);
 	}
 
 	protected void addPageButtons() {
@@ -53,15 +55,16 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	private void updatePageButtons() {
-		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1;
-		this.previousPageButton.visible = this.handler.getPageIndex() > 0;
+		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1
+				&& this.handler.inventory.isEmpty();
+		this.previousPageButton.visible = this.handler.getPageIndex() > 0 && this.handler.inventory.isEmpty();
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		if (this.handler.getPageIndex() != this.pageIndex) {
 			this.pageIndex = this.handler.getPageIndex();
-			this.handler.getPage().onSelected(this);
+			this.handler.getPage().updateWidgets(this);
 		}
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);

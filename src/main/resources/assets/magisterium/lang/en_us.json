@@ -10,12 +10,23 @@
   "container.magisterium.apprentice_spells.desc0": "Simpler spells are given in this chapter to gently introduce beginners to the art of spell casting.",
   "container.magisterium.apprentice_spells.desc1": "Don’t dismiss them as basic, they are used everyday by many a wizard.",
   
-  "container.magisterium.witches_barrier": "Witch's Barrier",
-  "container.magisterium.witches_barrier.desc0": "Creates a magical barrier that cannot be entered or left except by caster.",
-  "container.magisterium.witches_barrier.desc1": "The barrier holds for 30 seconds.",
-  "container.magisterium.witches_barrier.desc2": "This spell is a good example to learn how different items affect the magic.
+  "container.magisterium.charged_slam": "Charged Slam",
+  "container.magisterium.charged_slam.desc0": "Charges tome with energy that releases on hit to an enemy, dealing heavy damage and knocking it back.
+
+One of the simplest spells, it doesn’t require any additional materials to craft it.",
+  
+  "container.magisterium.witchs_barrier": "Witch's Barrier",
+  "container.magisterium.witchs_barrier.desc0": "Creates a magical barrier that cannot be entered or left except by caster.",
+  "container.magisterium.witchs_barrier.desc1": "The barrier holds for 15 seconds.",
+  "container.magisterium.witchs_barrier.desc2": "This spell is a good example to learn how different items affect the magic.
 
 Redstone increases duration of spells, while glowstone - their potency.
 
-When magma cream is used, it adds a fiery aura that burns entities affected by the spell. "
+When magma cream is used, it adds a fiery aura that burns entities affected by the spell. ",
+  "container.magisterium.noxious_burst": "Noxious Burst",
+  "container.magisterium.noxious_burst.desc0": "Spews out a cloud of nausating poison around the caster.
+
+Adding an alchemical ingredient to it, can further augment the spell by adding to it another effect.
+
+The caster will naturally be in the center of the spell."
 }

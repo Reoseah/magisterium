@@ -1,4 +1,4 @@
-package com.github.reoseah.magisterium.mixin.client;
+ package com.github.reoseah.magisterium.mixin.client;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class ItemRendererMixin {
 	private @Final BuiltinModelItemRenderer builtinModelItemRenderer;
 
 	@Inject(at = @At("HEAD"), method = "getHeldItemModel", cancellable = true)
-	public void getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed,
+	public void returnHeldSpelltomeTransformation(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed,
 			CallbackInfoReturnable<BakedModel> ci) {
 		Item item = stack.getItem();
 		if (item == Magisterium.MAGISTERIUM) {
@@ -52,7 +52,7 @@ public class ItemRendererMixin {
 	}
 
 	@Inject(at = @At("HEAD"), method = "renderItem", cancellable = true)
-	public void renderItem(ItemStack stack, ModelTransformation.Mode mode, boolean leftHanded, MatrixStack matrices,
+	public void renderHeldSpelltome(ItemStack stack, ModelTransformation.Mode mode, boolean leftHanded, MatrixStack matrices,
 			VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		if (!stack.isEmpty() && stack.getItem() == Magisterium.MAGISTERIUM) {
 			matrices.push();
@@ -65,15 +65,15 @@ public class ItemRendererMixin {
 			model.getTransformation().getTransformation(mode).apply(leftHanded, matrices);
 			matrices.translate(-0.5D, -0.5D, -0.5D);
 			if (!model.isBuiltin() && notInHand) {
-				RenderLayer layer = RenderLayers.getItemLayer(stack, true);
-				RenderLayer renderLayer3;
-				if (gui && Objects.equals(layer, TexturedRenderLayers.getEntityTranslucentCull())) {
-					renderLayer3 = TexturedRenderLayers.getEntityTranslucentCull();
+				RenderLayer itemLayer = RenderLayers.getItemLayer(stack, true);
+				RenderLayer layer;
+				if (gui && Objects.equals(itemLayer, TexturedRenderLayers.getEntityTranslucentCull())) {
+					layer = TexturedRenderLayers.getEntityTranslucentCull();
 				} else {
-					renderLayer3 = layer;
+					layer = itemLayer;
 				}
 
-				VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, renderLayer3,
+				VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, layer,
 						true, stack.hasGlint());
 				this.renderBakedItemModel(model, stack, light, overlay, matrices, vertexConsumer);
 			} else {

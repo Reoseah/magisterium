@@ -1,5 +1,7 @@
 package com.github.reoseah.magisterium;
 
+import com.github.reoseah.magisterium.pages.MagisteriumPage;
+
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,7 +20,20 @@ public class MagisteriumHandler extends ScreenHandler {
 
 	protected int page;
 
-	protected Inventory inventory = new SimpleInventory(16);
+	protected Inventory inventory = new SimpleInventory(16) {
+		public ItemStack removeStack(int slot, int amount) {
+			ItemStack stack = super.removeStack(slot, amount);
+			if (!stack.isEmpty()) {
+				MagisteriumHandler.this.onContentChanged(this);
+			}
+			return stack;
+		}
+
+		public void setStack(int slot, ItemStack stack) {
+			super.setStack(slot, stack);
+			MagisteriumHandler.this.onContentChanged(this);
+		}
+	};
 
 	public MagisteriumHandler(int syncId, PlayerEntity player, int bookSlot) {
 		super(Magisterium.MAGISTERIUM_SCREEN, syncId);
@@ -76,10 +91,7 @@ public class MagisteriumHandler extends ScreenHandler {
 				MagisteriumPage page = this.getPage();
 				for (int i = 0; i < page.slots; i++) {
 					if (page.canQuickTransfer(this.getSlot(i), i, stack)) {
-						if (!this.insertItem(stack, i, i + 1, false)) {
-							return ItemStack.EMPTY;
-						}
-						break;
+						this.insertItem(stack, i, i + 1, false);
 					}
 				}
 				if (index < 16 + 27) {
@@ -148,5 +160,6 @@ public class MagisteriumHandler extends ScreenHandler {
 		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
 			super(syncId, inventory.player, buf.readInt());
 		}
+
 	}
 }

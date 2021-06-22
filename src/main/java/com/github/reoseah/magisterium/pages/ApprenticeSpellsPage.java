@@ -2,7 +2,6 @@ package com.github.reoseah.magisterium.pages;
 
 import java.util.List;
 
-import com.github.reoseah.magisterium.MagisteriumPage;
 import com.github.reoseah.magisterium.MagisteriumScreen;
 
 import net.minecraft.client.font.TextRenderer;
