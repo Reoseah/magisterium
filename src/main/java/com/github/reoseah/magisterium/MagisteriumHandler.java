@@ -73,14 +73,15 @@ public class MagisteriumHandler extends ScreenHandler {
 				}
 				slot.onQuickTransfer(stack, previous);
 			} else {
-//				for (Map.Entry<Predicate<ItemStack>, Slot> entry : this.quickTransferMap.entrySet()) {
-//					if (entry.getKey().test(stack)) {
-//						if (!this.insertItem(stack, entry.getValue().id, entry.getValue().id + 1, false)) {
-//							return ItemStack.EMPTY;
-//						}
-//						break;
-//					}
-//				}
+				MagisteriumPage page = this.getPage();
+				for (int i = 0; i < page.slots; i++) {
+					if (page.canQuickTransfer(this.getSlot(i), i, stack)) {
+						if (!this.insertItem(stack, i, i + 1, false)) {
+							return ItemStack.EMPTY;
+						}
+						break;
+					}
+				}
 				if (index < 16 + 27) {
 					if (!this.insertItem(stack, 16 + 27, 16 + 36, false)) {
 						return ItemStack.EMPTY;
@@ -114,6 +115,7 @@ public class MagisteriumHandler extends ScreenHandler {
 	public void close(PlayerEntity player) {
 		super.close(player);
 		this.stack.getOrCreateTag().putInt("Page", this.page);
+		this.dropInventory(player, this.inventory);
 	}
 
 	public int getPageIndex() {

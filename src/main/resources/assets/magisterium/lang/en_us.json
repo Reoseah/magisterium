@@ -1,7 +1,21 @@
 {
   "item.magisterium.magisterium": "Enchanter's Tome",
   
+  "container.magisterium.chapter": "Chapter",
+  
+  "container.magisterium.apprentice_spells.quote0": "Those see magic",
+  "container.magisterium.apprentice_spells.quote1": "who look for it",
+  
+  "container.magisterium.apprentice_spells": "Apprentice Spells",
+  "container.magisterium.apprentice_spells.desc0": "Simpler spells are given in this chapter to gently introduce beginners to the art of spell casting.",
+  "container.magisterium.apprentice_spells.desc1": "Don’t dismiss them as basic, they are used everyday by many a wizard.",
+  
   "container.magisterium.witches_barrier": "Witch's Barrier",
-  "container.magisterium.witches_barrier.desc0": "Creates a magical barrier that cannot be entered by monsters.",
-  "container.magisterium.witches_barrier.desc2": "The spell dissipates after a certain time."
+  "container.magisterium.witches_barrier.desc0": "Creates a magical barrier that cannot be entered or left except by caster.",
+  "container.magisterium.witches_barrier.desc1": "The barrier holds for 30 seconds.",
+  "container.magisterium.witches_barrier.desc2": "This spell is a good example to learn how different items affect the magic.
+
+Redstone increases duration of spells, while glowstone - their potency.
+
+When magma cream is used, it adds a fiery aura that burns entities affected by the spell. "
 }
