@@ -3,7 +3,7 @@
   "pattern": [
     "gwg",
     "lxl",
-    "geg"
+    "gwg"
   ],
   "key": {
     "x": {
@@ -17,9 +17,6 @@
     },
     "e": {
       "item": "minecraft:fermented_spider_eye"
-    },
-    "w": {
-      "item": "minecraft:nether_wart"
     }
   },
   "result": {

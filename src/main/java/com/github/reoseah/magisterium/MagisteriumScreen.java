@@ -1,5 +1,7 @@
 package com.github.reoseah.magisterium;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.github.reoseah.magisterium.pages.MagisteriumPage;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -41,22 +43,44 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	protected void addPageButtons() {
-		this.confirmButton = this.addDrawableChild(new TexturedButtonWidget(Integer.MIN_VALUE, Integer.MIN_VALUE, 16,
-				16, 48, 192, 16, MAIN, 256, 256, button -> {
-					// TODO
-				}));
 		this.nextPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 206, this.y + 156, true, button -> {
-			this.goToNextPage();
+			this.client.interactionManager.clickButton(this.handler.syncId, 1);
+			this.handler.onButtonClick(this.client.player, 1);
+			this.updatePageButtons();
 		}, true));
 		this.previousPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 26, this.y + 156, false, button -> {
-			this.goToPreviousPage();
+			this.client.interactionManager.clickButton(this.handler.syncId, 0);
+			this.handler.onButtonClick(this.client.player, 0);
+			this.updatePageButtons();
 		}, true));
+		this.confirmButton = this.addDrawableChild(new TexturedButtonWidget(Integer.MIN_VALUE, Integer.MIN_VALUE, 16,
+				16, 48, 192, 16, MAIN, 256, 256, button -> {
+					this.client.interactionManager.clickButton(this.handler.syncId, 2);
+				}));
+
 		this.updatePageButtons();
 	}
 
 	private void updatePageButtons() {
 		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1;
 		this.previousPageButton.visible = this.handler.getPageIndex() > 0;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (super.keyPressed(keyCode, scanCode, modifiers)) {
+			return true;
+		}
+		switch (keyCode) {
+		case GLFW.GLFW_KEY_PAGE_UP:
+			this.previousPageButton.onPress();
+			return true;
+		case GLFW.GLFW_KEY_PAGE_DOWN:
+			this.nextPageButton.onPress();
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -68,35 +92,6 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		this.drawMouseoverTooltip(matrices, mouseX, mouseY);
-	}
-
-	protected void goToPreviousPage() {
-		this.client.interactionManager.clickButton(this.handler.syncId, 0);
-		this.handler.setPageIndex(this.handler.getPageIndex() - 1);
-		this.updatePageButtons();
-	}
-
-	protected void goToNextPage() {
-		this.client.interactionManager.clickButton(this.handler.syncId, 1);
-		this.handler.setPageIndex(this.handler.getPageIndex() + 1);
-		this.updatePageButtons();
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if (super.keyPressed(keyCode, scanCode, modifiers)) {
-			return true;
-		}
-		switch (keyCode) {
-		case 266:
-			this.previousPageButton.onPress();
-			return true;
-		case 267:
-			this.nextPageButton.onPress();
-			return true;
-		default:
-			return false;
-		}
 	}
 
 	@Override
