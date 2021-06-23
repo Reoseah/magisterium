@@ -5,6 +5,7 @@ import java.util.List;
 import com.github.reoseah.magisterium.MagisteriumHandler;
 import com.github.reoseah.magisterium.MagisteriumScreen;
 import com.github.reoseah.magisterium.mixined.MutableSlot;
+import com.mojang.datafixers.util.Pair;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,9 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.OrderedText;
-import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 public class WitchsBarrierPage extends MagisteriumPage {
 	protected static final TranslatableText TITLE = new TranslatableText("container.magisterium.witchs_barrier");
@@ -42,10 +43,19 @@ public class WitchsBarrierPage extends MagisteriumPage {
 		return switch (index) {
 		case 0 -> item == Items.REDSTONE // duration
 				|| item == Items.GLOWSTONE_DUST // strength
-				|| item == Items.GUNPOWDER || item == Items.SUGAR;
+			;
 		case 1 -> item == Items.MAGMA_CREAM // fire aspect
 				|| item == Items.SLIME_BALL;
 		default -> false;
+		};
+	}
+
+	@Override
+	public Pair<Identifier, Identifier> getBackgroundSprite(int index) {
+		return switch (index) {
+		case 0 -> SLOT_DUST;
+		case 1 -> SLOT_SLIMEBALL;
+		default -> null;
 		};
 	}
 

@@ -145,11 +145,11 @@ public class MagisteriumHandler extends ScreenHandler {
 
 	@Override
 	public boolean onButtonClick(PlayerEntity player, int id) {
-		if (id == 0 && this.page > 0) {
+		if (id == 0 && this.page > 0 && !this.inventory.isEmpty()) {
 			this.setPageIndex(this.page - 1);
 			return true;
 		}
-		if (id == 1 && this.page < MagisteriumPage.all().size() - 1) {
+		if (id == 1 && this.page < MagisteriumPage.all().size() - 1 && !this.inventory.isEmpty()) {
 			this.setPageIndex(this.page + 1);
 			return true;
 		}

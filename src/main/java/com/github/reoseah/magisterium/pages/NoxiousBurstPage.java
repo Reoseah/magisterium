@@ -5,6 +5,7 @@ import java.util.List;
 import com.github.reoseah.magisterium.MagisteriumHandler;
 import com.github.reoseah.magisterium.MagisteriumScreen;
 import com.github.reoseah.magisterium.mixined.MutableSlot;
+import com.mojang.datafixers.util.Pair;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,6 +18,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 public class NoxiousBurstPage extends MagisteriumPage {
 	protected static final TranslatableText TITLE = new TranslatableText("container.magisterium.noxious_burst");
@@ -24,6 +26,40 @@ public class NoxiousBurstPage extends MagisteriumPage {
 
 	public NoxiousBurstPage(int slots, String texture) {
 		super(slots, texture);
+	}
+
+	@Override
+	public void onSelected(MagisteriumHandler handler) {
+		super.onSelected(handler);
+		((MutableSlot) handler.getSlot(0)).setPos(166, 82);
+		((MutableSlot) handler.getSlot(1)).setPos(180, 55);
+		((MutableSlot) handler.getSlot(2)).setPos(194, 82);
+	}
+
+	@Override
+	public boolean canQuickTransfer(Slot slot, int index, ItemStack stack) {
+		Item item = stack.getItem();
+		return switch (index) {
+		case 0 -> item == Items.REDSTONE // duration
+				|| item == Items.GLOWSTONE_DUST // strength
+			;
+		case 1 -> item == Items.FERMENTED_SPIDER_EYE;
+		case 2 -> item == Items.SUGAR || item == Items.RABBIT_FOOT // Slowness
+				|| item == Items.GLISTERING_MELON_SLICE // Harming
+				|| item == Items.SPIDER_EYE // Poison
+			;
+		default -> false;
+		};
+	}
+
+	@Override
+	public Pair<Identifier, Identifier> getBackgroundSprite(int index) {
+		return switch (index) {
+		case 0 -> SLOT_DUST;
+		case 1 -> SLOT_FERMENTED_SPIDER_EYE;
+		case 2 -> SLOT_QUESTION_MARK;
+		default -> null;
+		};
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -40,14 +76,6 @@ public class NoxiousBurstPage extends MagisteriumPage {
 		}
 	}
 
-	@Override
-	public void onSelected(MagisteriumHandler handler) {
-		super.onSelected(handler);
-		((MutableSlot) handler.getSlot(0)).setPos(166, 82);
-		((MutableSlot) handler.getSlot(1)).setPos(180, 56);
-		((MutableSlot) handler.getSlot(2)).setPos(194, 82);
-	}
-
 	@Environment(EnvType.CLIENT)
 	@Override
 	public void updateWidgets(MagisteriumScreen screen) {
@@ -56,19 +84,4 @@ public class NoxiousBurstPage extends MagisteriumPage {
 		screen.getConfirmButton().setPos(screen.getX() + 180, screen.getY() + 104);
 	}
 
-	@Override
-	public boolean canQuickTransfer(Slot slot, int index, ItemStack stack) {
-		Item item = stack.getItem();
-		return switch (index) {
-		case 0 -> item == Items.REDSTONE // duration
-				|| item == Items.GLOWSTONE_DUST // strength
-				|| item == Items.GUNPOWDER || item == Items.SUGAR;
-		case 1 -> item == Items.FERMENTED_SPIDER_EYE;
-		case 2 -> item == Items.SUGAR || item == Items.RABBIT_FOOT // Slowness
-				|| item == Items.GLISTERING_MELON_SLICE // Harming
-				|| item == Items.SPIDER_EYE // Poison
-			;
-		default -> false;
-		};
-	}
 }

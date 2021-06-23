@@ -55,9 +55,8 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	}
 
 	private void updatePageButtons() {
-		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1
-				&& this.handler.inventory.isEmpty();
-		this.previousPageButton.visible = this.handler.getPageIndex() > 0 && this.handler.inventory.isEmpty();
+		this.nextPageButton.visible = this.handler.getPageIndex() < MagisteriumPage.all().size() - 1;
+		this.previousPageButton.visible = this.handler.getPageIndex() > 0;
 	}
 
 	@Override
