@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import com.github.reoseah.magisterium.pages.MagisteriumPage;
 
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -17,7 +16,7 @@ import net.minecraft.screen.slot.Slot;
 
 public class MagisteriumHandler extends ScreenHandler {
 	private final PlayerEntity player;
-	private final ItemStack spelltome;
+	private ItemStack spelltome;
 	private final int spelltomeSlot;
 
 	protected int page;
@@ -73,8 +72,16 @@ public class MagisteriumHandler extends ScreenHandler {
 		this.initializePage(this.page);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean canUse(PlayerEntity player) {
+		if (player.getEntityWorld().isClient) {
+			boolean canUse = player.getInventory().getStack(this.spelltomeSlot).getItem() == Magisterium.MAGISTERIUM;
+			if (canUse) {
+				this.spelltome = player.getInventory().getStack(this.spelltomeSlot);
+				return true;
+			}
+		}
 		return player.getInventory().getStack(this.spelltomeSlot) == this.spelltome;
 	}
 
@@ -147,11 +154,11 @@ public class MagisteriumHandler extends ScreenHandler {
 
 	@Override
 	public boolean onButtonClick(PlayerEntity player, int id) {
-		if (id == 0 && this.page > 0 && !this.inventory.isEmpty()) {
+		if (id == 0 && this.page > 0 && this.inventory.isEmpty()) {
 			this.initializePage(this.page - 1);
 			return true;
 		}
-		if (id == 1 && this.page < MagisteriumPage.all().size() - 1 && !this.inventory.isEmpty()) {
+		if (id == 1 && this.page < MagisteriumPage.all().size() - 1 && this.inventory.isEmpty()) {
 			this.initializePage(this.page + 1);
 			return true;
 		}
@@ -169,5 +176,9 @@ public class MagisteriumHandler extends ScreenHandler {
 		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
 			super(syncId, inventory.player, buf.readInt());
 		}
+	}
+
+	public boolean hasChargedSlam() {
+		return this.spelltome.hasTag() && this.spelltome.getTag().contains("ChargedSlam");
 	}
 }

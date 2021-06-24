@@ -26,7 +26,7 @@ When magma cream is used, it adds a fiery aura that burns entities affected by t
   "container.magisterium.noxious_burst": "Noxious Burst",
   "container.magisterium.noxious_burst.desc0": "Spews out a cloud of nausating poison around the caster.
 
-Adding an alchemical ingredient to it, can further augment the spell by adding to it another effect.
+Adding an alchemical ingredient to it, can further augment the spell by adding more effects.
 
-The caster will naturally be in the center of the spell."
+By default the spell will be centered around caster."
 }

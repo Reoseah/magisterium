@@ -13,6 +13,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
@@ -99,11 +100,19 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	protected void renderSpelltomeEffects(MatrixStack matrices) {
 		int x = this.x - 124;
 		int y = this.y + 16;
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, MAIN);
-		this.drawTexture(matrices, x, y, 0, 224, 140, 32);
 
-		drawTexture(matrices, x + 6, y + 7, 128, 192, 18, 18);
+		if (this.handler.hasChargedSlam()) {
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderTexture(0, MAIN);
+			this.drawTexture(matrices, x, y, 0, 224, 140, 32);
+			this.drawTexture(matrices, x + 6, y + 7, 128, 192, 18, 18);
+
+			this.textRenderer.drawWithShadow(matrices, new TranslatableText("container.magisterium.charged_slam"),
+					x + 10 + 18, y + 6, 16777215);
+			this.textRenderer.drawWithShadow(matrices, "**:**", x + 10 + 18, y + 6 + 10, 8355711);
+
+			y += 33;
+		}
 	}
 
 	@Override
