@@ -15,6 +15,7 @@ import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -90,6 +91,10 @@ public abstract class MagisteriumPage {
 
 	public static MagisteriumPage fromIndex(int i) {
 		return ALL.get(i);
+	}
+
+	public boolean activate(MagisteriumHandler handler, PlayerEntity player) {
+		return false;
 	}
 
 }

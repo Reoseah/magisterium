@@ -45,12 +45,13 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 	protected void addPageButtons() {
 		this.nextPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 206, this.y + 156, true, button -> {
 			this.client.interactionManager.clickButton(this.handler.syncId, 1);
-			this.handler.onButtonClick(this.client.player, 1);
+			this.handler.page++;
 			this.updatePageButtons();
 		}, true));
 		this.previousPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 26, this.y + 156, false, button -> {
 			this.client.interactionManager.clickButton(this.handler.syncId, 0);
-			this.handler.onButtonClick(this.client.player, 0);
+
+			this.handler.page--;
 			this.updatePageButtons();
 		}, true));
 		this.confirmButton = this.addDrawableChild(new TexturedButtonWidget(Integer.MIN_VALUE, Integer.MIN_VALUE, 16,
@@ -91,7 +92,18 @@ public class MagisteriumScreen extends HandledScreen<MagisteriumHandler> {
 		}
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
+		this.renderSpelltomeEffects(matrices);
 		this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+	}
+
+	protected void renderSpelltomeEffects(MatrixStack matrices) {
+		int x = this.x - 124;
+		int y = this.y + 16;
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, MAIN);
+		this.drawTexture(matrices, x, y, 0, 224, 140, 32);
+
+		drawTexture(matrices, x + 6, y + 7, 128, 192, 18, 18);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.github.reoseah.magisterium;
 
+import java.util.function.Consumer;
+
 import com.github.reoseah.magisterium.pages.MagisteriumPage;
 
 import net.fabricmc.fabric.api.util.NbtType;
@@ -15,8 +17,8 @@ import net.minecraft.screen.slot.Slot;
 
 public class MagisteriumHandler extends ScreenHandler {
 	private final PlayerEntity player;
-	private final ItemStack stack;
-	private final int bookSlot;
+	private final ItemStack spelltome;
+	private final int spelltomeSlot;
 
 	protected int page;
 
@@ -38,10 +40,10 @@ public class MagisteriumHandler extends ScreenHandler {
 	public MagisteriumHandler(int syncId, PlayerEntity player, int bookSlot) {
 		super(Magisterium.MAGISTERIUM_SCREEN, syncId);
 		this.player = player;
-		this.bookSlot = bookSlot;
-		this.stack = player.getInventory().getStack(bookSlot);
-		if (this.stack.hasTag() && this.stack.getTag().contains("Page", NbtType.INT)) {
-			this.page = Math.min(this.stack.getTag().getInt("Page"), MagisteriumPage.all().size() - 1);
+		this.spelltomeSlot = bookSlot;
+		this.spelltome = player.getInventory().getStack(bookSlot);
+		if (this.spelltome.hasTag() && this.spelltome.getTag().contains("Page")) {
+			this.page = Math.min(this.spelltome.getTag().getInt("Page"), MagisteriumPage.all().size() - 1);
 		}
 
 		this.addProperty(new Property() {
@@ -68,12 +70,12 @@ public class MagisteriumHandler extends ScreenHandler {
 			this.addSlot(new Slot(player.getInventory(), x, 49 + x * 18, 260));
 		}
 
-		this.setPageIndex(this.page);
+		this.initializePage(this.page);
 	}
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return player.getInventory().getStack(this.bookSlot) == this.stack;
+		return player.getInventory().getStack(this.spelltomeSlot) == this.spelltome;
 	}
 
 	@Override
@@ -126,7 +128,7 @@ public class MagisteriumHandler extends ScreenHandler {
 	@Override
 	public void close(PlayerEntity player) {
 		super.close(player);
-		this.stack.getOrCreateTag().putInt("Page", this.page);
+		this.spelltome.getOrCreateTag().putInt("Page", this.page);
 		this.dropInventory(player, this.inventory);
 	}
 
@@ -134,8 +136,8 @@ public class MagisteriumHandler extends ScreenHandler {
 		return this.page;
 	}
 
-	public void setPageIndex(int value) {
-		this.page = value;
+	public void initializePage(int index) {
+		this.page = index;
 		this.getPage().onSelected(this);
 	}
 
@@ -146,20 +148,26 @@ public class MagisteriumHandler extends ScreenHandler {
 	@Override
 	public boolean onButtonClick(PlayerEntity player, int id) {
 		if (id == 0 && this.page > 0 && !this.inventory.isEmpty()) {
-			this.setPageIndex(this.page - 1);
+			this.initializePage(this.page - 1);
 			return true;
 		}
 		if (id == 1 && this.page < MagisteriumPage.all().size() - 1 && !this.inventory.isEmpty()) {
-			this.setPageIndex(this.page + 1);
+			this.initializePage(this.page + 1);
 			return true;
 		}
+		if (id == 2) {
+			return this.getPage().activate(this, player);
+		}
 		return false;
+	}
+
+	public void changeSpelltome(Consumer<ItemStack> change) {
+		change.accept(this.spelltome);
 	}
 
 	public static class Client extends MagisteriumHandler {
 		public Client(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
 			super(syncId, inventory.player, buf.readInt());
 		}
-
 	}
 }

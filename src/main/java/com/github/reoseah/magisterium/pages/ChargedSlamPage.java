@@ -2,12 +2,14 @@ package com.github.reoseah.magisterium.pages;
 
 import java.util.List;
 
+import com.github.reoseah.magisterium.MagisteriumHandler;
 import com.github.reoseah.magisterium.MagisteriumScreen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -41,4 +43,13 @@ public class ChargedSlamPage extends MagisteriumPage {
 			tr.draw(matrices, desc0.get(i), LEFT_X_OFFSET, 32 + i * 9, 0x000000);
 		}
 	}
+
+	@Override
+	public boolean activate(MagisteriumHandler handler, PlayerEntity player) {
+		handler.changeSpelltome(stack -> {
+			stack.getOrCreateTag().putBoolean("ChargedSlam", true);
+		});
+		return true;
+	}
+
 }
