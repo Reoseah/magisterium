@@ -1,31 +1,32 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "magisterium",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Magisterium",
+	"description": "A magic mod about finding spell pages, binding them in a spell tome, then reading it!",
 	"authors": [
-		"Me!"
+		"Reoseah",
+		"Much younger me"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/magisterium",
+		"sources": "https://github.com/reoseah/magisterium"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "MIT",
+	"icon": "assets/magisterium/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"io.github.reoseah.magisterium.Magisterium"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"io.github.reoseah.magisterium.MagisteriumClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"magisterium.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "magisterium.client.mixins.json",
 			"environment": "client"
 		}
 	],
