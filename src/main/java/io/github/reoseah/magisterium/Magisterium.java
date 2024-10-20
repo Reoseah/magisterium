@@ -1,5 +1,8 @@
 package io.github.reoseah.magisterium;
 
+import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.BlockItem;
@@ -31,5 +34,7 @@ public class Magisterium implements ModInitializer {
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
+
+        Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
     }
 }

@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium;
+package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
