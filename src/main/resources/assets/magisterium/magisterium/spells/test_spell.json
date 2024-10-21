@@ -1,3 +1,30 @@
 {
-  "elements": []
+  "elements": [
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "test_spell.heading"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "test_spell.description"
+        }
+      ]
+    },
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "test_spell.heading 2"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "test_spell.description 2"
+        }
+      ]
+    }
+  ]
 }

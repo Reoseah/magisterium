@@ -10,7 +10,6 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.Property;
@@ -33,7 +32,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public final Context context;
     public final Property currentPage;
     public final Property isUttering;
-    public final Inventory inventory = new HemonomiconInventory(this);
+    public final Inventory inventory = new SpellBookInventory(this);
     private @Nullable Identifier utteranceId;
     private long utteranceStart;
 //    private @Nullable HemonomiconRecipe utteranceRecipe;
@@ -242,8 +241,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         public abstract Property createProperty(ComponentType<Integer> component);
 
         public abstract boolean canUse(PlayerEntity player);
-
-//        public abstract ActivitySource getActivitySource();
     }
 
     public static class ClientContext extends Context {
@@ -256,11 +253,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         public boolean canUse(PlayerEntity player) {
             return true;
         }
-
-//        @Override
-//        public ActivitySource getActivitySource() {
-//            return null;
-//        }
     }
 
     public static class LecternContext extends Context {
@@ -301,15 +293,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
                     && lectern.getBook() == this.stack //
                     && player.squaredDistanceTo(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64;
         }
-
-//        @Override
-//        public ActivitySource getActivitySource() {
-//            if (this.world instanceof ServerWorld serverWorld) {
-//                ActivityTracker tracker = ActivityTracker.get(serverWorld);
-//                return tracker.getOrCreateLectern(this.pos);
-//            }
-//            return null;
-//        }
     }
 
     public static class HandContext extends Context {
@@ -340,32 +323,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         public boolean canUse(PlayerEntity player) {
             return player.getStackInHand(this.hand) == this.stack;
         }
-
-//        @Override
-//        public ActivitySource getActivitySource() {
-//            return null;
-//        }
     }
 
-    private static class HemonomiconInventory extends SimpleInventory {
-        private final ScreenHandler handler;
-
-        public HemonomiconInventory(ScreenHandler handler) {
-            super(16);
-            this.handler = handler;
-        }
-
-        public ItemStack removeStack(int slot, int amount) {
-            ItemStack stack = super.removeStack(slot, amount);
-            if (!stack.isEmpty()) {
-                this.handler.onContentChanged(this);
-            }
-            return stack;
-        }
-
-        public void setStack(int slot, ItemStack stack) {
-            super.setStack(slot, stack);
-            this.handler.onContentChanged(this);
-        }
-    }
 }
