@@ -1,0 +1,5 @@
+{
+  "type": "magisterium:spell/quench_the_flame",
+  "utterance": "magisterium:quench_the_flame",
+  "duration": 4
+}

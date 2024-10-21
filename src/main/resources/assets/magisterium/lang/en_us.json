@@ -1,5 +1,12 @@
 {
   "itemGroup.magisterium": "Magisterium",
   "block.magisterium.arcane_table": "Arcane Table",
-  "item.magisterium.spell_book": "Spell Tome"
+  "item.magisterium.spell_book": "Spell Tome",
+  "item.magisterium.spell_page": "Spell Page",
+  "magisterium.spell.magisterium.awaken_the_flame.heading": "ᴀᴡᴀᴋᴇɴ ᴛʜᴇ ꜰʟᴀᴍᴇ",
+  "magisterium.spell.magisterium.awaken_the_flame.description": "Ignite nearby candles, torches and other kinds of fire bearers and receptacles.",
+  "magisterium.spell.magisterium.awaken_the_flame.utterance": "Iɢɴɪs ᴅᴏʀᴍɪᴇɴs, ɴᴜɴᴄ sᴜʀɢᴇ!\n\nLᴜᴍᴇɴ ᴛɪʙɪ ɪᴍᴘᴇʀᴏ, ꜰʟᴀᴍᴍᴀᴇ ʀᴇᴠᴇʟᴇᴛᴇ!",
+  "magisterium.spell.magisterium.quench_the_flame.heading": "ǫᴜᴇɴᴄʜ ᴛʜᴇ ꜰʟᴀᴍᴇ",
+  "magisterium.spell.magisterium.quench_the_flame.description": "Extinguish nearby candles, torches and other kinds of fire bearers and receptacles.",
+  "magisterium.spell.magisterium.quench_the_flame.utterance": "Iɢɴɪs ᴠɪᴠᴇɴs, ɴᴜɴᴄ ǫᴜɪᴇsᴄᴇ!\n\nLᴜᴍᴇɴ ᴛɪʙɪ ɴᴇɢᴀᴛᴜʀ, ꜰʟᴀᴍᴍᴀᴇ ᴇxᴛɪɴɢᴜᴇᴛᴇ!"
 }

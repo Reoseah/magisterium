@@ -2,9 +2,12 @@ package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
+import io.github.reoseah.magisterium.recipe.AwakenFlameRecipe;
+import io.github.reoseah.magisterium.recipe.QuenchFlameRecipe;
 import io.github.reoseah.magisterium.recipe.SpellBookCraftingRecipe;
 import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
@@ -31,6 +34,7 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:spell_page", SpellPageItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
 
@@ -40,13 +44,16 @@ public class Magisterium implements ModInitializer {
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE.asItem());
                     entries.add(SpellBookItem.INSTANCE);
+                    entries.add(SpellPageItem.INSTANCE);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
 
         Registry.register(Registries.RECIPE_TYPE, "magisterium:spell_book", SpellBookRecipe.TYPE);
 
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_book_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/quench_the_flame", QuenchFlameRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
 

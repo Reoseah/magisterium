@@ -1,0 +1,21 @@
+{
+  "elements": [
+    {
+      "type": "heading",
+      "translation_key": "magisterium.spell.magisterium.quench_the_flame.heading"
+    },
+    {
+      "type": "paragraph",
+      "translation_key": "magisterium.spell.magisterium.quench_the_flame.description"
+    },
+    {
+      "type": "utterance",
+      "id": "magisterium:quench_the_flame",
+      "translation_key": "magisterium.spell.magisterium.quench_the_flame.utterance",
+      "duration": 4
+    },
+    {
+      "type": "page_break"
+    }
+  ]
+}

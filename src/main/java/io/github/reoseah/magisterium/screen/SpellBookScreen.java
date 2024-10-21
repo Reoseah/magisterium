@@ -54,8 +54,12 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private final BookProperties properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
 
     // FIXME wip code, spell list should be obtained from the item stack
-    private final List<Identifier> spellIds = ImmutableList.of(Identifier.of("magisterium:test_spell"), Identifier.of("magisterium:test_spell_crafting"));
-    private final List<SpellData> spells = spellIds.stream().map(SpellDataLoader.SPELLS::get).toList();
+    private final List<Identifier> spellIds = ImmutableList.of( //
+            Identifier.of("magisterium:test_spell"), //
+            Identifier.of("magisterium:awaken_the_flame"), //
+            Identifier.of("magisterium:quench_the_flame") //
+    );
+
     private BookLayout layout;
     private int page;
 

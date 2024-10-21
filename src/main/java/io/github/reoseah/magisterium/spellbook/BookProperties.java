@@ -26,7 +26,7 @@ public final class BookProperties {
     public final int resultSlotV;
 
     public final int spellButtonU = 48;
-    public final int spellButtonV = 192;
+    public final int spellButtonV = 194;
     public final int spellButtonActiveV = 210;
     public final int spellButtonWidth = 12;
     public final int spellButtonHeight = 14;

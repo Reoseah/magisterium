@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+// TODO: have the utterance text shortly highlight to indicate finishing
 public class Utterance extends SimpleBlock {
     protected final String translationKey;
     protected final Identifier id;
@@ -125,7 +126,7 @@ public class Utterance extends SimpleBlock {
             float ratio = (readTime / Utterance.this.duration);
 
             if (ratio > 1) {
-                ClientPlayNetworking.send(new StopUtterancePayload());
+//                ClientPlayNetworking.send(new StopUtterancePayload());
 
                 this.mouseDown = false;
                 this.mouseDownTime = 0;
