@@ -5,9 +5,10 @@ import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.util.Identifier;
 
 public record SlotLayoutPayload(SlotConfiguration[] layout) implements CustomPayload {
-    public static final CustomPayload.Id<SlotLayoutPayload> ID = CustomPayload.id("magisterium:sync_slot_layout");
+    public static final CustomPayload.Id<SlotLayoutPayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:sync_slot_layout"));
     public static final PacketCodec<RegistryByteBuf, SlotLayoutPayload> CODEC = CustomPayload.codecOf(SlotLayoutPayload::write, SlotLayoutPayload::read);
 
     public void write(RegistryByteBuf buf) {

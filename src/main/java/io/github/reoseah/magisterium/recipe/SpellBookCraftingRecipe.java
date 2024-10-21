@@ -29,12 +29,31 @@ public class SpellBookCraftingRecipe extends SpellBookRecipe {
 
     @Override
     public boolean matches(SpellBookRecipeInput input, World world) {
-        return false;
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            if (!this.ingredients.get(i).test(input.getStackInSlot(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        return this.result.copy();
+        ItemStack result = this.getResult(lookup);
+
+        int count = result.getMaxCount();
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            ItemStack stack = input.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                count = Math.min(count, input.getStackInSlot(i).getCount());
+            }
+        }
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            input.removeStack(i, count);
+        }
+        result = result.copyWithCount(count);
+
+        return result;
     }
 
     @Override
@@ -47,14 +66,18 @@ public class SpellBookCraftingRecipe extends SpellBookRecipe {
         return Serializer.INSTANCE;
     }
 
+    @Override
+    public DefaultedList<Ingredient> getIngredients() {
+        return DefaultedList.copyOf(Ingredient.EMPTY, this.ingredients.toArray(new Ingredient[0]));
+    }
+
     public static class Serializer implements RecipeSerializer<SpellBookCraftingRecipe> {
         public static final MapCodec<SpellBookCraftingRecipe> CODEC = RecordCodecBuilder //
                 .mapCodec(instance -> instance.group( //
                                 Identifier.CODEC.fieldOf("utterance").forGetter(recipe -> recipe.utterance), //
                                 Codecs.POSITIVE_INT.fieldOf("duration").forGetter(recipe -> recipe.duration), //
                                 Codec.list(Ingredient.DISALLOW_EMPTY_CODEC).fieldOf("ingredients").forGetter(recipe -> recipe.ingredients), //
-                                ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
-                        ) //
+                                ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe -> recipe.result)) //
                         .apply(instance, SpellBookCraftingRecipe::new));
 
         public static final PacketCodec<RegistryByteBuf, SpellBookCraftingRecipe> PACKET_CODEC = new PacketCodec<>() {

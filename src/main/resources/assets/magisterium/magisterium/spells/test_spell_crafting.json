@@ -19,7 +19,7 @@
           ],
           "background": { "texture": "magisterium:textures/gui/spell_book.png", "x": 50, "y": 17, "u": 202, "v": 242, "width": 8, "height": 10 }
         },
-        { "type": "utterance", "translation_key": "Quick brown fox jumps over the lazy dog.\n\nSphynx of black quartz, judge my vow!", "id": "magisterium:recipe/test_spell_book_crafting", "duration": 10 }
+        { "type": "utterance", "translation_key": "Quick brown fox jumps over the lazy dog.\n\nSphynx of black quartz, judge my vow!", "id": "magisterium:recipe/test_spell_book_crafting", "duration": 5 }
       ]
     }
   ]

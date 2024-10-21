@@ -16,6 +16,10 @@ public class SpellBookRecipeInput implements RecipeInput {
         return this.inventory.getStack(slot);
     }
 
+    public ItemStack removeStack(int slot, int count) {
+        return this.inventory.removeStack(slot, count);
+    }
+
     @Override
     public int getSize() {
         return this.inventory.size();

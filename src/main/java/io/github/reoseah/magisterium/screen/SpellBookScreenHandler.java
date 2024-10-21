@@ -158,6 +158,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             var recipeDuration = this.utteranceRecipe.duration;
             if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
                 ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory), player.getWorld().getRegistryManager());
+
                 if (!result.isEmpty()) {
                     this.insertResult(result, player);
                 }
@@ -228,6 +229,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         return false;
     }
 
+    // TODO: rename to applySlotProperties
     public void configureSlots(SlotConfiguration[] definitions) {
         for (int i = 0; i < definitions.length; i++) {
             ((ConfigurableSlot) this.slots.get(i)).setConfiguration(definitions[i]);

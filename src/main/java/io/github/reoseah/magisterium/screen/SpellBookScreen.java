@@ -121,7 +121,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
         this.setFocused(null);
 
-        SlotConfiguration[] slots = this.layout.getFoldSlots(this.handler.currentPage.get());
+        SlotConfiguration[] slots = this.layout.getFoldSlots(this.page);
         this.handler.configureSlots(slots);
         ClientPlayNetworking.send(new SlotLayoutPayload(slots));
     }

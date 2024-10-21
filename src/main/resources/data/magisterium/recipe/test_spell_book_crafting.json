@@ -1,10 +1,10 @@
 {
   "type": "magisterium:spell_book_crafting",
-  "utterance": "magisterium:recipe/recipe_test_spell",
-  "duration": 10,
+  "utterance": "magisterium:recipe/test_spell_book_crafting",
+  "duration": 5,
   "ingredients": [
     { "item": "minecraft:iron_ingot" },
-    { "item": "minecraft:redstone_dust" },
+    { "item": "minecraft:redstone" },
     { "item": "minecraft:netherite_scrap" }
   ],
   "result": {

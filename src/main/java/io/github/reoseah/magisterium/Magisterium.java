@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class Magisterium implements ModInitializer {
     public static final String MOD_ID = "magisterium";
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(Magisterium.class);
 
     @Override
     public void onInitialize() {
