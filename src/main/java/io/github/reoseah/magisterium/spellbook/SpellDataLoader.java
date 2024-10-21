@@ -75,17 +75,17 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
             case "heading" -> new Heading(JsonHelper.getString(json, "translation_key"));
             case "paragraph" -> new Paragraph(JsonHelper.getString(json, "translation_key"));
             case "page_break" -> new PageBreak();
-            case "chapter" -> new Chapter(JsonHelper.getString(json, "translation_key"));
+            case "chapter" -> new BookmarkElement(JsonHelper.getString(json, "translation_key"));
             case "fold" -> {
                 JsonArray leftJson = JsonHelper.getArray(json, "left", new JsonArray());
                 JsonArray rightJson = JsonHelper.getArray(json, "right", new JsonArray());
-                BookSimpleElement[] left = readSimpleElements(leftJson);
-                BookSimpleElement[] right = readSimpleElements(rightJson);
+                SimpleBlock[] left = readSimpleElements(leftJson);
+                SimpleBlock[] right = readSimpleElements(rightJson);
                 yield new Fold(left, right);
             }
             case "vertically_centered" -> {
                 var element = readElement(JsonHelper.getObject(json, "element"));
-                if (element instanceof BookSimpleElement simple) {
+                if (element instanceof SimpleBlock simple) {
                     yield new VerticalCenterElement(simple);
                 } else {
                     throw new JsonParseException("Cannot use special element here: " + element);
@@ -104,7 +104,7 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
                     throw new JsonParseException("Too many slots for inventory element");
                 }
 
-                SlotConfiguration[] slots = new SlotConfiguration[slotsJson.size()];
+                SlotProperties[] slots = new SlotProperties[slotsJson.size()];
                 for (int j = 0; j < slotsJson.size(); j++) {
                     JsonObject slot = JsonHelper.asObject(slotsJson.get(j), "slot");
                     int x = JsonHelper.getInt(slot, "x");
@@ -113,10 +113,10 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
                     boolean output = slot.has("output") && JsonHelper.getBoolean(slot, "output");
                     Ingredient ingredient = slot.has("ingredient") ? Ingredient.ALLOW_EMPTY_CODEC.parse(JsonOps.INSTANCE, slot.get("ingredient")).getOrThrow() : null;
 
-                    slots[j] = new SlotConfiguration(x, y, output, ingredient, background);
+                    slots[j] = new SlotProperties(x, y, output, ingredient, background);
                 }
 
-                BookInventoryElement.Image background = null;
+                BookInventory.Image background = null;
                 if (json.has("background")) {
                     JsonObject backgroundJson = JsonHelper.asObject(json.get("background"), "background");
                     Identifier texture = Identifier.of(JsonHelper.getString(backgroundJson, "texture"));
@@ -126,11 +126,11 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
                     int v = JsonHelper.getInt(backgroundJson, "v");
                     int width = JsonHelper.getInt(backgroundJson, "width");
                     int height = JsonHelper.getInt(backgroundJson, "height");
-                    background = new BookInventoryElement.Image(texture, x, y, u, v, width, height);
+                    background = new BookInventory.Image(texture, x, y, u, v, width, height);
                 }
                 int height = JsonHelper.getInt(json, "height", 0);
 
-                yield new BookInventoryElement(height, background, slots);
+                yield new BookInventory(height, background, slots);
             }
 //            case "illustration" -> {
 //                Identifier texture = new Identifier(JsonHelper.getString(json, "texture"));
@@ -144,11 +144,11 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
         };
     }
 
-    private static BookSimpleElement[] readSimpleElements(JsonArray elementsJson) {
-        BookSimpleElement[] elements = new BookSimpleElement[elementsJson.size()];
+    private static SimpleBlock[] readSimpleElements(JsonArray elementsJson) {
+        SimpleBlock[] elements = new SimpleBlock[elementsJson.size()];
         for (int i = 0; i < elementsJson.size(); i++) {
             var element = readElement(JsonHelper.asObject(elementsJson.get(i), "element"));
-            if (element instanceof BookSimpleElement simple) {
+            if (element instanceof SimpleBlock simple) {
                 elements[i] = simple;
             } else {
                 throw new JsonParseException("Cannot use special element here: " + element);

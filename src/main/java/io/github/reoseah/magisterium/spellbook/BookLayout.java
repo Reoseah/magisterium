@@ -1,8 +1,8 @@
 package io.github.reoseah.magisterium.spellbook;
 
-import io.github.reoseah.magisterium.spellbook.element.BookInventory;
+import io.github.reoseah.magisterium.spellbook.element.SlotPropertiesProvider;
 import io.github.reoseah.magisterium.spellbook.element.Bookmark;
-import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
+import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -16,12 +16,11 @@ import java.util.stream.Stream;
 
 public record BookLayout(
         Int2ObjectMap<List<Drawable>> pages,
-        // TODO rename to bookmarks
-        Int2ObjectMap<Bookmark> chapters
+        Int2ObjectMap<Bookmark> bookmarks
 ) {
-    public BookLayout(Int2ObjectMap<List<Drawable>> pages, Int2ObjectMap<Bookmark> chapters) {
+    public BookLayout(Int2ObjectMap<List<Drawable>> pages, Int2ObjectMap<Bookmark> bookmarks) {
         this.pages = Int2ObjectMaps.unmodifiable(pages);
-        this.chapters = Int2ObjectMaps.unmodifiable(chapters);
+        this.bookmarks = Int2ObjectMaps.unmodifiable(bookmarks);
     }
 
     public int getPageCount() {
@@ -32,16 +31,16 @@ public record BookLayout(
         return this.pages.getOrDefault(page, Collections.emptyList());
     }
 
-    public SlotConfiguration[] getFoldSlots(int leftPage) {
+    public SlotProperties[] getFoldSlots(int leftPage) {
         // TODO build and keep a separate map of slots per page
-        Stream<SlotConfiguration> leftSlots = this.getPage(leftPage).stream()
-                .filter(drawable -> drawable instanceof BookInventory)
-                .flatMap(drawable -> Arrays.stream(((BookInventory) drawable).getSlots()));
-        Stream<SlotConfiguration> rightSlots = this.getPage(leftPage + 1).stream()
-                .filter(drawable -> drawable instanceof BookInventory)
-                .flatMap(drawable -> Arrays.stream(((BookInventory) drawable).getSlots()));
+        Stream<SlotProperties> leftSlots = this.getPage(leftPage).stream()
+                .filter(drawable -> drawable instanceof SlotPropertiesProvider)
+                .flatMap(drawable -> Arrays.stream(((SlotPropertiesProvider) drawable).getSlotProperties()));
+        Stream<SlotProperties> rightSlots = this.getPage(leftPage + 1).stream()
+                .filter(drawable -> drawable instanceof SlotPropertiesProvider)
+                .flatMap(drawable -> Arrays.stream(((SlotPropertiesProvider) drawable).getSlotProperties()));
 
-        return Stream.concat(leftSlots, rightSlots).limit(16).toArray(SlotConfiguration[]::new);
+        return Stream.concat(leftSlots, rightSlots).limit(16).toArray(SlotProperties[]::new);
     }
 
     public static class Builder {
@@ -57,9 +56,9 @@ public record BookLayout(
         private boolean allowWrap = true;
 
         public Builder(BookProperties properties) {
-            this.leftX = properties.leftPageOffset;
-            this.rightX = properties.rightPageOffset;
-            this.paddingTop = properties.topOffset;
+            this.leftX = properties.pageLeftX;
+            this.rightX = properties.pageRightX;
+            this.paddingTop = properties.pageY;
             this.pageHeight = properties.pageHeight;
 
             this.currentPageIdx = 0;

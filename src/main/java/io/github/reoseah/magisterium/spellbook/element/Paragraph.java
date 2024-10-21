@@ -9,7 +9,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class Paragraph extends BookSplittableElement {
+public class Paragraph extends DivisibleBlock {
     protected final String translationKey;
 
     public Paragraph(String translationKey) {
@@ -34,7 +34,7 @@ public class Paragraph extends BookSplittableElement {
     }
 
     @Override
-    protected boolean canSplit(int height, int maxHeight, TextRenderer textRenderer) {
+    protected boolean canDivide(int height, int maxHeight, TextRenderer textRenderer) {
         return maxHeight >= textRenderer.fontHeight;
     }
 

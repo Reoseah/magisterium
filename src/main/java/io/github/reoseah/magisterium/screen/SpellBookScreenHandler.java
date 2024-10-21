@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
-import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
+import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -50,7 +50,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.isUttering = this.addProperty(Property.create());
 
         for (int i = 0; i < 16; i++) {
-            this.addSlot(new ConfigurableSlot(this.inventory, i, Integer.MIN_VALUE, Integer.MIN_VALUE));
+            this.addSlot(new SpellBookSlot(this.inventory, i, Integer.MIN_VALUE, Integer.MIN_VALUE));
         }
 
         for (int x = 0; x < 9; x++) {
@@ -98,7 +98,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             IntArraySet slotsToSpreadStackTo = new IntArraySet();
             int total = 0;
             for (int i = 0; i < 16; i++) {
-                SlotConfiguration definition = ((ConfigurableSlot) this.getSlot(i)).config;
+                SlotProperties definition = ((SpellBookSlot) this.getSlot(i)).config;
                 if (definition != null && !definition.output && definition.ingredient != null && definition.ingredient.test(stack)) {
                     ItemStack slotStack = this.getSlot(i).getStack();
                     if (slotStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(slotStack, stack)) {
@@ -172,7 +172,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     protected void insertResult(ItemStack result, PlayerEntity player) {
         boolean inserted = false;
         for (int i = 0; i < 16; i++) {
-            SlotConfiguration configuration = ((ConfigurableSlot) this.slots.get(i)).getConfiguration();
+            SlotProperties configuration = ((SpellBookSlot) this.slots.get(i)).getConfiguration();
             if (configuration != null && configuration.output) {
                 ItemStack excess = insertStack(i, result);
                 if (!excess.isEmpty()) {
@@ -229,13 +229,12 @@ public class SpellBookScreenHandler extends ScreenHandler {
         return false;
     }
 
-    // TODO: rename to applySlotProperties
-    public void configureSlots(SlotConfiguration[] definitions) {
-        for (int i = 0; i < definitions.length; i++) {
-            ((ConfigurableSlot) this.slots.get(i)).setConfiguration(definitions[i]);
+    public void applySlotProperties(SlotProperties[] properties) {
+        for (int i = 0; i < properties.length; i++) {
+            ((SpellBookSlot) this.slots.get(i)).setConfiguration(properties[i]);
         }
-        for (int i = definitions.length; i < 16; i++) {
-            ((ConfigurableSlot) this.slots.get(i)).setConfiguration(null);
+        for (int i = properties.length; i < 16; i++) {
+            ((SpellBookSlot) this.slots.get(i)).setConfiguration(null);
         }
     }
 

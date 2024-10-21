@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Heading extends BookSimpleElement {
+public class Heading extends SimpleBlock {
     protected final String translationKey;
 
     public Heading(String translationKey) {
@@ -26,8 +26,8 @@ public class Heading extends BookSimpleElement {
     }
 
     @Override
-    protected int getVerticalGap() {
-        return super.getVerticalGap() + 2;
+    protected int getTopMargin() {
+        return super.getTopMargin() + 2;
     }
 
     @Override

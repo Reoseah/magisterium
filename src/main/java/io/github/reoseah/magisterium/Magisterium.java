@@ -68,7 +68,7 @@ public class Magisterium implements ModInitializer {
         });
         ServerPlayNetworking.registerGlobalReceiver(SlotLayoutPayload.ID, (payload, context) -> {
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-                handler.configureSlots(payload.layout());
+                handler.applySlotProperties(payload.layout());
             }
         });
     }

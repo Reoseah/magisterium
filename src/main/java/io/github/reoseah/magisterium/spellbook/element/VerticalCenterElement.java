@@ -4,10 +4,10 @@ import io.github.reoseah.magisterium.spellbook.BookProperties;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
-public class VerticalCenterElement extends BookSimpleElement {
-    private final BookSimpleElement element;
+public class VerticalCenterElement extends SimpleBlock {
+    private final SimpleBlock element;
 
-    public VerticalCenterElement(BookSimpleElement element) {
+    public VerticalCenterElement(SimpleBlock element) {
         this.element = element;
     }
 
@@ -22,7 +22,7 @@ public class VerticalCenterElement extends BookSimpleElement {
         int height = this.element.getHeight(properties.pageWidth, textRenderer);
         int newY = y + (maxHeight - height) / 2;
         if (newY > y) {
-            newY -= this.element.getVerticalGap();
+            newY -= this.element.getTopMargin();
         }
         return this.element.createWidget(x, newY, properties, maxHeight, textRenderer);
     }

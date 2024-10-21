@@ -6,7 +6,7 @@ import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import io.github.reoseah.magisterium.spellbook.SpellData;
 import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
-import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
+import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -95,7 +95,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     continue;
                 }
                 for (var element : spell.elements) {
-                    element.populate(builder, this.properties, this.textRenderer);
+                    element.visit(builder, this.properties, this.textRenderer);
                 }
             }
             this.layout = builder.build();
@@ -121,8 +121,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
         this.setFocused(null);
 
-        SlotConfiguration[] slots = this.layout.getFoldSlots(this.page);
-        this.handler.configureSlots(slots);
+        SlotProperties[] slots = this.layout.getFoldSlots(this.page);
+        this.handler.applySlotProperties(slots);
         ClientPlayNetworking.send(new SlotLayoutPayload(slots));
     }
 
@@ -164,7 +164,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 //        y -= this.y;
 //        int currentPage = this.handler.currentPage.get();
 //        int i = 0;
-//        for (Int2ObjectMap.Entry<Bookmark> entry : this.layout.chapters().int2ObjectEntrySet()) {
+//        for (Int2ObjectMap.Entry<Bookmark> entry : this.layout.bookmarks().int2ObjectEntrySet()) {
 //            int chapterPage = entry.getIntKey();
 //            if (chapterPage != currentPage) {
 //                int bookmarkY = this.properties.getBookmarkY(i);
@@ -184,7 +184,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
 //        int currentPage = this.handler.currentPage.get();
 //        int i = 0;
-//        for (Int2ObjectMap.Entry<Chapter> entry : this.layout.chapters().int2ObjectEntrySet()) {
+//        for (Int2ObjectMap.Entry<Chapter> entry : this.layout.bookmarks().int2ObjectEntrySet()) {
 //            int chapterPage = entry.getIntKey();
 //
 //            if (chapterPage != currentPage) {

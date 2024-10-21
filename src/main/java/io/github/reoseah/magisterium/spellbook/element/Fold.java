@@ -6,15 +6,15 @@ import io.github.reoseah.magisterium.spellbook.BookProperties;
 import net.minecraft.client.font.TextRenderer;
 
 public class Fold implements BookElement {
-    private final BookSimpleElement[] left, right;
+    private final SimpleBlock[] left, right;
 
-    public Fold(BookSimpleElement[] left, BookSimpleElement[] right) {
+    public Fold(SimpleBlock[] left, SimpleBlock[] right) {
         this.left = left;
         this.right = right;
     }
 
     @Override
-    public void populate(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
+    public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         if (builder.getCurrentPage() % 2 != 0) {
             builder.advancePage();
         } else if (!builder.isNewPage()) {
@@ -23,16 +23,16 @@ public class Fold implements BookElement {
         }
 
         builder.allowWrap(false);
-        for (BookSimpleElement element : this.left) {
-            element.populate(builder, properties, textRenderer);
+        for (SimpleBlock element : this.left) {
+            element.visit(builder, properties, textRenderer);
         }
 
         builder.allowWrap(true);
         builder.advancePage();
 
         builder.allowWrap(false);
-        for (BookSimpleElement element : this.right) {
-            element.populate(builder, properties, textRenderer);
+        for (SimpleBlock element : this.right) {
+            element.visit(builder, properties, textRenderer);
         }
 
         builder.allowWrap(true);

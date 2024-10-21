@@ -2,49 +2,53 @@ package io.github.reoseah.magisterium.spellbook;
 
 import net.minecraft.util.Identifier;
 
+// TODO: load this from data
+//       use nested objects like `bookmark.width`,
+//       likely with a few classes like Point, Rectangle, etc.
 public final class BookProperties {
     public final Identifier texture;
     public final int pageWidth;
     public final int pageHeight;
-    // TODO: rename to pageY
-    public final int topOffset;
-    // TODO: rename to pageLeftX
-    public final int leftPageOffset;
-    // TODO: rename to pageRightX
-    public final int rightPageOffset;
-    // TODO: rename to bookmarkY
+    public final int pageY;
+    public final int pageLeftX;
+    public final int pageRightX;
     public final int bookmarkOffset;
     public final int bookmarkHeight;
-    public final int bookmarkFullWidth;
-    public final int bookmarkFullU;
-    public final int bookmarkFullV;
-    // TODO: rename to bookmarkTip
-    public final int bookmarkHiddenWidth;
-    public final int bookmarkHiddenU;
-    public final int bookmarkHiddenV;
+    public final int bookmarkWidth;
+    public final int bookmarkU;
+    public final int bookmarkV;
+    public final int bookmarkTipWidth;
+    public final int bookmarkTipU;
+    public final int bookmarkTipV;
     public final int slotU;
     public final int slotV;
     public final int resultSlotU;
     public final int resultSlotV;
 
-    public BookProperties(Identifier texture, int pageWidth, int pageHeight, int topOffset, int leftPageOffset,
-                          int rightPageOffset, int bookmarkOffset, int bookmarkHeight, int bookmarkFullWidth,
-                          int bookmarkFullU, int bookmarkFullV, int bookmarkHiddenWidth, int bookmarkHiddenU,
-                          int bookmarkHiddenV, int slotU, int slotV, int resultSlotU, int resultSlotV) {
+    public final int spellButtonU = 48;
+    public final int spellButtonV = 192;
+    public final int spellButtonActiveV = 210;
+    public final int spellButtonWidth = 12;
+    public final int spellButtonHeight = 14;
+
+    public BookProperties(Identifier texture, int pageWidth, int pageHeight, int pageY, int pageLeftX,
+                          int pageRightX, int bookmarkOffset, int bookmarkHeight, int bookmarkWidth,
+                          int bookmarkU, int bookmarkV, int bookmarkTipWidth, int bookmarkTipU,
+                          int bookmarkTipV, int slotU, int slotV, int resultSlotU, int resultSlotV) {
         this.texture = texture;
         this.pageWidth = pageWidth;
         this.pageHeight = pageHeight;
-        this.topOffset = topOffset;
-        this.leftPageOffset = leftPageOffset;
-        this.rightPageOffset = rightPageOffset;
+        this.pageY = pageY;
+        this.pageLeftX = pageLeftX;
+        this.pageRightX = pageRightX;
         this.bookmarkOffset = bookmarkOffset;
         this.bookmarkHeight = bookmarkHeight;
-        this.bookmarkFullWidth = bookmarkFullWidth;
-        this.bookmarkFullU = bookmarkFullU;
-        this.bookmarkFullV = bookmarkFullV;
-        this.bookmarkHiddenWidth = bookmarkHiddenWidth;
-        this.bookmarkHiddenU = bookmarkHiddenU;
-        this.bookmarkHiddenV = bookmarkHiddenV;
+        this.bookmarkWidth = bookmarkWidth;
+        this.bookmarkU = bookmarkU;
+        this.bookmarkV = bookmarkV;
+        this.bookmarkTipWidth = bookmarkTipWidth;
+        this.bookmarkTipU = bookmarkTipU;
+        this.bookmarkTipV = bookmarkTipV;
         this.slotU = slotU;
         this.slotV = slotV;
         this.resultSlotU = resultSlotU;
@@ -57,9 +61,9 @@ public final class BookProperties {
 
     public int getBookmarkX(boolean isLeft) {
         if (isLeft) {
-            return 256 / 2 - this.bookmarkFullWidth;
+            return 256 / 2 - this.bookmarkWidth;
         } else {
-            return 256 / 2 + this.bookmarkFullWidth - this.bookmarkHiddenWidth;
+            return 256 / 2 + this.bookmarkWidth - this.bookmarkTipWidth;
         }
     }
 }

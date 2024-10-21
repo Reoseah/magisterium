@@ -1,22 +1,21 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
+import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: rename to SpellBookSlot
-public class ConfigurableSlot extends Slot {
-    protected SlotConfiguration config;
+public class SpellBookSlot extends Slot {
+    protected SlotProperties config;
 
-    public ConfigurableSlot(Inventory inventory, int index, int x, int y) {
+    public SpellBookSlot(Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
     }
 
-    public void setConfiguration(@Nullable SlotConfiguration config) {
+    public void setConfiguration(@Nullable SlotProperties config) {
         this.config = config;
         if (config != null) {
             ((MutableSlot) this).magisterium$setPos(config.x, config.y);
@@ -25,7 +24,7 @@ public class ConfigurableSlot extends Slot {
         }
     }
 
-    public SlotConfiguration getConfiguration() {
+    public SlotProperties getConfiguration() {
         return this.config;
     }
 

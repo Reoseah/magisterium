@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class Utterance extends BookSimpleElement {
+public class Utterance extends SimpleBlock {
     protected final String translationKey;
     protected final Identifier id;
     protected final float duration;
@@ -54,8 +54,8 @@ public class Utterance extends BookSimpleElement {
     }
 
     @Override
-    protected int getVerticalGap() {
-        return super.getVerticalGap() + 2;
+    protected int getTopMargin() {
+        return super.getTopMargin() + 2;
     }
 
     @Override
@@ -66,9 +66,6 @@ public class Utterance extends BookSimpleElement {
     private class UtteranceWidget implements Drawable, Element {
         private final int buttonX;
         private final int buttonY;
-        // TODO: move these to BookProperties
-        private static final int BUTTON_WIDTH = 12;
-        private static final int BUTTON_HEIGHT = 14;
 
         private final BookProperties properties;
         private final TextRenderer textRenderer;
@@ -86,7 +83,7 @@ public class Utterance extends BookSimpleElement {
             this.textRenderer = textRenderer;
 
             MutableText text = Text.translatable(translationKey);
-            this.lines = textRenderer.wrapLines(text, width - BUTTON_WIDTH);
+            this.lines = textRenderer.wrapLines(text, width - properties.spellButtonWidth);
             this.linesAsString = lines.stream().map(t -> {
                 StringBuilder builder = new StringBuilder();
                 t.accept((index, style, codePoint) -> {
@@ -118,10 +115,10 @@ public class Utterance extends BookSimpleElement {
         @Override
         public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
             if (this.mouseDown || mouseX > buttonX && mouseY > buttonY
-                    && mouseX < buttonX + BUTTON_WIDTH && mouseY < buttonY + BUTTON_HEIGHT) {
-                ctx.drawTexture(properties.texture, buttonX, buttonY, 48, 210, BUTTON_WIDTH, BUTTON_HEIGHT);
+                    && mouseX < buttonX + properties.spellButtonWidth && mouseY < buttonY + properties.spellButtonHeight) {
+                ctx.drawTexture(properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonActiveV, properties.spellButtonWidth, properties.spellButtonHeight);
             } else {
-                ctx.drawTexture(properties.texture, buttonX, buttonY, 48, 194, BUTTON_WIDTH, BUTTON_HEIGHT);
+                ctx.drawTexture(properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonV, properties.spellButtonWidth, properties.spellButtonHeight);
             }
 
             float readTime = this.mouseDown ? (System.currentTimeMillis() - this.mouseDownTime) / 1000F : 0;
@@ -137,9 +134,9 @@ public class Utterance extends BookSimpleElement {
             int coloredCharacters = Math.round(this.textLength * ratio);
 
             for (int i = 0; i < lines.size(); i++) {
-                ctx.drawText(textRenderer, lines.get(i), x + BUTTON_WIDTH, linesY.getInt(i), 0x000000, false);
+                ctx.drawText(textRenderer, lines.get(i), x + properties.spellButtonWidth, linesY.getInt(i), 0x000000, false);
                 if (coloredCharacters > 0) {
-                    ctx.drawText(textRenderer, linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length())), x + BUTTON_WIDTH, linesY.getInt(i), 0xce1e00, false);
+                    ctx.drawText(textRenderer, linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length())), x + properties.spellButtonWidth, linesY.getInt(i), 0xce1e00, false);
                     coloredCharacters -= linesAsString.get(i).length();
                 }
             }
@@ -148,7 +145,7 @@ public class Utterance extends BookSimpleElement {
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
             if (mouseX > buttonX && mouseY > buttonY
-                    && mouseX < buttonX + BUTTON_WIDTH && mouseY < buttonY + BUTTON_HEIGHT) {
+                    && mouseX < buttonX + properties.spellButtonWidth && mouseY < buttonY + properties.spellButtonHeight) {
                 this.mouseDown = true;
                 this.mouseDownTime = System.currentTimeMillis();
 

@@ -5,13 +5,12 @@ import io.github.reoseah.magisterium.spellbook.BookProperties;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
-// TODO: rename to SimpleBlock
-public abstract class BookSimpleElement implements BookElement {
+public abstract class SimpleBlock implements BookElement {
     @Override
-    public void populate(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
+    public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         int elementHeight = this.getHeight(properties.pageWidth, textRenderer);
 
-        int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getVerticalGap());
+        int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getTopMargin());
         if (elementY + elementHeight > builder.getMaxY() && builder.isWrapAllowed() && !builder.isNewPage()) {
             builder.advancePage();
             elementY = builder.getCurrentY();
@@ -25,8 +24,7 @@ public abstract class BookSimpleElement implements BookElement {
     /**
      * @return number of pixels to offset from the previous element
      */
-    // TODO: renamt to getTopMargin
-    protected int getVerticalGap() {
+    protected int getTopMargin() {
         return 4;
     }
 
@@ -39,10 +37,10 @@ public abstract class BookSimpleElement implements BookElement {
      * Return a renderer for this element.
      * <p>
      * Optionally, implement {@link net.minecraft.client.gui.Element} to also handle mouse events,
-     * {@link SlotConfigurationProvider} to configure screen handler slots.
+     * {@link SlotPropertiesProvider} to configure screen handler slots.
      *
      * @see net.minecraft.client.gui.Element
-     * @see SlotConfigurationProvider
+     * @see SlotPropertiesProvider
      */
     protected abstract Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer);
 }

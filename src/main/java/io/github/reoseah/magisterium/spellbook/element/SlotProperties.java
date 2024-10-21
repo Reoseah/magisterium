@@ -6,19 +6,18 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import com.mojang.datafixers.util.Pair;
 
-// TODO: rename to BookSlotData
-public class SlotConfiguration {
+public class SlotProperties {
     public final int x;
     public final int y;
     public final boolean output;
     public final Ingredient ingredient;
     public final Identifier background;
 
-    public SlotConfiguration(int x, int y, boolean output, Ingredient ingredient) {
+    public SlotProperties(int x, int y, boolean output, Ingredient ingredient) {
         this(x, y, output, ingredient, null);
     }
 
-    public SlotConfiguration(int x, int y, boolean output, Ingredient ingredient, Identifier background) {
+    public SlotProperties(int x, int y, boolean output, Ingredient ingredient, Identifier background) {
         this.x = x;
         this.y = y;
         this.background = background;
@@ -30,8 +29,8 @@ public class SlotConfiguration {
         return this.background != null ? Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, this.background) : null;
     }
 
-    public SlotConfiguration withOffset(int x, int y) {
-        return new SlotConfiguration(this.x + x, this.y + y, this.output, this.ingredient, this.background);
+    public SlotProperties withOffset(int x, int y) {
+        return new SlotProperties(this.x + x, this.y + y, this.output, this.ingredient, this.background);
     }
 
     public void write(RegistryByteBuf buf) {
@@ -46,12 +45,12 @@ public class SlotConfiguration {
         }
     }
 
-    public static SlotConfiguration read(RegistryByteBuf buf) {
+    public static SlotProperties read(RegistryByteBuf buf) {
         int x = buf.readVarInt();
         int y = buf.readVarInt();
         boolean output = buf.readBoolean();
         Ingredient ingredient = buf.readBoolean() ? Ingredient.PACKET_CODEC.decode(buf) : null;
 
-        return new SlotConfiguration(x, y, output, ingredient);
+        return new SlotProperties(x, y, output, ingredient);
     }
 }

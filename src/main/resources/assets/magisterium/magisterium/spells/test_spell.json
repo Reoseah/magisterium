@@ -14,17 +14,12 @@
       ]
     },
     {
-      "type": "fold",
-      "left": [
-        {
-          "type": "heading",
-          "translation_key": "test_spell.heading 2"
-        },
-        {
-          "type": "paragraph",
-          "translation_key": "test_spell.description 2"
-        }
-      ]
+      "type": "heading",
+      "translation_key": "test_spell.heading 2"
+    },
+    {
+      "type": "paragraph",
+      "translation_key": "a very long text to take up a lot of space and cause the text to wrap and split onto two pages.\n\nThis is a test to see how the text will be displayed in the final document.\n\nQuick brown fox jumps over the lazy dog!\n\nSphinx of black quartz, judge my vow!"
     }
   ]
 }

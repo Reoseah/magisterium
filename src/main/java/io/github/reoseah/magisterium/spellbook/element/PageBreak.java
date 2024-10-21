@@ -6,7 +6,7 @@ import net.minecraft.client.font.TextRenderer;
 
 public class PageBreak implements BookElement {
     @Override
-    public void populate(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
+    public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         builder.advancePage();
     }
 }
