@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
 import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandler;
@@ -35,7 +37,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public final Inventory inventory = new SpellBookInventory(this);
     private @Nullable Identifier utteranceId;
     private long utteranceStart;
-//    private @Nullable HemonomiconRecipe utteranceRecipe;
+    private @Nullable SpellBookRecipe utteranceRecipe;
 
     public SpellBookScreenHandler(int syncId, PlayerInventory playerInv) {
         this(syncId, playerInv, new ClientContext());
@@ -61,20 +63,20 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.utteranceId = id;
         this.utteranceStart = player.getWorld().getTime();
 
-//        player.getWorld().getRecipeManager() //
-//                .getAllMatches(HemonomiconRecipe.TYPE, this.inventory, player.getWorld()) //
-//                .stream() //
-//                .map(RecipeEntry::value) //
-//                .filter(recipe -> recipe.utterance.equals(id)) //
-//                .findFirst() //
-//                .ifPresent(recipe -> this.utteranceRecipe = recipe);
+        player.getWorld().getRecipeManager() //
+                .getAllMatches(SpellBookRecipe.TYPE, new SpellBookRecipeInput(this.inventory), player.getWorld()) //
+                .stream() //
+                .map(RecipeEntry::value) //
+                .filter(recipe -> recipe.utterance.equals(id)) //
+                .findFirst() //
+                .ifPresent(recipe -> this.utteranceRecipe = recipe);
     }
 
     public void stopUtterance() {
         this.isUttering.set(0);
         this.utteranceId = null;
         this.utteranceStart = 0;
-//        this.utteranceRecipe = null;
+        this.utteranceRecipe = null;
 
         this.sendContentUpdates();
     }
@@ -88,7 +90,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
         ItemStack previous = stack.copy();
         if (index < 16) {
-            // TODO: merge ritual blood stacks like the way they merge manually
             if (!this.insertItem(stack, 16, 16 + 9, true)) {
                 return ItemStack.EMPTY;
             }
@@ -153,20 +154,19 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public boolean canUse(PlayerEntity player) {
         // this gets called every tick, so it's a tick method effectively
 
-//        if (this.utteranceRecipe != null) {
-//            var recipeDuration = this.utteranceRecipe.duration;
-//            if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
-//                ItemStack result = this.utteranceRecipe.craft(this.inventory, player.getWorld(), player);
-//                if (!result.isEmpty()) {
-//                    this.insertResult(result, player);
-//                }
-//                this.stopUtterance();
-//            }
-//        }
+        if (this.utteranceRecipe != null) {
+            var recipeDuration = this.utteranceRecipe.duration;
+            if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
+                ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory), player.getWorld().getRegistryManager());
+                if (!result.isEmpty()) {
+                    this.insertResult(result, player);
+                }
+                this.stopUtterance();
+            }
+        }
 
         return this.context.canUse(player);
     }
-
 
     protected void insertResult(ItemStack result, PlayerEntity player) {
         boolean inserted = false;

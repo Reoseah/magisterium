@@ -1,14 +1,18 @@
 package io.github.reoseah.magisterium.spellbook;
 
+import io.github.reoseah.magisterium.spellbook.element.BookInventory;
 import io.github.reoseah.magisterium.spellbook.element.Bookmark;
+import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minecraft.client.gui.Drawable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public record BookLayout(
         Int2ObjectMap<List<Drawable>> pages,
@@ -28,17 +32,17 @@ public record BookLayout(
         return this.pages.getOrDefault(page, Collections.emptyList());
     }
 
-//    public SlotConfiguration[] getFoldSlots(int leftPage) {
-//        // TODO build and keep a separate map of slots per page
-//        Stream<SlotConfiguration> leftSlots = this.getPage(leftPage).stream()
-//                .filter(drawable -> drawable instanceof SlotConfigurationProvider)
-//                .flatMap(drawable -> Arrays.stream(((SlotConfigurationProvider) drawable).getSlots()));
-//        Stream<SlotConfiguration> rightSlots = this.getPage(leftPage + 1).stream()
-//                .filter(drawable -> drawable instanceof SlotConfigurationProvider)
-//                .flatMap(drawable -> Arrays.stream(((SlotConfigurationProvider) drawable).getSlots()));
-//
-//        return Stream.concat(leftSlots, rightSlots).limit(16).toArray(SlotConfiguration[]::new);
-//    }
+    public SlotConfiguration[] getFoldSlots(int leftPage) {
+        // TODO build and keep a separate map of slots per page
+        Stream<SlotConfiguration> leftSlots = this.getPage(leftPage).stream()
+                .filter(drawable -> drawable instanceof BookInventory)
+                .flatMap(drawable -> Arrays.stream(((BookInventory) drawable).getSlots()));
+        Stream<SlotConfiguration> rightSlots = this.getPage(leftPage + 1).stream()
+                .filter(drawable -> drawable instanceof BookInventory)
+                .flatMap(drawable -> Arrays.stream(((BookInventory) drawable).getSlots()));
+
+        return Stream.concat(leftSlots, rightSlots).limit(16).toArray(SlotConfiguration[]::new);
+    }
 
     public static class Builder {
         private final int leftX, rightX;

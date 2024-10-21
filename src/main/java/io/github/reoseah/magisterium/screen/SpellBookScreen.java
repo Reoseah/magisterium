@@ -1,11 +1,16 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.google.common.collect.ImmutableList;
+import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import io.github.reoseah.magisterium.spellbook.SpellData;
 import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
+import io.github.reoseah.magisterium.spellbook.element.SlotConfiguration;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.entity.player.PlayerInventory;
@@ -49,7 +54,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private final BookProperties properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
 
     // FIXME wip code, spell list should be obtained from the item stack
-    private final List<Identifier> spellIds = ImmutableList.of(Identifier.of("magisterium:test_spell"));
+    private final List<Identifier> spellIds = ImmutableList.of(Identifier.of("magisterium:test_spell"), Identifier.of("magisterium:test_spell_crafting"));
     private final List<SpellData> spells = spellIds.stream().map(SpellDataLoader.SPELLS::get).toList();
     private BookLayout layout;
     private int page;
@@ -115,6 +120,10 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         this.nextPageButton.visible = page + 1 < this.layout.getPageCount();
 
         this.setFocused(null);
+
+        SlotConfiguration[] slots = this.layout.getFoldSlots(this.handler.currentPage.get());
+        this.handler.configureSlots(slots);
+        ClientPlayNetworking.send(new SlotLayoutPayload(slots));
     }
 
     @Override
@@ -146,5 +155,92 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         }
 
         context.getMatrices().pop();
+    }
+
+    protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
+        super.drawMouseoverTooltip(context, x, y);
+
+//        x -= this.x;
+//        y -= this.y;
+//        int currentPage = this.handler.currentPage.get();
+//        int i = 0;
+//        for (Int2ObjectMap.Entry<Bookmark> entry : this.layout.chapters().int2ObjectEntrySet()) {
+//            int chapterPage = entry.getIntKey();
+//            if (chapterPage != currentPage) {
+//                int bookmarkY = this.properties.getBookmarkY(i);
+//                int bookmarkX = 256 / 2 + (chapterPage > currentPage ? this.properties.bookmarkFullWidth - this.properties.bookmarkHiddenWidth : -this.properties.bookmarkFullWidth);
+//
+//                boolean hovered = x > bookmarkX && x < bookmarkX + this.properties.bookmarkHiddenWidth && y > bookmarkY && y < bookmarkY + this.properties.bookmarkHeight;
+//
+//                if (hovered) {
+//                    context.drawTooltip(this.textRenderer, entry.getValue().getName(), this.x + x, this.y + y);
+//                }
+//            }
+//            i++;
+//        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+//        int currentPage = this.handler.currentPage.get();
+//        int i = 0;
+//        for (Int2ObjectMap.Entry<Chapter> entry : this.layout.chapters().int2ObjectEntrySet()) {
+//            int chapterPage = entry.getIntKey();
+//
+//            if (chapterPage != currentPage) {
+//                int bookmarkY = this.y + this.properties.getBookmarkY(i);
+//                int bookmarkX = this.x + this.properties.getBookmarkX(chapterPage < currentPage);
+//
+//                if (mouseX > bookmarkX && mouseX < bookmarkX + this.properties.bookmarkHiddenWidth && mouseY > bookmarkY && mouseY < bookmarkY + this.properties.bookmarkHeight) {
+////                    ClientPlayNetworking.send(new UseBookmarkPayload(chapterPage));
+//
+//                    this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
+//                    return true;
+//                }
+//            }
+//            i++;
+//        }
+
+        for (Drawable drawable : this.layout.getPage(this.page)) {
+            if (drawable instanceof Element element) {
+                if (element.mouseClicked(mouseX - this.x, mouseY - this.y, button)) {
+                    return true;
+                }
+            }
+        }
+        for (Drawable drawable : this.layout.getPage(this.page + 1)) {
+            if (drawable instanceof Element element) {
+                if (element.mouseClicked(mouseX - this.x, mouseY - this.y, button)) {
+                    return true;
+                }
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        for (Drawable drawable : this.layout.getPage(this.page)) {
+            if (drawable instanceof Element element) {
+                if (element.mouseReleased(mouseX - this.x, mouseY - this.y, button)) {
+                    return true;
+                }
+            }
+        }
+        for (Drawable drawable : this.layout.getPage(this.page + 1)) {
+            if (drawable instanceof Element element) {
+                if (element.mouseReleased(mouseX - this.x, mouseY - this.y, button)) {
+                    return true;
+                }
+            }
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
+        if (mouseY >= this.y + this.playerSlotsY && mouseY <= this.y + this.playerSlotsY + PLAYER_SLOTS_HEIGHT) {
+            return mouseX < left || mouseX >= (left + this.backgroundWidth);
+        }
+        return super.isClickOutsideBounds(mouseX, mouseY, left, top, button);
     }
 }

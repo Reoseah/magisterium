@@ -2,9 +2,16 @@ package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.network.SlotLayoutPayload;
+import io.github.reoseah.magisterium.network.StartUtterancePayload;
+import io.github.reoseah.magisterium.network.StopUtterancePayload;
+import io.github.reoseah.magisterium.recipe.SpellBookCraftingRecipe;
+import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -37,6 +44,32 @@ public class Magisterium implements ModInitializer {
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
 
+        Registry.register(Registries.RECIPE_TYPE, "magisterium:spell_book", SpellBookRecipe.TYPE);
+
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_book_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
+
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
+
+        PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SlotLayoutPayload.ID, SlotLayoutPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, (payload, context) -> {
+            LOGGER.info("StartUtterancePayload: {}", payload);
+            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
+                handler.startUtterance(payload.id(), context.player());
+            }
+        });
+        ServerPlayNetworking.registerGlobalReceiver(StopUtterancePayload.ID, (payload, context) -> {
+            LOGGER.info("StopUtterancePayload: {}", payload);
+            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
+                handler.stopUtterance();
+            }
+        });
+        ServerPlayNetworking.registerGlobalReceiver(SlotLayoutPayload.ID, (payload, context) -> {
+            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
+                handler.configureSlots(payload.layout());
+            }
+        });
     }
 }

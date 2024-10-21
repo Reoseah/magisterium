@@ -1,9 +1,12 @@
 package io.github.reoseah.magisterium.spellbook.element;
 
 
+import io.github.reoseah.magisterium.network.StartUtterancePayload;
+import io.github.reoseah.magisterium.network.StopUtterancePayload;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -125,7 +128,7 @@ public class Utterance extends BookSimpleElement {
             float ratio = (readTime / Utterance.this.duration);
 
             if (ratio > 1) {
-                // ClientPlayNetworking.send(new StopUtterancePayload());
+                ClientPlayNetworking.send(new StopUtterancePayload());
 
                 this.mouseDown = false;
                 this.mouseDownTime = 0;
@@ -149,7 +152,7 @@ public class Utterance extends BookSimpleElement {
                 this.mouseDown = true;
                 this.mouseDownTime = System.currentTimeMillis();
 
-//                ClientPlayNetworking.send(new StartUtterancePayload(id));
+                ClientPlayNetworking.send(new StartUtterancePayload(id));
                 return true;
             }
             return false;
@@ -161,7 +164,7 @@ public class Utterance extends BookSimpleElement {
                 this.mouseDown = false;
                 this.mouseDownTime = 0;
 
-//                ClientPlayNetworking.send(new StopUtterancePayload());
+                ClientPlayNetworking.send(new StopUtterancePayload());
                 return true;
             }
             return false;
