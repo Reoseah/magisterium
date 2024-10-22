@@ -6,10 +6,7 @@ import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
-import io.github.reoseah.magisterium.recipe.AwakenFlameRecipe;
-import io.github.reoseah.magisterium.recipe.QuenchFlameRecipe;
-import io.github.reoseah.magisterium.recipe.SpellBookCraftingRecipe;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
+import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -62,6 +59,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:quench_the_flame", QuenchFlameRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
 
