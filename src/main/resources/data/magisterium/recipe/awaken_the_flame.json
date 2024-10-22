@@ -1,5 +1,5 @@
 {
-  "type": "magisterium:spell/awaken_the_flame",
+  "type": "magisterium:awaken_the_flame",
   "utterance": "magisterium:awaken_the_flame",
   "duration": 4
 }

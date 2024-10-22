@@ -1,6 +1,8 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.google.common.collect.ImmutableList;
+import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
@@ -13,11 +15,14 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
@@ -52,13 +57,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     private final BookProperties properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
 
-    // FIXME wip code, spell list should be obtained from the item stack
-    private final List<Identifier> spellIds = ImmutableList.of( //
-            Identifier.of("magisterium:test_spell"), //
-            Identifier.of("magisterium:awaken_the_flame"), //
-            Identifier.of("magisterium:quench_the_flame") //
-    );
-
     private BookLayout layout;
     private int page;
 
@@ -89,21 +87,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             }
         }
 
-        if (this.layout == null) {
-            var builder = new BookLayout.Builder(this.properties);
-            for (var spellId : this.spellIds) {
-                var spell = SpellDataLoader.SPELLS.get(spellId);
-                if (spell == null) {
-                    LOGGER.warn("Spell data for id {} not found", spellId);
-                    continue;
-                }
-                for (var element : spell.elements) {
-                    element.visit(builder, this.properties, this.textRenderer);
-                }
-            }
-            this.layout = builder.build();
-        }
-
         this.previousPageButton = this.addDrawableChild(new PageTurnWidget(this.x + 26, this.y + 156, false, button -> {
             this.client.interactionManager.clickButton(this.handler.syncId, SpellBookScreenHandler.PREVIOUS_PAGE_BUTTON);
             this.handler.currentPage.set(this.handler.currentPage.get() - 2);
@@ -113,6 +96,30 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             this.handler.currentPage.set(this.handler.currentPage.get() + 2);
         }, true));
 
+    }
+
+    private void buildPages() {
+        var pageData = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGE_DATA, new NbtCompound());
+        var inventory = new SimpleInventory(18);
+        inventory.readNbtList(pageData.getList("Inventory", 10), this.client.world.getRegistryManager());
+
+        var builder = new BookLayout.Builder(this.properties);
+        for (int i = 0; i < 18; i++) {
+            var stack = inventory.getStack(i);
+            if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
+                var id = stack.getOrDefault(SpellPageItem.SPELL, null);
+                var spell = SpellDataLoader.SPELLS.get(id);
+                if (spell == null) {
+                    LOGGER.warn("Spell data for id {} not found", id);
+                    continue;
+                }
+                for (var element : spell.elements) {
+                    element.visit(builder, this.properties, this.textRenderer);
+                }
+            }
+        }
+
+        this.layout = builder.build();
         this.updatePage(this.handler.currentPage.get());
     }
 
@@ -131,6 +138,9 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (this.layout == null && !this.handler.getSpellBook().isEmpty()) {
+            this.buildPages();
+        }
         int page = this.handler.currentPage.get();
         if (this.page != page) {
             this.updatePage(page);

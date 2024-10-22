@@ -1,0 +1,67 @@
+{
+  "elements": [
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.conflagrate.heading"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.conflagrate.ingredients"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.conflagrate.description.0"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.conflagrate.description.1"
+        }
+      ],
+      "right": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.conflagrate.heading"
+        },
+        {
+          "type": "inventory",
+          "--comment": "triangle shape is a reference to alchemical symbol for fire, similar frost spell would use a triangle pointing down",
+          "slots": [
+            {
+              "x": 42,
+              "y": 0,
+              "ingredient": {
+                "tag": "magisterium:conflagrate_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 33,
+              "y": 18,
+              "ingredient": {
+                "tag": "magisterium:conflagrate_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 51,
+              "y": 18,
+              "ingredient": {
+                "tag": "magisterium:conflagrate_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "utterance",
+          "id": "magisterium:conflagrate",
+          "duration": 10,
+          "translation_key": "magisterium.spell.magisterium.conflagrate.utterance"
+        }
+      ]
+    }
+  ]
+}

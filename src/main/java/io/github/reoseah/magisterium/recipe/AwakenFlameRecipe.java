@@ -26,6 +26,10 @@ public class AwakenFlameRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        // TODO check if the player can edit the blocks in the area
+        //      show a message if they can't, stylized to fit the theme
+        //      like "There is a force preventing you from altering the world here."
+
         World world = input.player.getWorld();
         BlockPos center = input.player.getBlockPos();
         for (BlockPos pos : BlockPos.iterate(center.add(-RADIUS, -RADIUS, -RADIUS), center.add(RADIUS, RADIUS, RADIUS))) {

@@ -22,13 +22,13 @@ public abstract class DivisibleBlock extends SimpleBlock {
         int elementX = builder.getCurrentX();
         int nextX = builder.getNextX();
 
-        WidgetPair result = this.createWidgetPair(elementX, elementY, properties.pageWidth, builder.getMaxY() - elementY, nextX, builder.getMinY(), properties.pageHeight, textRenderer);
+        WidgetPair pair = this.createWidgetPair(elementX, elementY, properties.pageWidth, builder.getMaxY() - elementY, nextX, builder.getMinY(), properties.pageHeight, textRenderer);
 
-        builder.addWidget(result.current());
+        builder.addWidget(pair.current());
         builder.advancePage();
-        builder.addWidget(result.next());
+        builder.addWidget(pair.next());
 
-        builder.setCurrentY(builder.getMinY() + result.nextHeight());
+        builder.setCurrentY(builder.getMinY() + pair.nextHeight());
     }
 
     protected abstract boolean canDivide(int height, int maxHeight, TextRenderer textRenderer);

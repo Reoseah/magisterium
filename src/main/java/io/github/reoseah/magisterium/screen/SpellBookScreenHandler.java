@@ -12,6 +12,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
@@ -57,6 +58,18 @@ public class SpellBookScreenHandler extends ScreenHandler {
         for (int x = 0; x < 9; x++) {
             this.addSlot(new Slot(playerInv, x, 48 + x * 18, 185));
         }
+
+        this.addSlot(new Slot(new SimpleInventory(context.getStack()), 0, Integer.MIN_VALUE, Integer.MIN_VALUE) {
+            @Override
+            public boolean canTakeItems(PlayerEntity player) {
+                return false;
+            }
+
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return false;
+            }
+        });
     }
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
@@ -239,13 +252,31 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
     }
 
+    public ItemStack getSpellBook() {
+        return this.slots.get(16 + 9).getStack();
+    }
+
     public static abstract class Context {
+        protected final ItemStack stack;
+
+        public Context(ItemStack stack) {
+            this.stack = stack;
+        }
+
+        public ItemStack getStack() {
+            return this.stack;
+        }
+
         public abstract Property createProperty(ComponentType<Integer> component);
 
         public abstract boolean canUse(PlayerEntity player);
     }
 
     public static class ClientContext extends Context {
+        public ClientContext() {
+            super(ItemStack.EMPTY);
+        }
+
         @Override
         public Property createProperty(ComponentType<Integer> component) {
             return Property.create();
@@ -260,12 +291,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public static class LecternContext extends Context {
         private final World world;
         private final BlockPos pos;
-        private final ItemStack stack;
 
         public LecternContext(World world, BlockPos pos, ItemStack stack) {
+            super(stack);
             this.world = world;
             this.pos = pos;
-            this.stack = stack;
         }
 
         @Override
@@ -302,6 +332,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         private final ItemStack stack;
 
         public HandContext(Hand hand, ItemStack stack) {
+            super(stack);
             this.hand = hand;
             this.stack = stack;
         }

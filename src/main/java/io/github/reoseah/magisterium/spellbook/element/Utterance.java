@@ -19,6 +19,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 // TODO: have the utterance text shortly highlight to indicate finishing
+// TODO: consider renaming this and other Utterance* classes to Spell or SpellElement
 public class Utterance extends SimpleBlock {
     protected final String translationKey;
     protected final Identifier id;
@@ -126,8 +127,9 @@ public class Utterance extends SimpleBlock {
             float ratio = (readTime / Utterance.this.duration);
 
             if (ratio > 1) {
-//                ClientPlayNetworking.send(new StopUtterancePayload());
-
+                // TODO: send a packet from the server when utterance is finished
+                //       probably reusing utterance fields on screen handler on client for this
+                //       which currently are only used by the server
                 this.mouseDown = false;
                 this.mouseDownTime = 0;
             }

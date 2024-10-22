@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,23 +38,30 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:spell_page", SpellPageItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGE_DATA);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:spell", SpellPageItem.SPELL);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE.asItem());
-                    entries.add(SpellBookItem.INSTANCE);
-                    entries.add(SpellPageItem.INSTANCE);
+                    entries.add(SpellBookItem.createTestBook(displayContext.lookup()));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
 
+        // TODO if spell data is server loaded, won't need these recipes anymore
+        //      currently, they load parts of the spell data that the server needs to know
+        //      and they have to match the client data...
         Registry.register(Registries.RECIPE_TYPE, "magisterium:spell_book", SpellBookRecipe.TYPE);
 
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell/quench_the_flame", QuenchFlameRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:quench_the_flame", QuenchFlameRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
 
