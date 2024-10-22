@@ -1,10 +1,10 @@
 package io.github.reoseah.magisterium.spellbook.element;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
-import com.mojang.datafixers.util.Pair;
 
 public class SlotProperties {
     public final int x;

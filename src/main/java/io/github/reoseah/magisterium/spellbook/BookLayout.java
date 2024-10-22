@@ -1,8 +1,8 @@
 package io.github.reoseah.magisterium.spellbook;
 
-import io.github.reoseah.magisterium.spellbook.element.SlotPropertiesProvider;
 import io.github.reoseah.magisterium.spellbook.element.Bookmark;
 import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
+import io.github.reoseah.magisterium.spellbook.element.SlotPropertiesProvider;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;

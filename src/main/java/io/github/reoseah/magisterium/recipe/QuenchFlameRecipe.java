@@ -1,14 +1,19 @@
 package io.github.reoseah.magisterium.recipe;
 
-import io.github.reoseah.magisterium.Magisterium;
+import io.github.reoseah.magisterium.MagisteriumBlockTags;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class QuenchFlameRecipe extends SpellBookRecipe {
-    public static final RecipeSerializer<SpellBookRecipe> SERIALIZER = new SpellBookRecipe.SimpleSerializer<>(AwakenFlameRecipe::new);
+    public static final RecipeSerializer<QuenchFlameRecipe> SERIALIZER = new SpellBookRecipe.SimpleSerializer<>(QuenchFlameRecipe::new);
+
+    public static final int RADIUS = AwakenFlameRecipe.RADIUS;
 
     protected QuenchFlameRecipe(Identifier utterance, int duration) {
         super(utterance, duration);
@@ -21,7 +26,16 @@ public class QuenchFlameRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        Magisterium.LOGGER.info("QuenchFlameRecipe.craft");
+        World world = input.player.getWorld();
+        BlockPos center = input.player.getBlockPos();
+        for (BlockPos pos : BlockPos.iterate(center.add(-RADIUS, -RADIUS, -RADIUS), center.add(RADIUS, RADIUS, RADIUS))) {
+            BlockState state = world.getBlockState(pos);
+            if (state.getProperties().contains(Properties.LIT)) {
+                if (state.isIn(MagisteriumBlockTags.AWAKEN_THE_FIRE_TARGETS)) {
+                    world.setBlockState(pos, state.with(Properties.LIT, false));
+                }
+            }
+        }
 
         return ItemStack.EMPTY;
     }

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
-import io.github.reoseah.magisterium.spellbook.SpellData;
 import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
 import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
