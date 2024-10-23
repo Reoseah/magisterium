@@ -14,15 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Heading extends SimpleBlock {
-    protected final String translationKey;
+//    protected final String translationKey;
+    protected final Text text;
 
     public Heading(String translationKey) {
-        this.translationKey = translationKey;
+//        this.translationKey = translationKey;
+        this(Text.translatable(translationKey));
+    }
+
+    public Heading(Text text) {
+        this.text = text;
     }
 
     @Override
     protected int getHeight(int width, TextRenderer textRenderer) {
-        return textRenderer.getWrappedLinesHeight(Text.translatable(this.translationKey), width);
+        return textRenderer.getWrappedLinesHeight(this.text, width);
     }
 
     @Override
@@ -32,8 +38,7 @@ public class Heading extends SimpleBlock {
 
     @Override
     protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
-        MutableText translated = Text.translatable(this.translationKey);
-        List<OrderedText> lines = textRenderer.wrapLines(translated, properties.pageWidth);
+        List<OrderedText> lines = textRenderer.wrapLines(this.text, properties.pageWidth);
         List<ObjectIntPair<OrderedText>> centeredLines = new ArrayList<>(lines.size());
         for (OrderedText text : lines) {
             centeredLines.add(ObjectIntPair.of(text, x + (properties.pageWidth - textRenderer.getWidth(text)) / 2));

@@ -15,23 +15,18 @@ public class Fold implements BookElement {
 
     @Override
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
-        if (builder.getCurrentPage() % 2 != 0) {
-            builder.advancePage();
-        } else if (!builder.isNewPage()) {
-            builder.advancePage();
-            builder.advancePage();
-        }
-
+        builder.startNewFold();
         builder.allowWrap(false);
-        for (SimpleBlock element : this.left) {
+
+        for (var element : this.left) {
             element.visit(builder, properties, textRenderer);
         }
 
         builder.allowWrap(true);
         builder.advancePage();
-
         builder.allowWrap(false);
-        for (SimpleBlock element : this.right) {
+
+        for (var element : this.right) {
             element.visit(builder, properties, textRenderer);
         }
 

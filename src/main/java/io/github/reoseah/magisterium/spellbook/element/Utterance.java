@@ -3,10 +3,12 @@ package io.github.reoseah.magisterium.spellbook.element;
 
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -71,6 +73,8 @@ public class Utterance extends SimpleBlock {
 
         private final BookProperties properties;
         private final TextRenderer textRenderer;
+        private final SpellBookScreenHandler handler = (SpellBookScreenHandler) MinecraftClient.getInstance().player.currentScreenHandler;
+
         private final List<OrderedText> lines;
         private final List<String> linesAsString;
         private final IntList linesY;
@@ -127,11 +131,10 @@ public class Utterance extends SimpleBlock {
             float ratio = (readTime / Utterance.this.duration);
 
             if (ratio > 1) {
-                // TODO: send a packet from the server when utterance is finished
-                //       probably reusing utterance fields on screen handler on client for this
-                //       which currently are only used by the server
-                this.mouseDown = false;
-                this.mouseDownTime = 0;
+                if (this.handler.isUttering.get() == 0) {
+                    this.mouseDown = false;
+                    this.mouseDownTime = 0;
+                }
             }
 
             int coloredCharacters = Math.round(this.textLength * ratio);
@@ -139,7 +142,8 @@ public class Utterance extends SimpleBlock {
             for (int i = 0; i < lines.size(); i++) {
                 ctx.drawText(textRenderer, lines.get(i), x + properties.spellButtonWidth, linesY.getInt(i), 0x000000, false);
                 if (coloredCharacters > 0) {
-                    ctx.drawText(textRenderer, linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length())), x + properties.spellButtonWidth, linesY.getInt(i), 0xce1e00, false);
+                    int color = ratio > 1 ? 0xdd4c1e : 0xce1e00;
+                    ctx.drawText(textRenderer, linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length())), x + properties.spellButtonWidth, linesY.getInt(i), color, false);
                     coloredCharacters -= linesAsString.get(i).length();
                 }
             }

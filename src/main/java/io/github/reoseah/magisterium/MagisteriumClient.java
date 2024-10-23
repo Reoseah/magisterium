@@ -1,6 +1,8 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.screen.ArcaneTableScreen;
+import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreen;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
@@ -22,5 +24,6 @@ public class MagisteriumClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE);
 
         HandledScreens.register(SpellBookScreenHandler.TYPE, SpellBookScreen::new);
+        HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);
     }
 }

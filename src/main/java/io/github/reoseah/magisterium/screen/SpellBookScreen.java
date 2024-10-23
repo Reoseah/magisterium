@@ -1,29 +1,34 @@
 package io.github.reoseah.magisterium.screen;
 
-import com.google.common.collect.ImmutableList;
+import io.github.reoseah.magisterium.item.RibbonItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
+import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
-import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
+import io.github.reoseah.magisterium.spellbook.element.*;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.Format;
 
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -57,7 +62,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     private final BookProperties properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
 
-    private BookLayout layout;
+    private BookLayout layout = BookLayout.EMPTY;
     private int page;
 
     private PageTurnWidget previousPageButton;
@@ -104,6 +109,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         inventory.readNbtList(pageData.getList("Inventory", 10), this.client.world.getRegistryManager());
 
         var builder = new BookLayout.Builder(this.properties);
+        int currentChapter = 1;
         for (int i = 0; i < 18; i++) {
             var stack = inventory.getStack(i);
             if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
@@ -116,11 +122,35 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 for (var element : spell.elements) {
                     element.visit(builder, this.properties, this.textRenderer);
                 }
+            } else if (stack.isOf(RibbonItem.INSTANCE)) {
+                var name = stack.get(DataComponentTypes.CUSTOM_NAME);
+                if (name == null) {
+                    name = Text.translatable("magisterium.gui.untitled_section");
+                }
+                new BookmarkElement(name).visit(builder, this.properties, this.textRenderer);
+                builder.setCurrentY(builder.getMinY() + 20);
+                new Heading(Text.literal(toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(builder, this.properties, this.textRenderer);
+                new Heading(name).visit(builder, this.properties, this.textRenderer);
+                builder.advancePage();
             }
         }
 
         this.layout = builder.build();
         this.updatePage(this.handler.currentPage.get());
+    }
+
+    private static final int[] VALUES = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    private static final String[] SYMBOLS = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+    private static String toRoman(int number) {
+        StringBuilder roman = new StringBuilder();
+        for (int i = 0; i < VALUES.length; i++) {
+            while (number >= VALUES[i]) {
+                number -= VALUES[i];
+                roman.append(SYMBOLS[i]);
+            }
+        }
+        return roman.toString();
     }
 
     protected void updatePage(int page) {
@@ -138,7 +168,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (this.layout == null && !this.handler.getSpellBook().isEmpty()) {
+        if (this.layout == BookLayout.EMPTY && !this.handler.getSpellBook().isEmpty()) {
             this.buildPages();
         }
         int page = this.handler.currentPage.get();
@@ -167,52 +197,62 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             element.render(context, mouseXInGui, mouseYInGui, delta);
         }
 
+        int i = 0;
+        for (Int2ObjectMap.Entry<Bookmark> bookmarkEntry : this.layout.bookmarks().int2ObjectEntrySet()) {
+            int bookmarkPage = bookmarkEntry.getIntKey();
+            if (bookmarkPage != this.page) {
+                int bookmarkY = this.properties.getBookmarkY(i);
+                int bookmarkX = 256 / 2 + (bookmarkPage > this.page ? this.properties.bookmarkWidth - this.properties.bookmarkTipWidth : -this.properties.bookmarkWidth);
+
+                boolean hovered = mouseX > bookmarkX && mouseX < bookmarkX + this.properties.bookmarkTipWidth && mouseY > bookmarkY && mouseY < bookmarkY + this.properties.bookmarkHeight;
+
+                if (bookmarkPage < this.page) {
+                    context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
+                } else {
+                    context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU + this.properties.bookmarkTipWidth, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
+                }
+            }
+        }
+
         context.getMatrices().pop();
     }
 
     protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
         super.drawMouseoverTooltip(context, x, y);
 
-//        x -= this.x;
-//        y -= this.y;
-//        int currentPage = this.handler.currentPage.get();
-//        int i = 0;
-//        for (Int2ObjectMap.Entry<Bookmark> entry : this.layout.bookmarks().int2ObjectEntrySet()) {
-//            int chapterPage = entry.getIntKey();
-//            if (chapterPage != currentPage) {
-//                int bookmarkY = this.properties.getBookmarkY(i);
-//                int bookmarkX = 256 / 2 + (chapterPage > currentPage ? this.properties.bookmarkFullWidth - this.properties.bookmarkHiddenWidth : -this.properties.bookmarkFullWidth);
-//
-//                boolean hovered = x > bookmarkX && x < bookmarkX + this.properties.bookmarkHiddenWidth && y > bookmarkY && y < bookmarkY + this.properties.bookmarkHeight;
-//
-//                if (hovered) {
-//                    context.drawTooltip(this.textRenderer, entry.getValue().getName(), this.x + x, this.y + y);
-//                }
-//            }
-//            i++;
-//        }
+        int mouseXInGui = x - this.x;
+        int mouseYInGui = y - this.y;
+        int i = 0;
+        for (Int2ObjectMap.Entry<Bookmark> bookmarkEntry : this.layout.bookmarks().int2ObjectEntrySet()) {
+            int bookmarkPage = bookmarkEntry.getIntKey();
+            if (bookmarkPage != this.page) {
+                int bookmarkY = this.properties.getBookmarkY(i);
+                int bookmarkX = 256 / 2 + (bookmarkPage > this.page ? this.properties.bookmarkWidth - this.properties.bookmarkTipWidth : -this.properties.bookmarkWidth);
+
+                if (mouseXInGui > bookmarkX && mouseXInGui < bookmarkX + this.properties.bookmarkTipWidth && mouseYInGui > bookmarkY && mouseYInGui < bookmarkY + this.properties.bookmarkHeight) {
+                    context.drawTooltip(this.textRenderer, bookmarkEntry.getValue().getName(), x, y);
+                }
+            }
+        }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-//        int currentPage = this.handler.currentPage.get();
-//        int i = 0;
-//        for (Int2ObjectMap.Entry<Chapter> entry : this.layout.bookmarks().int2ObjectEntrySet()) {
-//            int chapterPage = entry.getIntKey();
-//
-//            if (chapterPage != currentPage) {
-//                int bookmarkY = this.y + this.properties.getBookmarkY(i);
-//                int bookmarkX = this.x + this.properties.getBookmarkX(chapterPage < currentPage);
-//
-//                if (mouseX > bookmarkX && mouseX < bookmarkX + this.properties.bookmarkHiddenWidth && mouseY > bookmarkY && mouseY < bookmarkY + this.properties.bookmarkHeight) {
-////                    ClientPlayNetworking.send(new UseBookmarkPayload(chapterPage));
-//
-//                    this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
-//                    return true;
-//                }
-//            }
-//            i++;
-//        }
+        int i = 0;
+        for (Int2ObjectMap.Entry<Bookmark> bookmarkEntry : this.layout.bookmarks().int2ObjectEntrySet()) {
+            int bookmarkPage = bookmarkEntry.getIntKey();
+            if (bookmarkPage != this.page) {
+                int bookmarkY = this.properties.getBookmarkY(i);
+                int bookmarkX = 256 / 2 + (bookmarkPage > this.page ? this.properties.bookmarkWidth - this.properties.bookmarkTipWidth : -this.properties.bookmarkWidth);
+
+                if (mouseX > bookmarkX && mouseX < bookmarkX + this.properties.bookmarkTipWidth && mouseY > bookmarkY && mouseY < bookmarkY + this.properties.bookmarkHeight) {
+                    ClientPlayNetworking.send(new UseBookmarkPayload(bookmarkPage));
+                    this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
+                    return true;
+                }
+            }
+            i++;
+        }
 
         for (Drawable drawable : this.layout.getPage(this.page)) {
             if (drawable instanceof Element element) {

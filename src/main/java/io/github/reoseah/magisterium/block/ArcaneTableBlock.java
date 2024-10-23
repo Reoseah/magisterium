@@ -1,15 +1,26 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
+import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class ArcaneTableBlock extends BlockWithEntity {
@@ -55,7 +66,22 @@ public class ArcaneTableBlock extends BlockWithEntity {
         return SHAPE;
     }
 
+    @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (!world.isClient) {
+            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+            return ActionResult.CONSUME;
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new ArcaneTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("container.magisterium.arcane_table"));
     }
 }

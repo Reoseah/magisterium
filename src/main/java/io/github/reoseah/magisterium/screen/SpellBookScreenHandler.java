@@ -37,8 +37,9 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public final Property currentPage;
     public final Property isUttering;
     public final Inventory inventory = new SpellBookInventory(this);
-    private @Nullable Identifier utteranceId;
+
     private long utteranceStart;
+
     private @Nullable SpellBookRecipe utteranceRecipe;
 
     public SpellBookScreenHandler(int syncId, PlayerInventory playerInv) {
@@ -74,7 +75,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
         this.isUttering.set(1);
-        this.utteranceId = id;
         this.utteranceStart = player.getWorld().getTime();
 
         player.getWorld().getRecipeManager() //
@@ -88,7 +88,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void stopUtterance() {
         this.isUttering.set(0);
-        this.utteranceId = null;
         this.utteranceStart = 0;
         this.utteranceRecipe = null;
 
@@ -168,7 +167,8 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public boolean canUse(PlayerEntity player) {
         // this gets called every tick, so it's a tick method effectively
 
-        if (this.utteranceRecipe != null) {
+        // TODO allow for spells that are active as long as the player holds the casting button down?
+        if (this.utteranceRecipe != null && !player.getWorld().isClient) {
             var recipeDuration = this.utteranceRecipe.duration;
             if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
                 ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory, player), player.getWorld().getRegistryManager());

@@ -18,6 +18,8 @@ public record BookLayout(
         Int2ObjectMap<List<Drawable>> pages,
         Int2ObjectMap<Bookmark> bookmarks
 ) {
+    public static final BookLayout EMPTY = new BookLayout(Int2ObjectMaps.emptyMap(), Int2ObjectMaps.emptyMap());
+
     public BookLayout(Int2ObjectMap<List<Drawable>> pages, Int2ObjectMap<Bookmark> bookmarks) {
         this.pages = Int2ObjectMaps.unmodifiable(pages);
         this.bookmarks = Int2ObjectMaps.unmodifiable(bookmarks);
@@ -49,7 +51,7 @@ public record BookLayout(
         private final int pageHeight;
 
         private final Int2ObjectMap<List<Drawable>> pages = new Int2ObjectArrayMap<>();
-        private final Int2ObjectMap<Bookmark> chapters = new Int2ObjectArrayMap<>();
+        private final Int2ObjectMap<Bookmark> bookmarks = new Int2ObjectArrayMap<>();
 
         private int currentPageIdx;
         private int currentY;
@@ -66,7 +68,7 @@ public record BookLayout(
         }
 
         public BookLayout build() {
-            return new BookLayout(this.pages, this.chapters);
+            return new BookLayout(this.pages, this.bookmarks);
         }
 
         public int getCurrentPage() {
@@ -81,6 +83,15 @@ public record BookLayout(
             if (this.allowWrap) {
                 this.currentPageIdx++;
                 this.currentY = this.paddingTop;
+            }
+        }
+
+        public void startNewFold() {
+            if (this.getCurrentPage() % 2 != 0) {
+                this.advancePage();
+            } else if (!this.isNewPage()) {
+                this.advancePage();
+                this.advancePage();
             }
         }
 
@@ -117,11 +128,11 @@ public record BookLayout(
         }
 
         public void markBookmark(Bookmark chapter) {
-            this.chapters.put(this.currentPageIdx, chapter);
+            this.bookmarks.put(this.currentPageIdx, chapter);
         }
 
         public int getCurrentBookmark() {
-            return this.chapters.size();
+            return this.bookmarks.size();
         }
 
         public boolean isWrapAllowed() {

@@ -6,20 +6,19 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.Text;
 
 public class BookmarkElement implements BookElement, Bookmark {
-    public final String translationKey;
+    public final Text text;
 
     public BookmarkElement(String translationKey) {
-        this.translationKey = translationKey;
+        this(Text.translatable(translationKey));
+    }
+
+    public BookmarkElement(Text text) {
+        this.text = text;
     }
 
     @Override
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
-        if (builder.getCurrentPage() % 2 != 0) {
-            builder.advancePage();
-        } else if (!builder.isNewPage()) {
-            builder.advancePage();
-            builder.advancePage();
-        }
+        builder.startNewFold();
 
         int x = 256 / 2 - properties.bookmarkWidth;
         int y = properties.getBookmarkY(builder.getCurrentBookmark());
@@ -33,6 +32,6 @@ public class BookmarkElement implements BookElement, Bookmark {
 
     @Override
     public Text getName() {
-        return Text.of(this.translationKey);
+        return this.text;
     }
 }

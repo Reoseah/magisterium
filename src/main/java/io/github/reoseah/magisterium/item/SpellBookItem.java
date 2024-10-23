@@ -33,9 +33,10 @@ public class SpellBookItem extends Item {
         book.set(PAGE_DATA, Util.make(new NbtCompound(), nbt -> {
             var inventory = new SimpleInventory(18);
 
-            inventory.setStack(0, SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
-            inventory.setStack(1, SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
-            inventory.setStack(2, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
+            inventory.setStack(0, RibbonItem.INSTANCE.getDefaultStack());
+            inventory.setStack(1, SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
+            inventory.setStack(2, SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
+            inventory.setStack(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
 
             nbt.put("Inventory", inventory.toNbtList(registryLookup));
         }));
@@ -46,6 +47,11 @@ public class SpellBookItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack book = player.getStackInHand(hand);
+
+        if (!book.contains(PAGE_DATA)) {
+            return TypedActionResult.fail(book);
+        }
+
         if (!world.isClient) {
             player.openHandledScreen(new NamedScreenHandlerFactory() {
                 @Override

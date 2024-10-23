@@ -1,12 +1,15 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.item.RibbonItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
+import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import io.github.reoseah.magisterium.recipe.*;
+import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -33,6 +36,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:spell_page", SpellPageItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:ribbon", RibbonItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGE_DATA);
@@ -42,11 +46,12 @@ public class Magisterium implements ModInitializer {
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
-                    entries.add(ArcaneTableBlock.INSTANCE.asItem());
+                    entries.add(ArcaneTableBlock.INSTANCE);
                     entries.add(SpellBookItem.createTestBook(displayContext.lookup()));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
+                    entries.add(RibbonItem.INSTANCE);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
@@ -62,19 +67,19 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
+        Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
 
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SlotLayoutPayload.ID, SlotLayoutPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, (payload, context) -> {
-            LOGGER.info("StartUtterancePayload: {}", payload);
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
                 handler.startUtterance(payload.id(), context.player());
             }
         });
         ServerPlayNetworking.registerGlobalReceiver(StopUtterancePayload.ID, (payload, context) -> {
-            LOGGER.info("StopUtterancePayload: {}", payload);
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
                 handler.stopUtterance();
             }
@@ -82,6 +87,11 @@ public class Magisterium implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(SlotLayoutPayload.ID, (payload, context) -> {
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
                 handler.applySlotProperties(payload.layout());
+            }
+        });
+        ServerPlayNetworking.registerGlobalReceiver(UseBookmarkPayload.ID, (payload, context) -> {
+            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler hemonomiconScreen) {
+                hemonomiconScreen.currentPage.set(payload.page());
             }
         });
     }
