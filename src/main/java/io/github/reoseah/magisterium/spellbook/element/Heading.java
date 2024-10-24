@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Heading extends SimpleBlock {
-//    protected final String translationKey;
     protected final Text text;
 
     public Heading(String translationKey) {
-//        this.translationKey = translationKey;
         this(Text.translatable(translationKey));
     }
 

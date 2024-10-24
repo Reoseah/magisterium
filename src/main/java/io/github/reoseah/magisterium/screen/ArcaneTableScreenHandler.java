@@ -158,6 +158,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
             this.addListener(sender -> {
                 var book = this.bookInventory.getStack(0);
                 if (book.isOf(SpellBookItem.INSTANCE)) {
+                    book.set(SpellBookItem.CURRENT_PAGE, 0);
                     book.set(SpellBookItem.PAGES, new ArrayList<>(this.getHeldStacks()));
                 }
             });
