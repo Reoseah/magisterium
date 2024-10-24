@@ -3,6 +3,7 @@ package io.github.reoseah.magisterium.screen;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -57,6 +58,12 @@ public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
                 if (bookmarks > 7) {
                     var tooltip = this.getTooltipFromItem(stack);
                     tooltip.add(Text.translatable("magisterium.gui.only_first_seven_bookmarks_will_show").formatted(Formatting.RED));
+                    context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
+                    return;
+                }
+                if (!stack.contains(DataComponentTypes.CUSTOM_NAME)) {
+                    var tooltip = this.getTooltipFromItem(stack);
+                    tooltip.add(Text.translatable("magisterium.gui.name_bookmarks_to_give_title").formatted(Formatting.RED));
                     context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
                     return;
                 }

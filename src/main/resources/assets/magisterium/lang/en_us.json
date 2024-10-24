@@ -5,9 +5,11 @@
   "item.magisterium.spell_book": "Spell Tome",
   "item.magisterium.spell_page": "Spell Page",
   "item.magisterium.bookmark": "Silk Bookmark",
+  "container.magisterium.arcane_table": "Arcane Table",
   "magisterium.gui.untitled_section": "Untitled",
   "magisterium.gui.untitled_section.description": "Rename the bookmark item to give the section a title.",
   "magisterium.gui.only_first_seven_bookmarks_will_show": "Only the first seven bookmarks will show",
+  "magisterium.gui.name_bookmarks_to_give_title": "Name bookmarks to give sections a title",
   "magisterium.spell.magisterium.awaken_the_flame": "Awaken the Flame",
   "magisterium.spell.magisterium.awaken_the_flame.heading": "ᴀᴡᴀᴋᴇɴ ᴛʜᴇ ꜰʟᴀᴍᴇ",
   "magisterium.spell.magisterium.awaken_the_flame.description": "Ignite nearby candles, torches and other kinds of fire bearers and receptacles.",
@@ -26,6 +28,5 @@
   "magisterium.spell.magisterium.conflagrate.ingredients": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: up to three objects infused with fire element",
   "magisterium.spell.magisterium.conflagrate.description.0": "Unleash a burst of scorching fire, setting the entire area around the caster ablaze.",
   "magisterium.spell.magisterium.conflagrate.description.1": "Additional items drastically increase the range of spell.",
-  "magisterium.spell.magisterium.conflagrate.utterance": "Iɢɴɪs ᴅᴏᴍɪɴᴀᴛᴜʀ, ɴɪʜɪʟ ʀᴇʟɪɴǫᴜᴇ ɪɴ ᴄɪɴᴇʀɪʙᴜs!\n\nMᴀᴛᴇʀɪᴀ ᴀʀᴅᴇᴀᴛ, sɪᴛ ꜰʟᴀᴍᴍɪs ᴄᴏɴsᴜᴍᴘᴛᴀ!\n\nOᴍɴɪᴀ ᴇᴛ sɪɴɢᴜʟᴀ ɪɴꜰʟᴀᴍᴍᴀʀᴇ!",
-  "container.magisterium.arcane_table": "Arcane Table"
+  "magisterium.spell.magisterium.conflagrate.utterance": "Iɢɴɪs ᴅᴏᴍɪɴᴀᴛᴜʀ, ɴɪʜɪʟ ʀᴇʟɪɴǫᴜᴇ ɪɴ ᴄɪɴᴇʀɪʙᴜs!\n\nMᴀᴛᴇʀɪᴀ ᴀʀᴅᴇᴀᴛ, sɪᴛ ꜰʟᴀᴍᴍɪs ᴄᴏɴsᴜᴍᴘᴛᴀ!\n\nOᴍɴɪᴀ ᴇᴛ sɪɴɢᴜʟᴀ ɪɴꜰʟᴀᴍᴍᴀʀᴇ!"
 }

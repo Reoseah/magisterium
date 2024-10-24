@@ -101,6 +101,10 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     }
 
+    private static final Text UNTITLED_SECTION = Text.translatable("magisterium.gui.untitled_section");
+    private static final Text UNTITLED_SECTION_DESCRIPTION = Text.translatable("magisterium.gui.untitled_section.description") //
+            .formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
+
     private void buildPages() {
         var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGES, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
@@ -126,28 +130,25 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     // more bookmarks won't fit into the book with the current layout
                     continue;
                 }
-                // TODO: refactor this mess
+
                 var name = stack.get(DataComponentTypes.CUSTOM_NAME);
-                var lore = stack.get(DataComponentTypes.LORE);
-                boolean unnamed = name == null;
-                if (name == null) {
-                    name = Text.translatable("magisterium.gui.untitled_section");
-                }
-                new BookmarkElement(name).visit(builder, this.properties, this.textRenderer);
+
+                new BookmarkElement(name != null ? name : UNTITLED_SECTION).visit(builder, this.properties, this.textRenderer);
                 builder.setCurrentY(builder.getCurrentY() + 20);
                 new Heading(Text.literal(RomanNumbers.toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(builder, this.properties, this.textRenderer);
-                new Heading(name).visit(builder, this.properties, this.textRenderer);
-                if (unnamed) {
+                new Heading(name != null ? name : UNTITLED_SECTION).visit(builder, this.properties, this.textRenderer);
+
+                if (name == null) {
                     builder.setCurrentY(builder.getCurrentY() + 4);
-                    new Paragraph(Text.translatable("magisterium.gui.untitled_section.description") //
-                            .formatted(Formatting.ITALIC) //
-                            .styled(style -> style.withColor(0xc4b090))
-                    ).visit(builder, this.properties, this.textRenderer);
-                } else if (lore != null) {
+                    new Paragraph(UNTITLED_SECTION_DESCRIPTION).visit(builder, this.properties, this.textRenderer);
+                    builder.advancePage();
+                    continue;
+                }
+
+                var lore = stack.get(DataComponentTypes.LORE);
+                if (lore != null) {
                     builder.setCurrentY(builder.getCurrentY() + 4);
-                    lore.lines().forEach(text -> {
-                        new Paragraph(text).visit(builder, this.properties, this.textRenderer);
-                    });
+                    lore.lines().forEach(text -> new Paragraph(text).visit(builder, this.properties, this.textRenderer));
                 }
                 builder.advancePage();
             }
@@ -156,7 +157,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         this.layout = builder.build();
         this.updatePage(this.handler.currentPage.get());
     }
-
 
     protected void updatePage(int page) {
         this.page = page;
