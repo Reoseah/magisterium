@@ -56,7 +56,8 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
 
                     @Override
                     public boolean canInsert(ItemStack stack) {
-                        return bookInventory.getStack(0).contains(SpellBookItem.PAGES);
+                        return bookInventory.getStack(0).contains(SpellBookItem.PAGES) //
+                                && stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS);
                     }
                 });
             }
@@ -176,6 +177,11 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
         @Override
         public int getMaxCountPerStack() {
             return 1;
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack) {
+            return super.canInsert(stack) && stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS);
         }
     }
 }
