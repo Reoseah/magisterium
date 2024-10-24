@@ -37,7 +37,7 @@ public class SpellBookItem extends Item {
         ItemStack book = new ItemStack(INSTANCE);
 
         book.set(PAGES, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
-            list.set(0, RibbonItem.INSTANCE.getDefaultStack());
+            list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
             list.set(1, SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
             list.set(2, SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
             list.set(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));

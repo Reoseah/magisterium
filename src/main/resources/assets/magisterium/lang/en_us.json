@@ -4,7 +4,7 @@
   "block.magisterium.glyph": "Arcane Glyph",
   "item.magisterium.spell_book": "Spell Tome",
   "item.magisterium.spell_page": "Spell Page",
-  "item.magisterium.ribbon": "Silk Bookmark",
+  "item.magisterium.bookmark": "Silk Bookmark",
   "magisterium.gui.untitled_section": "Untitled",
   "magisterium.gui.untitled_section.description": "Rename the bookmark item to give the section a title.",
   "magisterium.gui.only_first_seven_bookmarks_will_show": "Only the first seven bookmarks will show",

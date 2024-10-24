@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.screen;
 
-import io.github.reoseah.magisterium.item.RibbonItem;
+import io.github.reoseah.magisterium.item.BookmarkItem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -46,11 +46,11 @@ public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
     protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
         if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
             var stack = this.focusedSlot.getStack();
-            if (stack.isOf(RibbonItem.INSTANCE)) {
+            if (stack.isOf(BookmarkItem.INSTANCE)) {
                 int bookmarks = 0;
                 for (int i = 1; this.handler.getSlot(i) != this.focusedSlot && i < 19; i++) {
                     var slot = this.handler.getSlot(i);
-                    if (slot.getStack().isOf(RibbonItem.INSTANCE)) {
+                    if (slot.getStack().isOf(BookmarkItem.INSTANCE)) {
                         bookmarks++;
                     }
                 }

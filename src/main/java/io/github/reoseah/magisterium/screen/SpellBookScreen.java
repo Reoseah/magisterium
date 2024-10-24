@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.screen;
 
-import io.github.reoseah.magisterium.item.RibbonItem;
+import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
@@ -105,8 +105,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGES, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var builder = new BookLayout.Builder(this.properties);
-        for (int i = 0; i < 18; i++) {
-            var stack = pages.get(i);
+        for (ItemStack stack : pages) {
             if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
                 var id = stack.get(SpellPageItem.SPELL);
                 if (id == null) {
@@ -121,10 +120,10 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 for (var element : spell.elements) {
                     element.visit(builder, this.properties, this.textRenderer);
                 }
-            } else if (stack.isOf(RibbonItem.INSTANCE)) {
+            } else if (stack.isOf(BookmarkItem.INSTANCE)) {
                 int currentChapter = builder.getCurrentBookmark() + 1;
                 if (currentChapter > 7) {
-                    // more bookmarks won't fit into the book with current layout
+                    // more bookmarks won't fit into the book with the current layout
                     continue;
                 }
                 // TODO: refactor this mess

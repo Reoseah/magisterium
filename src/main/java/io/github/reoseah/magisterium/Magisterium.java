@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.item.RibbonItem;
+import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
@@ -54,7 +54,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:spell_page", SpellPageItem.INSTANCE);
-        Registry.register(Registries.ITEM, "magisterium:ribbon", RibbonItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGES);
@@ -70,7 +70,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
-                    entries.add(RibbonItem.INSTANCE);
+                    entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
