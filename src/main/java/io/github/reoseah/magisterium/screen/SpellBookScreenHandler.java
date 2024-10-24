@@ -138,9 +138,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
                     stack = this.getSlot(idx).insertStack(stack);
                 }
             }
-//            else if (!this.insertItem(stack, 16, 16 + 9, false)) {
-//                return ItemStack.EMPTY;
-//            }
         }
 
         if (stack.isEmpty()) {

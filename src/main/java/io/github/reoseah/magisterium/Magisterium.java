@@ -39,7 +39,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:ribbon", RibbonItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
-        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGE_DATA);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGES);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:spell", SpellPageItem.SPELL);
 
         var group = FabricItemGroup.builder() //
@@ -47,7 +47,7 @@ public class Magisterium implements ModInitializer {
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
-                    entries.add(SpellBookItem.createTestBook(displayContext.lookup()));
+                    entries.add(SpellBookItem.createTestBook());
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));

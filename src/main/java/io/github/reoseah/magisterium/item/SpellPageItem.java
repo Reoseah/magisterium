@@ -13,7 +13,7 @@ import java.util.List;
 public class SpellPageItem extends Item {
     public static final ComponentType<Identifier> SPELL = ComponentType.<Identifier>builder().codec(Identifier.CODEC).packetCodec(Identifier.PACKET_CODEC).build();
 
-    public static final Item INSTANCE = new SpellPageItem(new Item.Settings().maxCount(1));
+    public static final Item INSTANCE = new SpellPageItem(new Item.Settings().maxCount(16));
 
     protected SpellPageItem(Settings settings) {
         super(settings);

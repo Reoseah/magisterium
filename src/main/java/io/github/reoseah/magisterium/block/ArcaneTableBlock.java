@@ -82,6 +82,6 @@ public class ArcaneTableBlock extends BlockWithEntity {
 
     @Override
     protected NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new ArcaneTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("container.magisterium.arcane_table"));
+        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> ArcaneTableScreenHandler.createServerSide(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("container.magisterium.arcane_table"));
     }
 }

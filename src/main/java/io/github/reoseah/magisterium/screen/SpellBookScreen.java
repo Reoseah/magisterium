@@ -19,16 +19,14 @@ import net.minecraft.client.gui.widget.PageTurnWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.text.Format;
 
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -104,16 +102,18 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     }
 
     private void buildPages() {
-        var pageData = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGE_DATA, new NbtCompound());
-        var inventory = new SimpleInventory(18);
-        inventory.readNbtList(pageData.getList("Inventory", 10), this.client.world.getRegistryManager());
+        var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGES, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var builder = new BookLayout.Builder(this.properties);
         int currentChapter = 1;
         for (int i = 0; i < 18; i++) {
-            var stack = inventory.getStack(i);
+            var stack = pages.get(i);
             if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
-                var id = stack.getOrDefault(SpellPageItem.SPELL, null);
+                var id = stack.get(SpellPageItem.SPELL);
+                if (id == null) {
+                    LOGGER.warn("Spell id not found in stack {}", stack);
+                    continue;
+                }
                 var spell = SpellDataLoader.SPELLS.get(id);
                 if (spell == null) {
                     LOGGER.warn("Spell data for id {} not found", id);
@@ -132,6 +132,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 new Heading(Text.literal(toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(builder, this.properties, this.textRenderer);
                 new Heading(name).visit(builder, this.properties, this.textRenderer);
                 builder.advancePage();
+                currentChapter++;
             }
         }
 
@@ -212,6 +213,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU + this.properties.bookmarkTipWidth, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
                 }
             }
+            i++;
         }
 
         context.getMatrices().pop();
@@ -233,6 +235,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     context.drawTooltip(this.textRenderer, bookmarkEntry.getValue().getName(), x, y);
                 }
             }
+            i++;
         }
     }
 
