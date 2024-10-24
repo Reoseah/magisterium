@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.item.RibbonItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
@@ -16,23 +17,27 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.LecternBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +49,7 @@ public class Magisterium implements ModInitializer {
     @Override
     public void onInitialize() {
         Registry.register(Registries.BLOCK, "magisterium:arcane_table", ArcaneTableBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:glyph", GlyphBlock.INSTANCE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
@@ -63,6 +69,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
                     entries.add(RibbonItem.INSTANCE);
                 }) //
                 .build();
@@ -77,6 +84,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:quench_the_flame", QuenchFlameRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:glyphic_ignition", GlyphicIgnitionRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
@@ -151,6 +159,39 @@ public class Magisterium implements ModInitializer {
             }
         }
 
+        if (stack.isOf(Items.LAPIS_LAZULI)) {
+            if (placeBlock(player, world, hand, hitResult, stack, GlyphBlock.INSTANCE)) {
+                if (!player.getAbilities().creativeMode) {
+                    stack.decrement(1);
+                }
+                return ActionResult.SUCCESS;
+            }
+        }
+
         return ActionResult.PASS;
+    }
+
+    private static boolean placeBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult,
+                                      ItemStack stack, Block block) {
+        // placement code derived from BlockItem.useOnBlock
+        ItemPlacementContext context = new ItemPlacementContext(player, hand, stack, hitResult);
+        if (!context.canPlace() || !player.canModifyAt(world, context.getBlockPos())) {
+            return false;
+        }
+        BlockState state = block.getPlacementState(context);
+        BlockPos pos = context.getBlockPos();
+        if (!state.canPlaceAt(world, pos)) {
+            return false;
+        }
+        if (!world.isClient) {
+            world.setBlockState(pos, state, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+        }
+
+        BlockSoundGroup sounds = state.getSoundGroup();
+        world.playSound(player, pos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F,
+                sounds.getPitch() * 0.8F);
+        world.emitGameEvent(player, GameEvent.BLOCK_PLACE, pos);
+
+        return true;
     }
 }

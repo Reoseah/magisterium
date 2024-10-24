@@ -34,7 +34,7 @@ public class ArcaneTableBlock extends BlockWithEntity {
 
     public static final Block INSTANCE = new ArcaneTableBlock(Settings.copy(Blocks.CRAFTING_TABLE).mapColor(MapColor.BLUE));
 
-    public ArcaneTableBlock(Settings settings) {
+    protected ArcaneTableBlock(Settings settings) {
         super(settings);
     }
 

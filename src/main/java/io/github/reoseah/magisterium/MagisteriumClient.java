@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreen;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreen;
@@ -21,7 +22,7 @@ public class MagisteriumClient implements ClientModInitializer {
         // this will help with making items for each spell
         ResourceManagerHelperImpl.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SpellDataLoader());
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE);
 
         HandledScreens.register(SpellBookScreenHandler.TYPE, SpellBookScreen::new);
         HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);

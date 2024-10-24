@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "type=up": {
+      "model": "magisterium:block/glyph_up"
+    },
+    "type=down": {
+      "model": "magisterium:block/glyph_down"
+    },
+    "type=east": {
+      "model": "magisterium:block/glyph_east"
+    },
+    "type=north": {
+      "model": "magisterium:block/glyph_north"
+    },
+    "type=south": {
+      "model": "magisterium:block/glyph_south"
+    },
+    "type=west": {
+      "model": "magisterium:block/glyph_west"
+    }
+  }
+}
