@@ -129,6 +129,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 }
                 // TODO: refactor this mess
                 var name = stack.get(DataComponentTypes.CUSTOM_NAME);
+                var lore = stack.get(DataComponentTypes.LORE);
                 boolean unnamed = name == null;
                 if (name == null) {
                     name = Text.translatable("magisterium.gui.untitled_section");
@@ -140,6 +141,11 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 if (unnamed) {
                     builder.setCurrentY(builder.getCurrentY() + 4);
                     new Paragraph(Text.translatable("magisterium.gui.untitled_section.description").formatted(Formatting.ITALIC)).visit(builder, this.properties, this.textRenderer);
+                } else if (lore != null) {
+                    builder.setCurrentY(builder.getCurrentY() + 4);
+                    lore.lines().forEach(text -> {
+                        new Paragraph(text).visit(builder, this.properties, this.textRenderer);
+                    });
                 }
                 builder.advancePage();
             }

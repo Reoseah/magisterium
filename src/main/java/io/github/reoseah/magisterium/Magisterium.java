@@ -12,15 +12,30 @@ import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LecternBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.LecternBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +84,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
 
+        UseBlockCallback.EVENT.register(Magisterium::interact);
+
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
@@ -94,5 +111,49 @@ public class Magisterium implements ModInitializer {
                 hemonomiconScreen.currentPage.set(payload.page());
             }
         });
+    }
+
+    private static ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        var pos = hitResult.getBlockPos();
+        if (player.isSpectator()
+                || !player.canModifyBlocks()
+                || !player.canModifyAt(world, pos)) {
+            return ActionResult.PASS;
+        }
+
+        var stack = player.getStackInHand(hand);
+        var state = world.getBlockState(pos);
+        var be = world.getBlockEntity(pos);
+
+        if (state.getBlock() instanceof LecternBlock
+                && be instanceof LecternBlockEntity lectern) {
+            var book = lectern.getBook();
+            if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
+                return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.FAIL;
+            } else if (book.isOf(SpellBookItem.INSTANCE)) {
+                if (player.isSneaking()) {
+                    lectern.setBook(ItemStack.EMPTY);
+                    LecternBlock.setHasBook(player, world, pos, state, false);
+                    if (!player.getInventory().insertStack(book)) {
+                        player.dropItem(book, false);
+                    }
+                } else {
+                    player.openHandledScreen(new NamedScreenHandlerFactory() {
+                        @Override
+                        public ScreenHandler createMenu(int syncId, PlayerInventory playerInv, PlayerEntity player1) {
+                            return new SpellBookScreenHandler(syncId, playerInv, new SpellBookScreenHandler.LecternContext(world, pos, book));
+                        }
+
+                        @Override
+                        public Text getDisplayName() {
+                            return book.getName();
+                        }
+                    });
+                }
+                return ActionResult.SUCCESS;
+            }
+        }
+
+        return ActionResult.PASS;
     }
 }
