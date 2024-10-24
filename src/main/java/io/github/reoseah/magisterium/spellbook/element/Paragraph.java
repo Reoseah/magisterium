@@ -3,7 +3,6 @@ package io.github.reoseah.magisterium.spellbook.element;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
