@@ -105,8 +105,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGES, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var builder = new BookLayout.Builder(this.properties);
-        // TODO: expose builder.bookmarks instead of counting manually
-        int currentChapter = 1;
         for (int i = 0; i < 18; i++) {
             var stack = pages.get(i);
             if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
@@ -124,8 +122,9 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     element.visit(builder, this.properties, this.textRenderer);
                 }
             } else if (stack.isOf(RibbonItem.INSTANCE)) {
+                int currentChapter = builder.getCurrentBookmark() + 1;
                 if (currentChapter > 7) {
-                    // this many bookmarks won't fit into the book with current layout
+                    // more bookmarks won't fit into the book with current layout
                     continue;
                 }
                 // TODO: refactor this mess
@@ -143,7 +142,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     new Paragraph(Text.translatable("magisterium.gui.untitled_section.description").formatted(Formatting.ITALIC)).visit(builder, this.properties, this.textRenderer);
                 }
                 builder.advancePage();
-                currentChapter++;
             }
         }
 

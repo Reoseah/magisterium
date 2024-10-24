@@ -167,5 +167,10 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
         private void clearWithoutNotifyingListeners() {
             this.heldStacks.clear();
         }
+
+        @Override
+        public int getMaxCountPerStack() {
+            return 1;
+        }
     }
 }
