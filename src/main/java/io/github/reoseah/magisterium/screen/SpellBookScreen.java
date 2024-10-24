@@ -21,6 +21,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -140,7 +141,10 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 new Heading(name).visit(builder, this.properties, this.textRenderer);
                 if (unnamed) {
                     builder.setCurrentY(builder.getCurrentY() + 4);
-                    new Paragraph(Text.translatable("magisterium.gui.untitled_section.description").formatted(Formatting.ITALIC)).visit(builder, this.properties, this.textRenderer);
+                    new Paragraph(Text.translatable("magisterium.gui.untitled_section.description") //
+                            .formatted(Formatting.ITALIC) //
+                            .styled(style -> style.withColor(0xc4b090))
+                    ).visit(builder, this.properties, this.textRenderer);
                 } else if (lore != null) {
                     builder.setCurrentY(builder.getCurrentY() + 4);
                     lore.lines().forEach(text -> {
@@ -207,7 +211,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 int bookmarkY = this.properties.getBookmarkY(i);
                 int bookmarkX = 256 / 2 + (bookmarkPage > this.page ? this.properties.bookmarkWidth - this.properties.bookmarkTipWidth : -this.properties.bookmarkWidth);
 
-                boolean hovered = mouseX > bookmarkX && mouseX < bookmarkX + this.properties.bookmarkTipWidth && mouseY > bookmarkY && mouseY < bookmarkY + this.properties.bookmarkHeight;
+                boolean hovered = mouseXInGui > bookmarkX && mouseXInGui < bookmarkX + this.properties.bookmarkTipWidth && mouseYInGui > bookmarkY && mouseYInGui < bookmarkY + this.properties.bookmarkHeight;
 
                 if (bookmarkPage < this.page) {
                     context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
