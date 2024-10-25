@@ -2,6 +2,8 @@ package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
+import io.github.reoseah.magisterium.block.IllusoryWallBlock;
+import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
@@ -50,6 +52,9 @@ public class Magisterium implements ModInitializer {
     public void onInitialize() {
         Registry.register(Registries.BLOCK, "magisterium:arcane_table", ArcaneTableBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:glyph", GlyphBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
+
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
@@ -68,8 +73,9 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellBookItem.createTestBook());
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
                     entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();
@@ -83,8 +89,9 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:quench_the_flame", QuenchFlameRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:glyphic_ignition", GlyphicIgnitionRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:illusory_wall", IllusoryWallRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);

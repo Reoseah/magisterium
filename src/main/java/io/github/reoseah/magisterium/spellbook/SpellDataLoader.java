@@ -70,17 +70,15 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
     }
 
     private static BookElement readElement(JsonObject json) {
-        String type = JsonHelper.getString(json, "type");
+        var type = JsonHelper.getString(json, "type");
         return switch (type) {
             case "heading" -> new Heading(JsonHelper.getString(json, "translation_key"));
             case "paragraph" -> new Paragraph(JsonHelper.getString(json, "translation_key"));
             case "page_break" -> new PageBreak();
             case "chapter" -> new BookmarkElement(JsonHelper.getString(json, "translation_key"));
             case "fold" -> {
-                JsonArray leftJson = JsonHelper.getArray(json, "left", new JsonArray());
-                JsonArray rightJson = JsonHelper.getArray(json, "right", new JsonArray());
-                SimpleBlock[] left = readSimpleElements(leftJson);
-                SimpleBlock[] right = readSimpleElements(rightJson);
+                var left = readSimpleElements(JsonHelper.getArray(json, "left", new JsonArray()));
+                var right = readSimpleElements(JsonHelper.getArray(json, "right", new JsonArray()));
                 yield new Fold(left, right);
             }
             case "vertically_centered" -> {
@@ -92,41 +90,41 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
                 }
             }
             case "utterance" -> {
-                String translationKey = JsonHelper.getString(json, "translation_key");
-                Identifier id = Identifier.of(JsonHelper.getString(json, "id"));
+                var translationKey = JsonHelper.getString(json, "translation_key");
+                var id = Identifier.of(JsonHelper.getString(json, "id"));
                 int duration = JsonHelper.getInt(json, "duration");
                 yield new Utterance(translationKey, id, duration);
             }
             case "inventory" -> {
-                JsonArray slotsJson = JsonHelper.getArray(json, "slots");
+                var slotsJson = JsonHelper.getArray(json, "slots");
 
                 if (slotsJson.size() >= 16) {
                     throw new JsonParseException("Too many slots for inventory element");
                 }
 
-                SlotProperties[] slots = new SlotProperties[slotsJson.size()];
+                var slots = new SlotProperties[slotsJson.size()];
                 for (int j = 0; j < slotsJson.size(); j++) {
-                    JsonObject slot = JsonHelper.asObject(slotsJson.get(j), "slot");
+                    var slot = JsonHelper.asObject(slotsJson.get(j), "slot");
                     int x = JsonHelper.getInt(slot, "x");
                     int y = JsonHelper.getInt(slot, "y");
-                    Identifier background = slot.has("background") ? Identifier.of(JsonHelper.getString(slot, "background")) : null;
+                    var background = slot.has("background") ? Identifier.of(JsonHelper.getString(slot, "background")) : null;
                     boolean output = slot.has("output") && JsonHelper.getBoolean(slot, "output");
-                    Ingredient ingredient = slot.has("ingredient") ? Ingredient.ALLOW_EMPTY_CODEC.parse(JsonOps.INSTANCE, slot.get("ingredient")).getOrThrow() : null;
+                    var ingredient = slot.has("ingredient") ? Ingredient.ALLOW_EMPTY_CODEC.parse(JsonOps.INSTANCE, slot.get("ingredient")).getOrThrow() : null;
 
                     slots[j] = new SlotProperties(x, y, output, ingredient, background);
                 }
 
-                BookInventory.Image background = null;
+                BookInventory.Background background = null;
                 if (json.has("background")) {
-                    JsonObject backgroundJson = JsonHelper.asObject(json.get("background"), "background");
-                    Identifier texture = Identifier.of(JsonHelper.getString(backgroundJson, "texture"));
+                    var backgroundJson = JsonHelper.asObject(json.get("background"), "background");
+                    var texture = Identifier.of(JsonHelper.getString(backgroundJson, "texture"));
                     int x = JsonHelper.getInt(backgroundJson, "x");
                     int y = JsonHelper.getInt(backgroundJson, "y");
                     int u = JsonHelper.getInt(backgroundJson, "u");
                     int v = JsonHelper.getInt(backgroundJson, "v");
                     int width = JsonHelper.getInt(backgroundJson, "width");
                     int height = JsonHelper.getInt(backgroundJson, "height");
-                    background = new BookInventory.Image(texture, x, y, u, v, width, height);
+                    background = new BookInventory.Background(texture, x, y, u, v, width, height);
                 }
                 int height = JsonHelper.getInt(json, "height", 0);
 
@@ -145,7 +143,7 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
     }
 
     private static SimpleBlock[] readSimpleElements(JsonArray elementsJson) {
-        SimpleBlock[] elements = new SimpleBlock[elementsJson.size()];
+        var elements = new SimpleBlock[elementsJson.size()];
         for (int i = 0; i < elementsJson.size(); i++) {
             var element = readElement(JsonHelper.asObject(elementsJson.get(i), "element"));
             if (element instanceof SimpleBlock simple) {

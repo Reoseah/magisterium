@@ -13,9 +13,9 @@ import java.util.Arrays;
 public class BookInventory extends SimpleBlock {
     public final int height;
     public final SlotProperties[] slots;
-    public final @Nullable BookInventory.Image background;
+    public final @Nullable BookInventory.Background background;
 
-    public BookInventory(int height, @Nullable Image background, SlotProperties... slots) {
+    public BookInventory(int height, @Nullable BookInventory.Background background, SlotProperties... slots) {
         this.height = height != 0 ? height : Arrays.stream(slots).mapToInt(slot -> slot.output ? slot.y + 18 + 4 : slot.y + 18).max().orElse(0) + 1;
         this.background = background;
         this.slots = slots;
@@ -70,6 +70,6 @@ public class BookInventory extends SimpleBlock {
         }
     }
 
-    public record Image(Identifier texture, int x, int y, int u, int v, int width, int height) {
+    public record Background(Identifier texture, int x, int y, int u, int v, int width, int height) {
     }
 }

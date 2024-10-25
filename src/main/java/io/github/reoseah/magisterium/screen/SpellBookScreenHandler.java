@@ -74,9 +74,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
-        this.isUttering.set(1);
-        this.utteranceStart = player.getWorld().getTime();
-
         player.getWorld().getRecipeManager() //
                 .getAllMatches(SpellBookRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player), player.getWorld()) //
                 .stream() //
@@ -84,6 +81,10 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 .filter(recipe -> recipe.utterance.equals(id)) //
                 .findFirst() //
                 .ifPresent(recipe -> this.utteranceRecipe = recipe);
+        if (this.utteranceRecipe != null) {
+            this.isUttering.set(1);
+            this.utteranceStart = player.getWorld().getTime();
+        }
     }
 
     public void stopUtterance() {
@@ -112,7 +113,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             int total = 0;
             for (int i = 0; i < 16; i++) {
                 SlotProperties definition = ((SpellBookSlot) this.getSlot(i)).config;
-                if (definition != null && !definition.output && definition.ingredient != null && definition.ingredient.test(stack)) {
+                if (definition != null && !definition.output && (definition.ingredient == null || definition.ingredient.test(stack))) {
                     ItemStack slotStack = this.getSlot(i).getStack();
                     if (slotStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(slotStack, stack)) {
                         slotsToSpreadStackTo.add(i);

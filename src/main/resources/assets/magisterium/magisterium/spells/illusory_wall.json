@@ -1,0 +1,43 @@
+{
+  "elements": [
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.illusory_wall.heading"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.illusory_wall.components"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.illusory_wall.description"
+        }
+      ],
+      "right": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.illusory_wall.heading"
+        },
+        {
+          "type": "inventory",
+          "slots": [
+            {
+              "x": 42,
+              "y": 0,
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "utterance",
+          "id": "magisterium:illusory_wall",
+          "translation_key": "magisterium.spell.magisterium.illusory_wall.utterance",
+          "duration": 8
+        }
+      ]
+    }
+  ]
+}

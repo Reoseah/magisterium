@@ -1,13 +1,12 @@
 package io.github.reoseah.magisterium.recipe;
 
-import io.github.reoseah.magisterium.MagisteriumBlockTags;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,13 +31,20 @@ public class GlyphicIgnitionRecipe extends SpellBookRecipe {
         //      show a message if they can't, stylized to fit the theme
         //      like "There is a force preventing you from altering the world here."
 
+        boolean success = false;
+
         World world = input.player.getWorld();
         BlockPos center = input.player.getBlockPos();
         for (BlockPos pos : BlockPos.iterate(center.add(-RADIUS, -RADIUS, -RADIUS), center.add(RADIUS, RADIUS, RADIUS))) {
             BlockState state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
                 world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                success = true;
             }
+        }
+
+        if (!success) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_glyphs_found"), true);
         }
 
         return ItemStack.EMPTY;

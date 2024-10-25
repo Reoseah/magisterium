@@ -40,8 +40,9 @@ public class SpellBookItem extends Item {
             list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
             list.set(1, SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
             list.set(2, SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
-            list.set(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
-            list.set(4, SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
+            list.set(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
+            list.set(4, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
+            list.set(5, SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
         }));
 
         return book;

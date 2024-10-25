@@ -2,6 +2,8 @@ package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
+import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
+import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreen;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreen;
@@ -12,6 +14,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.resource.ResourceType;
 
 public class MagisteriumClient implements ClientModInitializer {
@@ -26,5 +29,7 @@ public class MagisteriumClient implements ClientModInitializer {
 
         HandledScreens.register(SpellBookScreenHandler.TYPE, SpellBookScreen::new);
         HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);
+
+        BlockEntityRendererFactories.register(IllusoryWallBlockEntity.TYPE, IllusoryWallBlockEntityRenderer::new);
     }
 }
