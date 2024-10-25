@@ -1,11 +1,13 @@
 package io.github.reoseah.magisterium.recipe;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ConnectingBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -35,7 +37,11 @@ public class ConflagrateRecipe extends SpellBookRecipe {
 
         // TODO spawn a bunch of fire particles in the area
 
-        int buildUpStart = 1, buildUpFinish = 5, decayStart = 11, decayFinish = 15;
+        final int buildUpStart = 1, buildUpFinish = 5, decayStart = 11, decayFinish = 15;
+
+        boolean hasTargets = false;
+        boolean hasLit = false;
+        boolean hasFailed = false;
 
         var world = input.player.getWorld();
         var center = input.player.getBlockPos();
@@ -58,40 +64,57 @@ public class ConflagrateRecipe extends SpellBookRecipe {
                 chance = 0;
             }
 
-            if (entry != null && entry.getBurnChance() > 0 && world.random.nextFloat() < chance) {
-                for (var direction : Direction.values()) {
+            if (entry != null && entry.getBurnChance() > 0) {
+                if (world.random.nextFloat() < chance) {
+                    for (var direction : Direction.values()) {
+                        var side = pos.offset(direction);
+                        if (world.isAir(side)) {
+                            hasTargets = true;
 
-                    var side = pos.offset(direction);
-                    if (world.isAir(side)) {
-                        var below = side.down();
-                        var stateBelow = world.getBlockState(below);
-
-                        // TODO: perhaps should make FireBlock#getStateForPosition accessible
-                        if (stateBelow.isSideSolidFullSquare(world, below, Direction.UP)) {
-                            world.setBlockState(side, Blocks.FIRE.getDefaultState());
-                        } else {
-                            var fireState = Blocks.FIRE.getDefaultState();
-                            for (var direction2 : Direction.values()) {
-                                if (direction == Direction.DOWN) {
-                                    continue;
-                                }
-                                var side2 = side.offset(direction2);
-                                var entry2 = FlammableBlockRegistry.getInstance(Blocks.FIRE).get(world.getBlockState(side2).getBlock());
-                                if (entry2 != null && entry2.getBurnChance() > 0) {
-                                    var state2 = world.getBlockState(side2);
-                                    if (state2.isSideSolidFullSquare(world, side2, direction2.getOpposite())) {
-                                        fireState = fireState.with(ConnectingBlock.FACING_PROPERTIES.get(direction2), true);
-                                    }
-                                }
+                            if (world.canPlayerModifyAt(input.player, side)) {
+                                world.setBlockState(side, getFireStateForPosition(world, side));
+                                hasLit = true;
+                            } else {
+                                hasFailed = true;
                             }
-                            world.setBlockState(side, fireState);
                         }
                     }
                 }
             }
         }
 
+        if (!hasTargets) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
+        } else if (hasFailed && hasLit) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
+        } else if (hasFailed) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+        }
+
         return ItemStack.EMPTY;
+    }
+
+    private static BlockState getFireStateForPosition(World world, BlockPos pos) {
+        var below = pos.down();
+        if (world.getBlockState(below).isSideSolidFullSquare(world, below, Direction.UP)) {
+            return Blocks.FIRE.getDefaultState();
+        } else {
+            var fireState = Blocks.FIRE.getDefaultState();
+            for (var direction : Direction.values()) {
+                if (direction == Direction.DOWN) {
+                    continue;
+                }
+                var side = pos.offset(direction);
+                var entry = FlammableBlockRegistry.getInstance(Blocks.FIRE).get(world.getBlockState(side).getBlock());
+                if (entry != null && entry.getBurnChance() > 0) {
+                    var state = world.getBlockState(side);
+                    if (state.isSideSolidFullSquare(world, side, direction.getOpposite())) {
+                        fireState = fireState.with(ConnectingBlock.FACING_PROPERTIES.get(direction), true);
+                    }
+                }
+            }
+            return fireState;
+        }
     }
 
     @Override

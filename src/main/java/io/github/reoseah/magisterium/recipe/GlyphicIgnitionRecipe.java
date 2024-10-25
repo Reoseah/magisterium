@@ -27,24 +27,31 @@ public class GlyphicIgnitionRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        // TODO check if the player can edit the blocks in the area
-        //      show a message if they can't, stylized to fit the theme
-        //      like "There is a force preventing you from altering the world here."
-
-        boolean success = false;
+        boolean hasTargets = false;
+        boolean hasLit = false;
+        boolean hasFailed = false;
 
         World world = input.player.getWorld();
         BlockPos center = input.player.getBlockPos();
         for (BlockPos pos : BlockPos.iterate(center.add(-RADIUS, -RADIUS, -RADIUS), center.add(RADIUS, RADIUS, RADIUS))) {
             BlockState state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
-                world.setBlockState(pos, Blocks.FIRE.getDefaultState());
-                success = true;
+                hasTargets = true;
+                if (world.canPlayerModifyAt(input.player, pos)) {
+                    world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                    hasLit = true;
+                } else {
+                    hasFailed = true;
+                }
             }
         }
 
-        if (!success) {
+        if (!hasTargets) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_glyphs_found"), true);
+        } else if (hasFailed && hasLit) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
+        } else if (hasFailed) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
         }
 
         return ItemStack.EMPTY;
