@@ -5,6 +5,8 @@
   "item.magisterium.spell_book": "Spell Tome",
   "item.magisterium.spell_page": "Spell Page",
   "item.magisterium.bookmark": "Silk Bookmark",
+  "tags.item.magisterium.spell_book_components": "Spell Book Components",
+  "tags.item.magisterium.conflagrate_ingredients": "Conflagrate Ingredients",
   "container.magisterium.arcane_table": "Arcane Table",
   "gamerule.enableMagisteriumPlaygrounds": "Enable Magisterium playgrounds (block most spells outside the designated areas, see /magisterium playgrounds)",
   "commands.magisterium.playgrounds.list.success": "Available playgrounds: %s",

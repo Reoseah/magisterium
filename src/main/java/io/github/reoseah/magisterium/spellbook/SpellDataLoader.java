@@ -130,19 +130,11 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
 
                 yield new BookInventory(height, background, slots);
             }
-//            case "illustration" -> {
-//                Identifier texture = new Identifier(JsonHelper.getString(json, "texture"));
-//                int u = JsonHelper.getInt(json, "u");
-//                int v = JsonHelper.getInt(json, "v");
-//                int width = JsonHelper.getInt(json, "width");
-//                int height = JsonHelper.getInt(json, "height");
-//                yield new Illustration(texture, u, v, width, height);
-//            }
             default -> throw new JsonParseException("Unknown element type: " + type);
         };
     }
 
-    private static SimpleBlock[] readSimpleElements(JsonArray elementsJson) {
+    public static SimpleBlock[] readSimpleElements(JsonArray elementsJson) {
         var elements = new SimpleBlock[elementsJson.size()];
         for (int i = 0; i < elementsJson.size(); i++) {
             var element = readElement(JsonHelper.asObject(elementsJson.get(i), "element"));

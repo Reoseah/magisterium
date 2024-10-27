@@ -30,7 +30,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -184,12 +183,12 @@ public class Magisterium implements ModInitializer {
     }
 
     private static boolean tryPlaceGlyph(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult, ItemStack stack) {
-        ItemPlacementContext context = new ItemPlacementContext(player, hand, stack, hitResult);
+        var context = new ItemPlacementContext(player, hand, stack, hitResult);
         if (!context.canPlace()) {
             return false;
         }
-        BlockState placementState = GlyphBlock.INSTANCE.getPlacementState(context);
-        BlockPos placementPos = context.getBlockPos();
+        var placementState = GlyphBlock.INSTANCE.getPlacementState(context);
+        var placementPos = context.getBlockPos();
         if (!placementState.canPlaceAt(world, placementPos)) {
             return false;
         }
@@ -199,7 +198,7 @@ public class Magisterium implements ModInitializer {
                 return false;
             }
         }
-        BlockSoundGroup sounds = placementState.getSoundGroup();
+        var sounds = placementState.getSoundGroup();
         world.playSound(player, placementPos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F,
                 sounds.getPitch());
         world.emitGameEvent(player, GameEvent.BLOCK_PLACE, placementPos);
