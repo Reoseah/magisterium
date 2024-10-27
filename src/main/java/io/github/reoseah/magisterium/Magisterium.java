@@ -14,12 +14,12 @@ import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.LecternBlockEntity;
@@ -30,6 +30,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -96,6 +97,9 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
 
+        MagisteriumGameRules.initialize();
+        MagisteriumCommands.initialize();
+
         UseBlockCallback.EVENT.register(Magisterium::interact);
 
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
@@ -127,9 +131,7 @@ public class Magisterium implements ModInitializer {
 
     private static ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         var pos = hitResult.getBlockPos();
-        if (player.isSpectator()
-                || !player.canModifyBlocks()
-                || !player.canModifyAt(world, pos)) {
+        if (player.isSpectator()) {
             return ActionResult.PASS;
         }
 
@@ -141,33 +143,36 @@ public class Magisterium implements ModInitializer {
                 && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
-                return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.FAIL;
+                if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+                    return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.FAIL;
+                }
+                return ActionResult.PASS;
             } else if (book.isOf(SpellBookItem.INSTANCE)) {
-                if (player.isSneaking()) {
+                if (player.isSneaking() && MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
                     lectern.setBook(ItemStack.EMPTY);
                     LecternBlock.setHasBook(player, world, pos, state, false);
                     if (!player.getInventory().insertStack(book)) {
                         player.dropItem(book, false);
                     }
-                } else {
-                    player.openHandledScreen(new NamedScreenHandlerFactory() {
-                        @Override
-                        public ScreenHandler createMenu(int syncId, PlayerInventory playerInv, PlayerEntity player1) {
-                            return new SpellBookScreenHandler(syncId, playerInv, new SpellBookScreenHandler.LecternContext(world, pos, book));
-                        }
-
-                        @Override
-                        public Text getDisplayName() {
-                            return book.getName();
-                        }
-                    });
+                    return ActionResult.SUCCESS;
                 }
+                player.openHandledScreen(new NamedScreenHandlerFactory() {
+                    @Override
+                    public ScreenHandler createMenu(int syncId, PlayerInventory playerInv, PlayerEntity player1) {
+                        return new SpellBookScreenHandler(syncId, playerInv, new SpellBookScreenHandler.LecternContext(world, pos, book));
+                    }
+
+                    @Override
+                    public Text getDisplayName() {
+                        return book.getName();
+                    }
+                });
                 return ActionResult.SUCCESS;
             }
         }
 
         if (stack.isOf(Items.LAPIS_LAZULI)) {
-            if (placeBlock(player, world, hand, hitResult, stack, GlyphBlock.INSTANCE)) {
+            if (tryPlaceGlyph(player, world, hand, hitResult, stack)) {
                 if (!player.getAbilities().creativeMode) {
                     stack.decrement(1);
                 }
@@ -178,27 +183,27 @@ public class Magisterium implements ModInitializer {
         return ActionResult.PASS;
     }
 
-    private static boolean placeBlock(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult,
-                                      ItemStack stack, Block block) {
-        // placement code derived from BlockItem.useOnBlock
+    private static boolean tryPlaceGlyph(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult, ItemStack stack) {
         ItemPlacementContext context = new ItemPlacementContext(player, hand, stack, hitResult);
-        if (!context.canPlace() || !player.canModifyAt(world, context.getBlockPos())) {
+        if (!context.canPlace()) {
             return false;
         }
-        BlockState state = block.getPlacementState(context);
-        BlockPos pos = context.getBlockPos();
-        if (!state.canPlaceAt(world, pos)) {
+        BlockState placementState = GlyphBlock.INSTANCE.getPlacementState(context);
+        BlockPos placementPos = context.getBlockPos();
+        if (!placementState.canPlaceAt(world, placementPos)) {
             return false;
         }
         if (!world.isClient) {
-            world.setBlockState(pos, state, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            if (!MagisteriumPlaygrounds.trySetBlockState((ServerWorld) world, placementPos, placementState, player)) {
+                return false;
+            }
         }
-
-        BlockSoundGroup sounds = state.getSoundGroup();
-        world.playSound(player, pos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F,
-                sounds.getPitch() * 0.8F);
-        world.emitGameEvent(player, GameEvent.BLOCK_PLACE, pos);
+        BlockSoundGroup sounds = placementState.getSoundGroup();
+        world.playSound(player, placementPos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F,
+                sounds.getPitch());
+        world.emitGameEvent(player, GameEvent.BLOCK_PLACE, placementPos);
 
         return true;
     }
+
 }

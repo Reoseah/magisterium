@@ -63,6 +63,7 @@ public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
                 }
                 if (!stack.contains(DataComponentTypes.CUSTOM_NAME)) {
                     var tooltip = this.getTooltipFromItem(stack);
+                    // TODO rename this to container.magisterium.arcane_table.name_bookmarks_to_give_title
                     tooltip.add(Text.translatable("magisterium.gui.name_bookmarks_to_give_title").formatted(Formatting.RED));
                     context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
                     return;
