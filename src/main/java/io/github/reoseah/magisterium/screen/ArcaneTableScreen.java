@@ -14,22 +14,11 @@ public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
 
     public ArcaneTableScreen(ArcaneTableScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 212;
+        this.backgroundWidth = 204;
         this.backgroundHeight = 192;
-        this.playerInventoryTitleX = 16;
+        this.playerInventoryTitleX = 22;
         this.playerInventoryTitleY = this.backgroundHeight - 93;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.titleX = 122 - this.textRenderer.getWidth(this.title) / 2;
-    }
-
-    @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        super.drawForeground(context, mouseX, mouseY);
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xf6b734, false);
+        this.titleX = Integer.MIN_VALUE;
     }
 
     @Override

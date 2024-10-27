@@ -173,7 +173,7 @@ public class Magisterium implements ModInitializer {
 
         if (stack.isOf(Items.LAPIS_LAZULI)) {
             if (tryPlaceGlyph(player, world, hand, hitResult, stack)) {
-                if (!player.getAbilities().creativeMode) {
+                if (!world.isClient && !player.getAbilities().creativeMode) {
                     stack.decrement(1);
                 }
                 return ActionResult.SUCCESS;
@@ -194,7 +194,7 @@ public class Magisterium implements ModInitializer {
             return false;
         }
         if (!world.isClient) {
-            if (!MagisteriumPlaygrounds.trySetBlockState((ServerWorld) world, placementPos, placementState, player)) {
+            if (!MagisteriumPlaygrounds.trySetBlockState(world, placementPos, placementState, player)) {
                 player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
                 return false;
             }

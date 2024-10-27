@@ -34,7 +34,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
         this.bookInventory = bookInventory;
         this.bookContentsInventory = bookContentsInventory;
 
-        this.addSlot(new Slot(this.bookInventory, 0, 12, 36) {
+        this.addSlot(new Slot(this.bookInventory, 0, 22, 36) {
             @Override
             public Pair<Identifier, Identifier> getBackgroundSprite() {
                 return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_BOOK_SLOT_TEXTURE);
@@ -48,7 +48,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 6; column++) {
-                this.addSlot(new Slot(this.bookContentsInventory, column + row * 6, 70 + column * 18, 18 + row * 18) {
+                this.addSlot(new Slot(this.bookContentsInventory, column + row * 6, 81 + column * 18, 18 + row * 18) {
                     @Override
                     public boolean canTakeItems(PlayerEntity playerEntity) {
                         return bookInventory.getStack(0).contains(SpellBookItem.PAGES);
@@ -65,12 +65,12 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                this.addSlot(new Slot(playerInventory, column + row * 9 + 9, 16 + column * 18, 111 + row * 18));
+                this.addSlot(new Slot(playerInventory, column + row * 9 + 9, 22 + column * 18, 111 + row * 18));
             }
         }
 
         for (int column = 0; column < 9; column++) {
-            this.addSlot(new Slot(playerInventory, column, 16 + column * 18, 169));
+            this.addSlot(new Slot(playerInventory, column, 22 + column * 18, 169));
         }
     }
 
