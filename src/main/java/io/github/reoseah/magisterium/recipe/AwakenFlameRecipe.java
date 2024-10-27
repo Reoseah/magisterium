@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.recipe;
 
 import io.github.reoseah.magisterium.MagisteriumBlockTags;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
@@ -38,8 +39,7 @@ public class AwakenFlameRecipe extends SpellBookRecipe {
             if (state.getProperties().contains(Properties.LIT) //
                     && state.isIn(MagisteriumBlockTags.AWAKEN_THE_FIRE_TARGETS)) {
                 hasTargets = true;
-                if (world.canPlayerModifyAt(input.player, pos)) {
-                    world.setBlockState(pos, state.with(Properties.LIT, true));
+                if (MagisteriumPlaygrounds.trySetBlockState(world, pos, state.with(Properties.LIT, true), input.player)) {
                     hasLit = true;
                 } else {
                     hasFailed = true;

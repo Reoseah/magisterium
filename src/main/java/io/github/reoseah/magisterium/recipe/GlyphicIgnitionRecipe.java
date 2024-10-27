@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.recipe;
 
 import io.github.reoseah.magisterium.block.GlyphBlock;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -37,8 +38,7 @@ public class GlyphicIgnitionRecipe extends SpellBookRecipe {
             BlockState state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
                 hasTargets = true;
-                if (world.canPlayerModifyAt(input.player, pos)) {
-                    world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                if (MagisteriumPlaygrounds.trySetBlockState(world, pos, Blocks.FIRE.getDefaultState(), input.player)) {
                     hasLit = true;
                 } else {
                     hasFailed = true;

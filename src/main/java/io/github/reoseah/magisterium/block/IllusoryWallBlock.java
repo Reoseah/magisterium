@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -25,10 +26,16 @@ public class IllusoryWallBlock extends BlockWithEntity {
         super(settings);
     }
 
-    public static void setBlock(World world, BlockPos pos, BlockState illusoryState) {
-        world.setBlockState(pos, INSTANCE.getDefaultState());
-        var be = world.getBlockEntity(pos);
-        ((IllusoryWallBlockEntity) be).setIllusoryState(illusoryState);
+    public static boolean setBlock(World world, BlockPos pos, BlockState illusoryState, PlayerEntity player) {
+        if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+
+            if (world.setBlockState(pos, INSTANCE.getDefaultState())) {
+                var be = world.getBlockEntity(pos);
+                ((IllusoryWallBlockEntity) be).setIllusoryState(illusoryState);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

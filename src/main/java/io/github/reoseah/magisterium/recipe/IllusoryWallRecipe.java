@@ -65,6 +65,8 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
             return ItemStack.EMPTY;
         }
 
+        boolean hasSuccess = false, hasFailure = false;
+
         var queue = new ArrayDeque<BlockPos>();
         queue.add(startPos);
         var visited = new HashSet<BlockPos>();
@@ -79,12 +81,19 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
 
             var state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
-                // TODO: record positions changed, send to client to spawn particles
-                IllusoryWallBlock.setBlock(world, pos, illusionState);
+                if (IllusoryWallBlock.setBlock(world, pos, illusionState, input.player)) {
+                    hasSuccess = true;
+                } else {
+                    hasFailure = true;
+                }
                 for (int dy = 1; dy < MAX_HEIGHT; dy++) {
                     var wallPos = pos.up(dy);
                     if (world.getBlockState(wallPos).isAir()) {
-                        IllusoryWallBlock.setBlock(world, wallPos, illusionState);
+                        if (IllusoryWallBlock.setBlock(world, wallPos, illusionState, input.player)) {
+                            hasSuccess = true;
+                        } else {
+                            hasFailure = true;
+                        }
                     }
                 }
                 glyphsConverted++;
@@ -97,6 +106,11 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
                     queue.add(nextPos);
                 }
             }
+        }
+        if (hasFailure && hasSuccess) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
+        } else if (hasFailure) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
         }
 
         return ItemStack.EMPTY;

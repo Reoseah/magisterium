@@ -62,7 +62,7 @@ public class MagisteriumPlaygrounds extends PersistentState {
         return player.canModifyBlocks() && player.canModifyAt(world, pos);
     }
 
-    public static boolean trySetBlockState(ServerWorld world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public static boolean trySetBlockState(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (canModifyWorld(world, pos, player)) {
             return world.setBlockState(pos, state);
         }

@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.recipe;
 
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -27,10 +28,6 @@ public class ConflagrateRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        // TODO check if the player can edit the blocks in the area
-        //      show a message if they can't, stylized to fit the theme
-        //      like "There is a force preventing you from altering the world here."
-
         // TODO consume the items to increase the range
 
         // TODO make the area circular instead of square
@@ -71,8 +68,7 @@ public class ConflagrateRecipe extends SpellBookRecipe {
                         if (world.isAir(side)) {
                             hasTargets = true;
 
-                            if (world.canPlayerModifyAt(input.player, side)) {
-                                world.setBlockState(side, getFireStateForPosition(world, side));
+                            if (MagisteriumPlaygrounds.trySetBlockState(world, side, getFireStateForPosition(world, side), input.player)) {
                                 hasLit = true;
                             } else {
                                 hasFailed = true;

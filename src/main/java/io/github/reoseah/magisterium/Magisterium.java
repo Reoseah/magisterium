@@ -195,6 +195,7 @@ public class Magisterium implements ModInitializer {
         }
         if (!world.isClient) {
             if (!MagisteriumPlaygrounds.trySetBlockState((ServerWorld) world, placementPos, placementState, player)) {
+                player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
                 return false;
             }
         }

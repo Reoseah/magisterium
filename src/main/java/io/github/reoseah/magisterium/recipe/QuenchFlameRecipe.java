@@ -1,11 +1,13 @@
 package io.github.reoseah.magisterium.recipe;
 
 import io.github.reoseah.magisterium.MagisteriumBlockTags;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,15 +28,32 @@ public class QuenchFlameRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        boolean hasTargets = false;
+        boolean hasQuenched = false;
+        boolean hasFailed = false;
+
         World world = input.player.getWorld();
         BlockPos center = input.player.getBlockPos();
         for (BlockPos pos : BlockPos.iterate(center.add(-RADIUS, -RADIUS, -RADIUS), center.add(RADIUS, RADIUS, RADIUS))) {
             BlockState state = world.getBlockState(pos);
             if (state.getProperties().contains(Properties.LIT)) {
                 if (state.isIn(MagisteriumBlockTags.AWAKEN_THE_FIRE_TARGETS)) {
-                    world.setBlockState(pos, state.with(Properties.LIT, false));
+                    hasTargets = true;
+                    if (MagisteriumPlaygrounds.trySetBlockState(world, pos, state.with(Properties.LIT, false), input.player)) {
+                        hasQuenched = true;
+                    } else {
+                        hasFailed = true;
+                    }
                 }
             }
+        }
+
+        if (!hasTargets) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
+        } else if (hasFailed && hasQuenched) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
+        } else if (hasFailed) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
         }
 
         return ItemStack.EMPTY;
