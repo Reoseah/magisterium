@@ -75,7 +75,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
         player.getWorld().getRecipeManager() //
-                .getAllMatches(SpellBookRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player), player.getWorld()) //
+                .getAllMatches(SpellBookRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld()) //
                 .stream() //
                 .map(RecipeEntry::value) //
                 .filter(recipe -> recipe.utterance.equals(id)) //
@@ -169,7 +169,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         if (this.utteranceRecipe != null && !player.getWorld().isClient) {
             var recipeDuration = this.utteranceRecipe.duration;
             if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
-                ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory, player), player.getWorld().getRegistryManager());
+                ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
 
                 if (!result.isEmpty()) {
                     this.insertResult(result, player);
@@ -268,6 +268,8 @@ public class SpellBookScreenHandler extends ScreenHandler {
         public abstract Property createProperty(ComponentType<Integer> component);
 
         public abstract boolean canUse(PlayerEntity player);
+
+        public abstract <T> void setStackComponent(ComponentType<T> component, T value);
     }
 
     public static class ClientContext extends Context {
@@ -283,6 +285,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
         @Override
         public boolean canUse(PlayerEntity player) {
             return true;
+        }
+
+        @Override
+        public <T> void setStackComponent(ComponentType<T> component, T value) {
+            // no-op
         }
     }
 
@@ -323,6 +330,15 @@ public class SpellBookScreenHandler extends ScreenHandler {
                     && lectern.getBook() == this.stack //
                     && player.squaredDistanceTo(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64;
         }
+
+        @Override
+        public <T> void setStackComponent(ComponentType<T> component, T value) {
+            this.stack.set(component, value);
+            BlockEntity be = this.world.getBlockEntity(this.pos);
+            if (be != null) {
+                be.markDirty();
+            }
+        }
     }
 
     public static class HandContext extends Context {
@@ -353,6 +369,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
         @Override
         public boolean canUse(PlayerEntity player) {
             return player.getStackInHand(this.hand) == this.stack;
+        }
+
+        @Override
+        public <T> void setStackComponent(ComponentType<T> component, T value) {
+            this.stack.set(component, value);
         }
     }
 

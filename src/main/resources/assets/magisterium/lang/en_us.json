@@ -3,6 +3,8 @@
   "block.magisterium.arcane_table": "Arcane Table",
   "block.magisterium.glyph": "Arcane Glyph",
   "item.magisterium.spell_book": "Spell Tome",
+  "item.magisterium.spell_book.unstable_charge": "Unstable Charge",
+  "item.magisterium.spell_book.empty": "Empty",
   "item.magisterium.spell_page": "Spell Page",
   "item.magisterium.bookmark": "Silk Bookmark",
   "tags.item.magisterium.spell_book_components": "Spell Book Components",
@@ -47,5 +49,11 @@
   "magisterium.spell.magisterium.illusory_wall.heading": "ɪʟʟᴜsᴏʀʏ ᴡᴀʟʟ",
   "magisterium.spell.magisterium.illusory_wall.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: material that the wall is to be made of, a line of arcane glyphs on the ground",
   "magisterium.spell.magisterium.illusory_wall.description": "Create a wall of illusion that seems solid, but can be passed through.",
-  "magisterium.spell.magisterium.illusory_wall.utterance": "Pᴀʀɪᴇs ꜰᴀʟʟᴀx, ᴠɪᴅᴇᴀʀɪs ꜰɪʀᴍᴜs ᴇᴛ ᴀʟᴛᴜs!\n\nTᴀɴɢᴀɴᴛ ᴛᴇ ꜰʀᴜsᴛʀᴀ, sᴏʟɪᴅᴜᴍ ᴠɪᴅᴇʀᴇ sᴇᴅ ᴜᴍʙʀᴀ sɪs.\n\nVᴇʀɪᴛᴀs ᴀʙsᴄᴏɴᴅɪᴛᴀ, ᴜᴍʙʀᴀ ᴘᴇʀᴍᴀɴᴇ!"
+  "magisterium.spell.magisterium.illusory_wall.utterance": "Pᴀʀɪᴇs ꜰᴀʟʟᴀx, ᴠɪᴅᴇᴀʀɪs ꜰɪʀᴍᴜs ᴇᴛ ᴀʟᴛᴜs!\n\nTᴀɴɢᴀɴᴛ ᴛᴇ ꜰʀᴜsᴛʀᴀ, sᴏʟɪᴅᴜᴍ ᴠɪᴅᴇʀᴇ sᴇᴅ ᴜᴍʙʀᴀ sɪs.\n\nVᴇʀɪᴛᴀs ᴀʙsᴄᴏɴᴅɪᴛᴀ, ᴜᴍʙʀᴀ ᴘᴇʀᴍᴀɴᴇ!",
+  "magisterium.spell.magisterium.unstable_charge": "Unstable Charge",
+  "magisterium.spell.magisterium.unstable_charge.heading": "ᴜɴsᴛᴀʙʟᴇ ᴄʜᴀʀɢᴇ",
+  "magisterium.spell.magisterium.unstable_charge.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: one measure of nether wart and a bottle of liquid magic",
+  "magisterium.spell.magisterium.unstable_charge.description.0": "Infuse the book with volatile energy that releases on impact.",
+  "magisterium.spell.magisterium.unstable_charge.description.1": "On next enemy hit, deal massive damage and knockback. Killing blow can behead the victim.",
+  "magisterium.spell.magisterium.unstable_charge.utterance": "Aʀᴄᴀɴᴜᴍ ɪɴsᴛᴀʙɪʟᴇ, ɪɴᴛʀᴀ ʜᴏᴄ ᴠᴀs ᴅᴏʀᴍɪ!\n\nPᴇʀᴄᴜᴛᴇ ᴀᴜᴛ ᴘᴇʀᴄᴜᴛᴇ, ᴇᴛ ᴠɪ ᴇxᴘʟᴏsɪᴠᴀ ʟɪʙᴇʀᴀ!"
 }

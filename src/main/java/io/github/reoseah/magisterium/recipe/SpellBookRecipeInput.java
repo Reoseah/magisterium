@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.recipe;
 
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -8,10 +9,12 @@ import net.minecraft.recipe.input.RecipeInput;
 public class SpellBookRecipeInput implements RecipeInput {
     protected final Inventory inventory;
     protected final PlayerEntity player;
+    protected final SpellBookScreenHandler.Context context;
 
-    public SpellBookRecipeInput(Inventory inventory, PlayerEntity player) {
+    public SpellBookRecipeInput(Inventory inventory, PlayerEntity player, SpellBookScreenHandler.Context context) {
         this.inventory = inventory;
         this.player = player;
+        this.context = context;
     }
 
     @Override
@@ -30,5 +33,9 @@ public class SpellBookRecipeInput implements RecipeInput {
 
     public PlayerEntity getPlayer() {
         return this.player;
+    }
+
+    public SpellBookScreenHandler.Context getContext() {
+        return this.context;
     }
 }

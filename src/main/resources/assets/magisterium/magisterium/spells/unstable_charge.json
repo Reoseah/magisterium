@@ -1,0 +1,47 @@
+{
+  "elements": [
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.heading"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.components"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.description.0"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.description.1"
+        }
+      ],
+      "right": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.heading"
+        },
+        {
+          "type": "inventory",
+          "slots": [
+            {
+              "x": 42,
+              "y": 0,
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "utterance",
+          "id": "magisterium:unstable_charge",
+          "translation_key": "magisterium.spell.magisterium.unstable_charge.utterance",
+          "duration": 8
+        }
+      ]
+    }
+  ]
+}

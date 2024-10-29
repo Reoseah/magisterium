@@ -63,6 +63,7 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGES);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:unstable_charge", SpellBookItem.UNSTABLE_CHARGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:spell", SpellPageItem.SPELL);
 
         var group = FabricItemGroup.builder() //
@@ -76,6 +77,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
                     entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
+                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:unstable_charge")));
                     entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();
@@ -92,6 +94,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:glyphic_ignition", GlyphicIgnitionRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:illusory_wall", IllusoryWallRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:unstable_charge", UnstableChargeRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
@@ -143,7 +146,7 @@ public class Magisterium implements ModInitializer {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
                 if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
-                    return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.FAIL;
+                    return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.PASS;
                 }
                 return ActionResult.PASS;
             } else if (book.isOf(SpellBookItem.INSTANCE)) {

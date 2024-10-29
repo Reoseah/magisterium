@@ -52,11 +52,11 @@ public class IllusoryWallBlock extends BlockWithEntity {
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
         super.onBroken(world, pos, state);
 
-        final int maxIterations = 100;
+        final int maxIterations = 200;
 
         var queue = new ArrayDeque<BlockPos>();
-        for (var dir : Direction.values()) {
-            queue.add(pos.offset(dir));
+        for (var nextPos : BlockPos.iterate(pos.add(-1, -1, -1), pos.add(1, 1, 1))) {
+            queue.add(nextPos.toImmutable());
         }
         var visited = new HashSet<BlockPos>();
 
@@ -67,13 +67,16 @@ public class IllusoryWallBlock extends BlockWithEntity {
             }
             visited.add(currentPos);
 
-            var currentState = world.getBlockState(currentPos);
-            if (currentState.getBlock() == INSTANCE) {
+            if (world.getBlockState(currentPos).getBlock() == INSTANCE) {
+                // TODO perhaps check that illusion block is the same as the one being broken
+                //      in case different illusions are touching each other
                 world.setBlockState(currentPos, Blocks.AIR.getDefaultState(), 3);
                 world.syncWorldEvent(null, 2001, currentPos, Block.getRawIdFromState(INSTANCE.getDefaultState()));
 
-                for (var dir : Direction.values()) {
-                    queue.add(currentPos.offset(dir));
+                for (var nextPos : BlockPos.iterate(currentPos.add(-1, -1, -1), currentPos.add(1, 1, 1))) {
+                    if (!visited.contains(nextPos)) {
+                        queue.add(nextPos.toImmutable());
+                    }
                 }
             }
         }

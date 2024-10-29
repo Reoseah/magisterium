@@ -3,11 +3,13 @@ package io.github.reoseah.magisterium.recipe;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +52,9 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
             illusionState = blockItem.getBlock().getDefaultState();
         }
 
-        if (illusionState.isAir()) {
+        if (illusionState.isAir() || illusionState.getRenderType() != BlockRenderType.MODEL) {
             input.player.sendMessage(Text.translatable("magisterium.gui.invalid_illusion_block"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
             return ItemStack.EMPTY;
         }
 
@@ -62,6 +65,7 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
 
         if (startPos == null) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_glyphs_found"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
             return ItemStack.EMPTY;
         }
 
@@ -111,6 +115,7 @@ public class IllusoryWallRecipe extends SpellBookRecipe {
             input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
         } else if (hasFailure) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
         }
 
         return ItemStack.EMPTY;

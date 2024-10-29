@@ -2,10 +2,18 @@ package io.github.reoseah.magisterium.item;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -26,6 +34,9 @@ public class SpellBookItem extends Item {
             .codec(ItemStack.OPTIONAL_CODEC.listOf()) //
             .packetCodec(ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList())) //
             .build();
+    public static final ComponentType<Unit> UNSTABLE_CHARGE = ComponentType.<Unit>builder() //
+            .codec(Unit.CODEC) //
+            .build();
 
     public static final Item INSTANCE = new SpellBookItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(CURRENT_PAGE, 0));
 
@@ -43,6 +54,7 @@ public class SpellBookItem extends Item {
             list.set(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
             list.set(4, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
             list.set(5, SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
+            list.set(6, SpellPageItem.createSpellPage(Identifier.of("magisterium:unstable_charge")));
         }));
 
         return book;
@@ -70,5 +82,48 @@ public class SpellBookItem extends Item {
             });
         }
         return TypedActionResult.success(book, false);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        super.appendTooltip(stack, context, tooltip, type);
+        if (!stack.contains(PAGES) || stack.get(PAGES).isEmpty()) {
+            tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
+        }
+        if (stack.contains(UNSTABLE_CHARGE)) {
+            tooltip.add(Text.translatable("item.magisterium.spell_book.unstable_charge").formatted(Formatting.GRAY));
+        }
+    }
+
+    @Override
+    public float getBonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
+        var stack = damageSource.getWeaponStack();
+        if (stack != null && stack.contains(UNSTABLE_CHARGE)) {
+            return baseAttackDamage + 9;
+        }
+        return super.getBonusAttackDamage(target, baseAttackDamage, damageSource);
+    }
+
+    @Override
+    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (stack.contains(UNSTABLE_CHARGE)) {
+            stack.remove(UNSTABLE_CHARGE);
+            if (target.isDead() && target.getWorld().getRandom().nextFloat() < .5) {
+                if (target.getType() == EntityType.ZOMBIE) {
+                    target.dropItem(Items.ZOMBIE_HEAD);
+                } else if (target.getType() == EntityType.SKELETON) {
+                    target.dropItem(Items.SKELETON_SKULL);
+                } else if (target.getType() == EntityType.CREEPER) {
+                    target.dropItem(Items.CREEPER_HEAD);
+                } else if (target.getType() == EntityType.PLAYER) {
+                    var player = (PlayerEntity) target;
+                    var head = new ItemStack(Items.PLAYER_HEAD);
+                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(player.getGameProfile()));
+                    target.dropStack(head);
+                }
+            }
+            // TODO sent a packet to spawn particles and play a sound
+        }
+        return super.postHit(stack, target, attacker);
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.block.ConnectingBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -81,10 +82,12 @@ public class ConflagrateRecipe extends SpellBookRecipe {
 
         if (!hasTargets) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
         } else if (hasFailed && hasLit) {
             input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
         } else if (hasFailed) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
         }
 
         return ItemStack.EMPTY;
