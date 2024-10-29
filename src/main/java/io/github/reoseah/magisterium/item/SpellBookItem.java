@@ -49,12 +49,12 @@ public class SpellBookItem extends Item {
 
         book.set(PAGES, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
             list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
-            list.set(1, SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
-            list.set(2, SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
-            list.set(3, SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
-            list.set(4, SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
-            list.set(5, SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
-            list.set(6, SpellPageItem.createSpellPage(Identifier.of("magisterium:unstable_charge")));
+            list.set(1, SpellPageItem.AWAKEN_THE_FLAME.getDefaultStack());
+            list.set(2, SpellPageItem.QUENCH_THE_FLAME.getDefaultStack());
+            list.set(3, SpellPageItem.GLYPHIC_IGNITION.getDefaultStack());
+            list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
+            list.set(5, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
+            list.set(6, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
         }));
 
         return book;

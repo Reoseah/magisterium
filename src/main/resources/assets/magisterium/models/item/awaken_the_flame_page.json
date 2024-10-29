@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "magisterium:item/spell_page_1"
+    "layer0": "magisterium:item/awaken_the_flame_page"
   }
 }

@@ -58,26 +58,31 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
-        Registry.register(Registries.ITEM, "magisterium:spell_page", SpellPageItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:awaken_the_flame_page", SpellPageItem.AWAKEN_THE_FLAME);
+        Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", SpellPageItem.QUENCH_THE_FLAME);
+        Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", SpellPageItem.GLYPHIC_IGNITION);
+        Registry.register(Registries.ITEM, "magisterium:conflagrate_page", SpellPageItem.CONFLAGRATE);
+        Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
+        Registry.register(Registries.ITEM, "magisterium:unstable_charge_page", SpellPageItem.UNSTABLE_CHARGE);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:page_data", SpellBookItem.PAGES);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:unstable_charge", SpellBookItem.UNSTABLE_CHARGE);
-        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:spell", SpellPageItem.SPELL);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
+                    entries.add(SpellBookItem.INSTANCE);
                     entries.add(SpellBookItem.createTestBook());
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:awaken_the_flame")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:quench_the_flame")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:glyphic_ignition")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:conflagrate")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:illusory_wall")));
-                    entries.add(SpellPageItem.createSpellPage(Identifier.of("magisterium:unstable_charge")));
+                    entries.add(SpellPageItem.AWAKEN_THE_FLAME);
+                    entries.add(SpellPageItem.QUENCH_THE_FLAME);
+                    entries.add(SpellPageItem.GLYPHIC_IGNITION);
+                    entries.add(SpellPageItem.CONFLAGRATE);
+                    entries.add(SpellPageItem.ILLUSORY_WALL);
+                    entries.add(SpellPageItem.UNSTABLE_CHARGE);
                     entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();

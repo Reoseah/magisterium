@@ -110,8 +110,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
         var builder = new BookLayout.Builder(this.properties);
         for (ItemStack stack : pages) {
-            if (stack.isOf(SpellPageItem.INSTANCE) && stack.contains(SpellPageItem.SPELL)) {
-                var id = stack.get(SpellPageItem.SPELL);
+            if (stack.getItem() instanceof SpellPageItem spellPage) {
+                var id = spellPage.spell;
                 if (id == null) {
                     LOGGER.warn("Spell id not found in stack {}", stack);
                     continue;
