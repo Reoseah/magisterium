@@ -1,0 +1,66 @@
+{
+  "elements": [
+    {
+      "type": "fold",
+      "left": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.cold_snap.heading"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.cold_snap.components"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.cold_snap.description.0"
+        },
+        {
+          "type": "paragraph",
+          "translation_key": "magisterium.spell.magisterium.cold_snap.description.1"
+        }
+      ],
+      "right": [
+        {
+          "type": "heading",
+          "translation_key": "magisterium.spell.magisterium.cold_snap.heading"
+        },
+        {
+          "type": "inventory",
+          "slots": [
+            {
+              "x": 33,
+              "y": 0,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 51,
+              "y": 0,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 42,
+              "y": 18,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "utterance",
+          "id": "magisterium:cold_snap",
+          "duration": 10,
+          "translation_key": "magisterium.spell.magisterium.cold_snap.utterance"
+        }
+      ]
+    }
+  ]
+}

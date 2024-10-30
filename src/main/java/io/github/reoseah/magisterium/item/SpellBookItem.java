@@ -54,7 +54,8 @@ public class SpellBookItem extends Item {
             list.set(3, SpellPageItem.GLYPHIC_IGNITION.getDefaultStack());
             list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
             list.set(5, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
-            list.set(6, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
+//            list.set(6, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
+            list.set(7, SpellPageItem.COLD_SNAP.getDefaultStack());
         }));
 
         return book;

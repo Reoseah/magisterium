@@ -16,6 +16,7 @@ public class SpellPageItem extends Item {
     public static final Item CONFLAGRATE = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:conflagrate"));
     public static final Item ILLUSORY_WALL = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:illusory_wall"));
     public static final Item UNSTABLE_CHARGE = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:unstable_charge"));
+    public static final Item COLD_SNAP = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:cold_snap"));
 
     public final Identifier spell;
     protected final Text tooltip;

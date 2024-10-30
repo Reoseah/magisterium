@@ -64,6 +64,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:conflagrate_page", SpellPageItem.CONFLAGRATE);
         Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
         Registry.register(Registries.ITEM, "magisterium:unstable_charge_page", SpellPageItem.UNSTABLE_CHARGE);
+        Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
@@ -82,7 +83,8 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.GLYPHIC_IGNITION);
                     entries.add(SpellPageItem.CONFLAGRATE);
                     entries.add(SpellPageItem.ILLUSORY_WALL);
-                    entries.add(SpellPageItem.UNSTABLE_CHARGE);
+//                    entries.add(SpellPageItem.UNSTABLE_CHARGE);
+                    entries.add(SpellPageItem.COLD_SNAP);
                     entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();
@@ -100,6 +102,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:illusory_wall", IllusoryWallRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:unstable_charge", UnstableChargeRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:cold_snap", ColdSnapRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
