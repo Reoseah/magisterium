@@ -90,7 +90,8 @@ public class SpellBookItem extends Item {
         super.appendTooltip(stack, context, tooltip, type);
         var pages = stack.get(PAGES);
         if (pages != null && !pages.isEmpty()) {
-            tooltip.add(Text.translatable("item.magisterium.spell_book.pages", pages.size()).formatted(Formatting.GRAY));
+            var nonEmptyCount = pages.stream().filter(page -> !page.isEmpty()).count();
+            tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));
         } else {
             tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
         }

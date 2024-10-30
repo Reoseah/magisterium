@@ -63,7 +63,7 @@ public class ColdSnapRecipe extends SpellBookRecipe {
                         chance = 0;
                     }
                     if (world.random.nextDouble() < chance) {
-                        if (MagisteriumPlaygrounds.trySetBlockState(world, pos, frozen, input.player)) {
+                        if (MagisteriumPlaygrounds.trySetBlockState(world, pos.down(), frozen, input.player)) {
                             hasFrozen = true;
                         } else {
                             hasFailed = true;
