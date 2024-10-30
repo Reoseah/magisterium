@@ -63,7 +63,7 @@ public class SpellBookItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        ItemStack book = player.getStackInHand(hand);
+        var book = player.getStackInHand(hand);
 
         if (!book.contains(PAGES)) {
             return TypedActionResult.fail(book);
@@ -88,7 +88,10 @@ public class SpellBookItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        if (!stack.contains(PAGES) || stack.get(PAGES).isEmpty()) {
+        var pages = stack.get(PAGES);
+        if (pages != null && !pages.isEmpty()) {
+            tooltip.add(Text.translatable("item.magisterium.spell_book.pages", pages.size()).formatted(Formatting.GRAY));
+        } else {
             tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
         }
         if (stack.contains(UNSTABLE_CHARGE)) {

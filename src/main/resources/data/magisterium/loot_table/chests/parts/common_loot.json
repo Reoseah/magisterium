@@ -1,0 +1,39 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "magisterium:awaken_the_fire_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "magisterium:quench_the_fire_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "magisterium:glyphic_ignition_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "magisterium:conflagrate_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "magisterium:cold_snap_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "magisterium:illusory_wall_page"
+        }
+      ]
+    }
+  ]
+}

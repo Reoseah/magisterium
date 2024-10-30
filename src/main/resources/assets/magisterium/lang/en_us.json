@@ -5,6 +5,7 @@
   "item.magisterium.spell_book": "Spell Tome",
   "item.magisterium.spell_book.unstable_charge": "Unstable Charge",
   "item.magisterium.spell_book.empty": "Empty",
+  "item.magisterium.spell_book.pages": "%s Entries",
   "item.magisterium.spell_page": "Spell Page",
   "item.magisterium.bookmark": "Silk Bookmark",
   "tags.item.magisterium.spell_book_components": "Spell Book Components",

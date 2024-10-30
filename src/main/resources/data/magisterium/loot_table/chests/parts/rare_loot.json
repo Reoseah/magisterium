@@ -1,0 +1,39 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "magisterium:spell_book",
+          "functions": [
+            {
+              "function": "set_components",
+              "components": {
+                "magisterium:pages": [
+                  {
+                    "id": "magisterium:awaken_the_flame_page",
+                    "count": 1
+                  },
+                  {
+                    "id": "magisterium:quench_the_flame_page",
+                    "count": 1
+                  },
+                  {
+                    "id": "magisterium:conflagrate_page",
+                    "count": 1
+                  },
+                  {
+                    "id": "magisterium:glyphic_ignition_page",
+                    "count": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

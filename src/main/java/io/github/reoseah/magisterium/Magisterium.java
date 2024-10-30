@@ -18,6 +18,8 @@ import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -26,8 +28,11 @@ import net.minecraft.block.entity.LecternBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.entry.LootTableEntry;
+import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.registry.*;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.BlockSoundGroup;
@@ -43,10 +48,14 @@ import net.minecraft.world.event.GameEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Magisterium implements ModInitializer {
     public static final String MOD_ID = "magisterium";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Magisterium.class);
+
 
     @Override
     public void onInitialize() {
@@ -111,6 +120,7 @@ public class Magisterium implements ModInitializer {
         MagisteriumCommands.initialize();
 
         UseBlockCallback.EVENT.register(Magisterium::interact);
+        LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
 
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
@@ -217,4 +227,40 @@ public class Magisterium implements ModInitializer {
         return true;
     }
 
+    public static final RegistryKey<LootTable> COMMON_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE,
+            Identifier.of("magisterium:chests/parts/common_loot"));
+    public static final RegistryKey<LootTable> RARE_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE,
+            Identifier.of("magisterium:chests/parts/rare_loot"));
+
+    public static final Set<Identifier> STRUCTURES_TO_SPAWN_COMMON_LOOT = new HashSet<>();
+
+    static {
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/simple_dungeon"));
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/desert_pyramid"));
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/jungle_temple"));
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_corridor"));
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_crossing"));
+        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_library"));
+    }
+
+    public static final Set<Identifier> STRUCTURES_TO_SPAWN_RARE_LOOT = new HashSet<>();
+
+    static {
+        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/desert_pyramid"));
+        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/jungle_temple"));
+        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/stronghold_library"));
+    }
+
+    private static void modifyLootTable(RegistryKey<LootTable> key, LootTable.Builder tableBuilder, LootTableSource source, RegistryWrapper.WrapperLookup registries) {
+        if (STRUCTURES_TO_SPAWN_COMMON_LOOT.contains(key.getValue())) {
+            tableBuilder.pool(LootPool.builder() //
+                    .with(LootTableEntry.builder(COMMON_STRUCTURES_LOOT)) //
+                    .rolls(UniformLootNumberProvider.create(0, 2)));
+        }
+        if (STRUCTURES_TO_SPAWN_RARE_LOOT.contains(key.getValue())) {
+            tableBuilder.pool(LootPool.builder() //
+                    .with(LootTableEntry.builder(RARE_STRUCTURES_LOOT)) //
+                    .rolls(UniformLootNumberProvider.create(0, 1)));
+        }
+    }
 }
