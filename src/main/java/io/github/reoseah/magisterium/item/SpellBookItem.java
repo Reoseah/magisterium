@@ -30,7 +30,7 @@ public class SpellBookItem extends Item {
             .codec(Codecs.NONNEGATIVE_INT) //
             .packetCodec(PacketCodecs.VAR_INT) //
             .build();
-    public static final ComponentType<List<ItemStack>> PAGES = ComponentType.<List<ItemStack>>builder() //
+    public static final ComponentType<List<ItemStack>> CONTENTS = ComponentType.<List<ItemStack>>builder() //
             .codec(ItemStack.OPTIONAL_CODEC.listOf()) //
             .packetCodec(ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList())) //
             .build();
@@ -47,7 +47,7 @@ public class SpellBookItem extends Item {
     public static ItemStack createTestBook() {
         ItemStack book = new ItemStack(INSTANCE);
 
-        book.set(PAGES, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
+        book.set(CONTENTS, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
             list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
             list.set(1, SpellPageItem.AWAKEN_THE_FLAME.getDefaultStack());
             list.set(2, SpellPageItem.QUENCH_THE_FLAME.getDefaultStack());
@@ -65,7 +65,7 @@ public class SpellBookItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         var book = player.getStackInHand(hand);
 
-        if (!book.contains(PAGES)) {
+        if (!book.contains(CONTENTS)) {
             return TypedActionResult.fail(book);
         }
 
@@ -88,7 +88,7 @@ public class SpellBookItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        var pages = stack.get(PAGES);
+        var pages = stack.get(CONTENTS);
         if (pages != null && !pages.isEmpty()) {
             var nonEmptyCount = pages.stream().filter(page -> !page.isEmpty()).count();
             tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));

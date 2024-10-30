@@ -6,12 +6,12 @@
         {
           "type": "minecraft:item",
           "weight": 10,
-          "name": "magisterium:awaken_the_fire_page"
+          "name": "magisterium:awaken_the_flame_page"
         },
         {
           "type": "minecraft:item",
           "weight": 10,
-          "name": "magisterium:quench_the_fire_page"
+          "name": "magisterium:quench_the_flame_page"
         },
         {
           "type": "minecraft:item",

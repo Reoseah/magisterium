@@ -51,12 +51,12 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
                 this.addSlot(new Slot(this.bookContentsInventory, column + row * 6, 81 + column * 18, 18 + row * 18) {
                     @Override
                     public boolean canTakeItems(PlayerEntity playerEntity) {
-                        return bookInventory.getStack(0).contains(SpellBookItem.PAGES);
+                        return bookInventory.getStack(0).contains(SpellBookItem.CONTENTS);
                     }
 
                     @Override
                     public boolean canInsert(ItemStack stack) {
-                        return bookInventory.getStack(0).contains(SpellBookItem.PAGES) //
+                        return bookInventory.getStack(0).contains(SpellBookItem.CONTENTS) //
                                 && stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS);
                     }
                 });
@@ -97,7 +97,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
                 if (!this.insertItem(stack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS) && bookInventory.getStack(0).contains(SpellBookItem.PAGES)) {
+            } else if (stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS) && bookInventory.getStack(0).contains(SpellBookItem.CONTENTS)) {
                 if (!this.insertItem(stack, 1, 1 + 18, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -151,7 +151,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
                 if (book != this.book) {
                     this.clearWithoutNotifyingListeners();
                     if (book.isOf(SpellBookItem.INSTANCE)) {
-                        var bookPages = book.get(SpellBookItem.PAGES);
+                        var bookPages = book.get(SpellBookItem.CONTENTS);
                         if (bookPages != null) {
                             for (int i = 0; i < bookPages.size(); i++) {
                                 this.heldStacks.set(i, bookPages.get(i));
@@ -165,7 +165,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
                 var book = this.bookInventory.getStack(0);
                 if (book.isOf(SpellBookItem.INSTANCE)) {
                     book.set(SpellBookItem.CURRENT_PAGE, 0);
-                    book.set(SpellBookItem.PAGES, new ArrayList<>(this.getHeldStacks()));
+                    book.set(SpellBookItem.CONTENTS, new ArrayList<>(this.getHeldStacks()));
                 }
             });
         }

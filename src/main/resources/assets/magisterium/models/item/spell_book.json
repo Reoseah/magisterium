@@ -2,5 +2,13 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "magisterium:item/spell_book"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "magisterium:is_in_hand": 1
+      },
+      "model": "magisterium:item/spell_book_in_hand"
+    }
+  ]
 }

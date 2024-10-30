@@ -11,7 +11,7 @@
             {
               "function": "set_components",
               "components": {
-                "magisterium:pages": [
+                "magisterium:contents": [
                   {
                     "id": "magisterium:awaken_the_flame_page",
                     "count": 1

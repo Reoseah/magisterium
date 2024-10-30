@@ -106,7 +106,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             .formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
 
     private void buildPages() {
-        var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.PAGES, DefaultedList.ofSize(18, ItemStack.EMPTY));
+        var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var builder = new BookLayout.Builder(this.properties);
         for (ItemStack stack : pages) {
