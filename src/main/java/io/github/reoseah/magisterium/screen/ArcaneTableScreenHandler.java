@@ -1,7 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.reoseah.magisterium.MagisteriumItemTags;
+import io.github.reoseah.magisterium.item.MagisteriumItemTags;
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import net.minecraft.entity.player.PlayerEntity;

@@ -5,6 +5,9 @@ import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.particle.EnergyParticle;
+import io.github.reoseah.magisterium.particle.GlyphParticle;
+import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreen;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreen;
@@ -13,12 +16,12 @@ import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
@@ -41,5 +44,10 @@ public class MagisteriumClient implements ClientModInitializer {
         HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);
 
         BlockEntityRendererFactories.register(IllusoryWallBlockEntity.TYPE, IllusoryWallBlockEntityRenderer::new);
+
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.ENERGY, EnergyParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_A, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_B, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_C, GlyphParticle.Factory::new);
     }
 }

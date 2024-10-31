@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium;
+package io.github.reoseah.magisterium.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.registry.RegistryKeys;

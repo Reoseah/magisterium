@@ -1,9 +1,6 @@
 package io.github.reoseah.magisterium;
 
-import io.github.reoseah.magisterium.block.ArcaneTableBlock;
-import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.block.IllusoryWallBlock;
-import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
+import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
@@ -11,6 +8,7 @@ import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
+import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
@@ -59,6 +57,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:arcane_table", ArcaneTableBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:glyph", GlyphBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
+
+        Registry.register(Registries.BLOCK, "magisterium:test", TestBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
 
@@ -112,6 +112,11 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
+
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:energy", MagisteriumParticles.ENERGY);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_a", MagisteriumParticles.GLYPH_A);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_b", MagisteriumParticles.GLYPH_B);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_c", MagisteriumParticles.GLYPH_C);
 
         MagisteriumGameRules.initialize();
         MagisteriumCommands.initialize();

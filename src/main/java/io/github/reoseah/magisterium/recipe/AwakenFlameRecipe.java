@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.recipe;
 
-import io.github.reoseah.magisterium.MagisteriumBlockTags;
+import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
