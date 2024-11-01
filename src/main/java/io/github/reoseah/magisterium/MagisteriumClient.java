@@ -49,5 +49,7 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_A, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_B, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_C, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_D, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_E, GlyphParticle.Factory::new);
     }
 }

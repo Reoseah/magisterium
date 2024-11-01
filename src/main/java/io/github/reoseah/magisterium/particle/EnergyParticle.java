@@ -11,7 +11,7 @@ public class EnergyParticle extends SpriteBillboardParticle {
         super(clientWorld, x, y, z, velocityX, velocityY, velocityZ);
         this.maxAge = 8 + this.random.nextInt(24);
         this.setSprite(spriteProvider);
-        float brightness = this.random.nextFloat() * 0.6F + 0.4F;
+        float brightness = this.random.nextFloat() * 0.7F + 0.3F;
         this.red = brightness * 0.1F;
         this.green = brightness * 0.5F;
         this.blue = brightness;
@@ -42,9 +42,9 @@ public class EnergyParticle extends SpriteBillboardParticle {
             return;
         }
         this.move(this.velocityX, this.velocityY, this.velocityZ);
-        this.velocityX *= 0.99D;
-        this.velocityY *= 0.99D;
-        this.velocityZ *= 0.99D;
+        this.velocityX *= 0.98;
+        this.velocityY *= 0.98;
+        this.velocityZ *= 0.98;
     }
 
     @Environment(EnvType.CLIENT)

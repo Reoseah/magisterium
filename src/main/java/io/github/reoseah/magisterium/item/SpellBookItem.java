@@ -55,7 +55,9 @@ public class SpellBookItem extends Item {
             list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
             list.set(5, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
 //            list.set(6, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
+            list.set(6, SpellPageItem.ARCANE_LIFT.getDefaultStack());
             list.set(7, SpellPageItem.COLD_SNAP.getDefaultStack());
+            list.set(8, SpellPageItem.DISPEL_MAGIC.getDefaultStack());
         }));
 
         return book;

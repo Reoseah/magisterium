@@ -51,14 +51,12 @@ public class Magisterium implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Magisterium.class);
 
-
     @Override
     public void onInitialize() {
         Registry.register(Registries.BLOCK, "magisterium:arcane_table", ArcaneTableBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:glyph", GlyphBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
-
-        Registry.register(Registries.BLOCK, "magisterium:test", TestBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:arcane_lift", ArcaneLiftBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
 
@@ -71,6 +69,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
         Registry.register(Registries.ITEM, "magisterium:unstable_charge_page", SpellPageItem.UNSTABLE_CHARGE);
         Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
+        Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
+        Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
@@ -91,6 +91,8 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.ILLUSORY_WALL);
 //                    entries.add(SpellPageItem.UNSTABLE_CHARGE);
                     entries.add(SpellPageItem.COLD_SNAP);
+                    entries.add(SpellPageItem.ARCANE_LIFT);
+                    entries.add(SpellPageItem.DISPEL_MAGIC);
                     entries.add(BookmarkItem.INSTANCE);
                 }) //
                 .build();
@@ -109,6 +111,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:illusory_wall", IllusoryWallRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:unstable_charge", UnstableChargeRecipe.SERIALIZER);
         Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:cold_snap", ColdSnapRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:arcane_lift", ArcaneLiftRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:dispel_magic", DispelMagicRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
@@ -117,6 +121,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_a", MagisteriumParticles.GLYPH_A);
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_b", MagisteriumParticles.GLYPH_B);
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_c", MagisteriumParticles.GLYPH_C);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_d", MagisteriumParticles.GLYPH_D);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_e", MagisteriumParticles.GLYPH_E);
 
         MagisteriumGameRules.initialize();
         MagisteriumCommands.initialize();
@@ -145,8 +151,8 @@ public class Magisterium implements ModInitializer {
             }
         });
         ServerPlayNetworking.registerGlobalReceiver(UseBookmarkPayload.ID, (payload, context) -> {
-            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler hemonomiconScreen) {
-                hemonomiconScreen.currentPage.set(payload.page());
+            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
+                handler.currentPage.set(payload.page());
             }
         });
     }

@@ -13,7 +13,7 @@ public class GlyphParticle extends SpriteBillboardParticle {
     public GlyphParticle(ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
         super(clientWorld, x, y, z, velocityX, velocityY, velocityZ);
         this.spriteProvider = spriteProvider;
-        this.maxAge = 16;
+        this.maxAge = 32;
         this.setSpriteForAge(spriteProvider);
 
         this.scale = .5F;
