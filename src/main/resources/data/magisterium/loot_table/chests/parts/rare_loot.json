@@ -32,6 +32,32 @@
               }
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "magisterium:spell_book",
+          "functions": [
+            {
+              "function": "set_components",
+              "components": {
+                "magisterium:contents": [
+                  {
+                    "id": "magisterium:illusory_wall_page",
+                    "count": 1
+                  },
+                  {
+                    "id": "magisterium:arcane_lift_page",
+                    "count": 1
+                  },
+                  {
+                    "id": "magisterium:dispel_magic_page",
+                    "count": 1
+                  }
+                ]
+              }
+            }
+          ]
         }
       ]
     }

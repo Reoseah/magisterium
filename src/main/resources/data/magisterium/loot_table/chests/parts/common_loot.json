@@ -16,6 +16,11 @@
         {
           "type": "minecraft:item",
           "weight": 10,
+          "name": "magisterium:dispel_magic_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
           "name": "magisterium:glyphic_ignition_page"
         },
         {
@@ -32,6 +37,11 @@
           "type": "minecraft:item",
           "weight": 5,
           "name": "magisterium:illusory_wall_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "magisterium:arcane_lift_page"
         }
       ]
     }
