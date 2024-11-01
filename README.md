@@ -12,21 +12,21 @@ The mod is centered on using spell books, which double as a container for the sp
 
 **Spell Pages** are found in the world, currently as loot in dungeons, desert and jungle temples and strongholds.
 
-![Spell Page in a desert temple chest](./docs/img/spell page loot.png)
+![Spell Page in a desert temple chest](https://raw.githubusercontent.com/reoseah/magisterium/refs/heads/modfest-1.21/docs/img/spell%20page%20loot.png)
 
 They can be inserted into a spell book in the **Arcane Table**, alongside some utilities like **Bookmarks**.
 
-![Arcane table GUI](docs/img/arcane table gui 2.png)
+![Arcane table GUI](https://github.com/reoseah/magisterium/blob/modfest-1.21/docs/img/arcane%20table%20gui%202.png?raw=true)
 
 Then, use the spell book to read about the spell, fill ingredients and comply with the requirements, if any, and hold the chant button!
 
-![Spell Page in a desert temple chest](./docs/img/illusory wall reading.png)
+![Reading a spell](https://github.com/reoseah/magisterium/blob/modfest-1.21/docs/img/illusory%20wall%20reading.png?raw=true)
 
 A number of spells require **Arcane Glyphs** to be placed on the ground, which will define the area of effect of the spell. 
 Simply right click with Lapis Lazuli on the ground to place them.
 
-![Spell Page in a desert temple chest](./docs/img/glyphs placement.png)
+![Placing glyphs](https://github.com/reoseah/magisterium/blob/modfest-1.21/docs/img/glyphs%20placement.png?raw=true)
 
 Woila! You've cast a spell!
 
-![Spell Page in a desert temple chest](./docs/img/illusory wall result.png)
+![The spell aftermath](https://github.com/reoseah/magisterium/blob/modfest-1.21/docs/img/illusory%20wall%20result.png?raw=true)
