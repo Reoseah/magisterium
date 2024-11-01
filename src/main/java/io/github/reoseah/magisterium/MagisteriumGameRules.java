@@ -8,7 +8,7 @@ public class MagisteriumGameRules {
     public static final GameRules.Key<GameRules.BooleanRule> ENABLE_MAGISTERIUM_PLAYGROUNDS = GameRuleRegistry.register( //
             "enableMagisteriumPlaygrounds", //
             GameRules.Category.MISC, //
-            GameRuleFactory.createBooleanRule(true) //
+            GameRuleFactory.createBooleanRule(false) //
     );
 
     public static void initialize() {
