@@ -1,0 +1,21 @@
+{
+  "magisterium.chant": {
+    "subtitle": "subtitles.magisterium.chant",
+    "sounds": [
+      "magisterium:chant_0",
+      "magisterium:chant_1",
+      "magisterium:chant_2",
+      "magisterium:chant_3",
+      "magisterium:chant_4",
+      "magisterium:chant_5"
+    ]
+  },
+  "magisterium.arcane_lift_loop": {
+    "subtitle": "subtitles.magisterium.magic_hum",
+    "sounds": [
+      "magisterium:arcane_lift_loop_0",
+      "magisterium:arcane_lift_loop_1",
+      "magisterium:arcane_lift_loop_2"
+    ]
+  }
+}

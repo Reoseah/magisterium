@@ -124,6 +124,9 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_d", MagisteriumParticles.GLYPH_D);
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_e", MagisteriumParticles.GLYPH_E);
 
+        Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
+        Registry.register(Registries.SOUND_EVENT, "magisterium:arcane_lift_loop", MagisteriumSounds.ARCANE_LIFT_LOOP);
+
         MagisteriumGameRules.initialize();
         MagisteriumCommands.initialize();
 

@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.screen;
 
+import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
 import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
@@ -21,6 +22,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -161,20 +163,28 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.dropInventory(player, this.inventory);
     }
 
+    private Long lastSoundTime = null;
+
     @Override
     public boolean canUse(PlayerEntity player) {
         // this gets called every tick, so it's a tick method effectively
 
         // TODO allow for spells that are active as long as the player holds the casting button down?
-        if (this.utteranceRecipe != null && !player.getWorld().isClient) {
+        if (this.utteranceRecipe != null) {
             var recipeDuration = this.utteranceRecipe.duration;
-            if (player.getWorld().getTime() - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
+            long time = player.getWorld().getTime();
+            if (time - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
                 ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
 
                 if (!result.isEmpty()) {
                     this.insertResult(result, player);
                 }
                 this.stopUtterance();
+            } else if (this.lastSoundTime == null || time - this.lastSoundTime >= 50) {
+                if (this.lastSoundTime == null || time - this.utteranceStart <= recipeDuration * player.getWorld().getTickManager().getTickRate() - 50) {
+                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.5F, 1.0F);
+                }
+                this.lastSoundTime = time;
             }
         }
 

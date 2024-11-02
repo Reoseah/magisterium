@@ -53,11 +53,11 @@ public class SpellBookItem extends Item {
             list.set(2, SpellPageItem.QUENCH_THE_FLAME.getDefaultStack());
             list.set(3, SpellPageItem.GLYPHIC_IGNITION.getDefaultStack());
             list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
-            list.set(5, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
-//            list.set(6, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
-            list.set(6, SpellPageItem.ARCANE_LIFT.getDefaultStack());
-            list.set(7, SpellPageItem.COLD_SNAP.getDefaultStack());
+            list.set(5, SpellPageItem.COLD_SNAP.getDefaultStack());
+            list.set(6, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
+            list.set(7, SpellPageItem.ARCANE_LIFT.getDefaultStack());
             list.set(8, SpellPageItem.DISPEL_MAGIC.getDefaultStack());
+//            list.set(17, SpellPageItem.UNSTABLE_CHARGE.getDefaultStack());
         }));
 
         return book;

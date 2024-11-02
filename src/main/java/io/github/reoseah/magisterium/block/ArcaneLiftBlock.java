@@ -1,14 +1,14 @@
 package io.github.reoseah.magisterium.block;
 
+import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -58,6 +58,9 @@ public class ArcaneLiftBlock extends Block implements Dispelable {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (random.nextInt(10) == 0) {
+            world.playSoundAtBlockCenter(pos, MagisteriumSounds.ARCANE_LIFT_LOOP, SoundCategory.BLOCKS, 0.15F, 1.0F, true);
+        }
 
         if (random.nextInt(4) == 0) {
             double x = pos.getX() - .5 + random.nextFloat() * 2;
