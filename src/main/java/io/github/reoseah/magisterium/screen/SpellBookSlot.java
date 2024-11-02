@@ -30,7 +30,7 @@ public class SpellBookSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return this.config != null && !this.config.output;
+        return this.config != null && !this.config.output && (this.config.ingredient == null || this.config.ingredient.test(stack));
     }
 
     @Nullable
