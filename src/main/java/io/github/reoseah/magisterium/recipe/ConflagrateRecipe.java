@@ -30,6 +30,7 @@ public class ConflagrateRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        // TODO: extract this to a helper method, reuse in other recipes
         int totalValue = 0;
         for (int i = 0; i < input.getSize(); i++) {
             var stack = input.getStackInSlot(i);

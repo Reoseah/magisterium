@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.recipe;
 
+import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,7 +30,21 @@ public class ColdSnapRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        final int fullFreezeRadius = 11, maxRadius = 15;
+        int totalValue = 0;
+        for (int i = 0; i < input.getSize(); i++) {
+            var stack = input.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                int value = ItemValuesLoader.getValue(stack);
+                totalValue += value;
+
+                stack.decrement(1);
+                input.inventory.setStack(i, stack);
+            }
+        }
+
+        int fullFreezeRadius = 3 + totalValue;
+        int maxRadius = 7 + totalValue;
+
         final var map = new HashMap<BlockState, BlockState>();
         map.put(Blocks.WATER.getDefaultState(), Blocks.ICE.getDefaultState());
         map.put(Blocks.LAVA.getDefaultState(), Blocks.OBSIDIAN.getDefaultState());

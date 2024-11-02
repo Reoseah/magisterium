@@ -103,7 +103,7 @@ public class ArcaneLiftBlock extends Block implements Dispelable {
     protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         var velocity = entity.getVelocity();
         if (entity.isDescending()) {
-            double velocityY = Math.max(velocity.y, -0.1);
+            double velocityY = Math.max(velocity.y, -0.15);
             entity.setVelocity(velocity.x, velocityY, velocity.z);
         } else {
             double velocityY = MathHelper.clamp(velocity.y + 0.03, 0.25, 0.75);
