@@ -17,6 +17,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -31,7 +32,7 @@ public class MagisteriumClient implements ClientModInitializer {
         // perhaps it could be loaded on the server and sent to client,
         // like the recipes do?
         // this will help with making items for each spell
-        ResourceManagerHelperImpl.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SpellDataLoader());
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SpellDataLoader());
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE);
 

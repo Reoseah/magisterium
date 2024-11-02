@@ -1,6 +1,8 @@
 package io.github.reoseah.magisterium;
 
+import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
+import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
@@ -12,6 +14,7 @@ import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -20,6 +23,8 @@ import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.LecternBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,6 +35,7 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.LootTableEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.*;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
@@ -37,6 +43,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -126,6 +133,8 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
         Registry.register(Registries.SOUND_EVENT, "magisterium:arcane_lift_loop", MagisteriumSounds.ARCANE_LIFT_LOOP);
+
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ItemValuesLoader());
 
         MagisteriumGameRules.initialize();
         MagisteriumCommands.initialize();
@@ -238,29 +247,25 @@ public class Magisterium implements ModInitializer {
         return true;
     }
 
-    public static final RegistryKey<LootTable> COMMON_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE,
+    public static final RegistryKey<LootTable> COMMON_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE, //
             Identifier.of("magisterium:chests/parts/common_loot"));
-    public static final RegistryKey<LootTable> RARE_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE,
+    public static final RegistryKey<LootTable> RARE_STRUCTURES_LOOT = RegistryKey.of(RegistryKeys.LOOT_TABLE, //
             Identifier.of("magisterium:chests/parts/rare_loot"));
 
-    public static final Set<Identifier> STRUCTURES_TO_SPAWN_COMMON_LOOT = new HashSet<>();
+    public static final Set<Identifier> STRUCTURES_TO_SPAWN_COMMON_LOOT = ImmutableSet.<Identifier>builder() //
+            .add(Identifier.ofVanilla("chests/simple_dungeon")) //
+            .add(Identifier.ofVanilla("chests/desert_pyramid")) //
+            .add(Identifier.ofVanilla("chests/jungle_temple")) //
+            .add(Identifier.ofVanilla("chests/stronghold_corridor")) //
+            .add(Identifier.ofVanilla("chests/stronghold_crossing")) //
+            .add(Identifier.ofVanilla("chests/stronghold_library")) //
+            .build();
 
-    static {
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/simple_dungeon"));
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/desert_pyramid"));
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/jungle_temple"));
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_corridor"));
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_crossing"));
-        STRUCTURES_TO_SPAWN_COMMON_LOOT.add(Identifier.ofVanilla("chests/stronghold_library"));
-    }
-
-    public static final Set<Identifier> STRUCTURES_TO_SPAWN_RARE_LOOT = new HashSet<>();
-
-    static {
-        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/desert_pyramid"));
-        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/jungle_temple"));
-        STRUCTURES_TO_SPAWN_RARE_LOOT.add(Identifier.ofVanilla("chests/stronghold_library"));
-    }
+    public static final Set<Identifier> STRUCTURES_TO_SPAWN_RARE_LOOT = ImmutableSet.<Identifier>builder() //
+            .add(Identifier.ofVanilla("chests/desert_pyramid")) //
+            .add(Identifier.ofVanilla("chests/jungle_temple")) //
+            .add(Identifier.ofVanilla("chests/stronghold_library")) //
+            .build();
 
     private static void modifyLootTable(RegistryKey<LootTable> key, LootTable.Builder tableBuilder, LootTableSource source, RegistryWrapper.WrapperLookup registries) {
         if (STRUCTURES_TO_SPAWN_COMMON_LOOT.contains(key.getValue())) {

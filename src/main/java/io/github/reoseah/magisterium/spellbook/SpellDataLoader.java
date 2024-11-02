@@ -60,13 +60,12 @@ public class SpellDataLoader extends JsonDataLoader implements IdentifiableResou
                 errors = true;
             }
         }
-
-        if (!errors) {
-            SPELLS = builder.build();
-            LOGGER.info("Loaded {} spell data", SPELLS.size());
-        } else {
+        if (errors) {
             throw new IllegalStateException("Failed to load spell data");
         }
+
+        SPELLS = builder.build();
+        LOGGER.debug("Loaded {} spell data", SPELLS.size());
     }
 
     private static BookElement readElement(JsonObject json) {

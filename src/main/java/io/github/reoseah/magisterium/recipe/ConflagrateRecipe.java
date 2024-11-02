@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.recipe;
 
+import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.BlockState;
@@ -29,13 +30,24 @@ public class ConflagrateRecipe extends SpellBookRecipe {
 
     @Override
     public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        // TODO consume the items to increase the range
+        int totalValue = 0;
+        for (int i = 0; i < input.getSize(); i++) {
+            var stack = input.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                int value = ItemValuesLoader.getValue(stack);
+                totalValue += value;
 
-        // TODO make the area circular instead of square
+                stack.decrement(1);
+                input.inventory.setStack(i, stack);
+            }
+        }
 
         // TODO spawn a bunch of fire particles in the area
 
-        final int buildUpStart = 1, buildUpFinish = 5, decayStart = 11, decayFinish = 15;
+        final int buildUpStart = 1, buildUpFinish = 5;
+
+        int decayStart = 5 + totalValue;
+        int decayFinish = 9 + totalValue;
 
         boolean hasTargets = false;
         boolean hasLit = false;
