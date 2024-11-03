@@ -5,10 +5,7 @@ import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
-import io.github.reoseah.magisterium.item.BookmarkItem;
-import io.github.reoseah.magisterium.item.RuneItem;
-import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.item.SpellPageItem;
+import io.github.reoseah.magisterium.item.*;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
@@ -76,12 +73,15 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
+        Registry.register(Registries.ITEM, "magisterium:data_driven_page", DataDrivenPageItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:fire_rune", RuneItem.FIRE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:elements", DataDrivenPageItem.ELEMENTS);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:effects", DataDrivenPageItem.EFFECTS);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
@@ -141,6 +141,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(SpellEffect.REGISTRY, "magisterium:illusory_wall", IllusoryWallEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:arcane_lift", ArcaneLiftEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:command", ExecuteCommandEffect.CODEC);
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ItemValuesLoader());
 

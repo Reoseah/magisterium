@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.screen;
 
+import io.github.reoseah.magisterium.item.DataDrivenPageItem;
 import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
@@ -161,6 +162,14 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     lore.lines().forEach(text -> new Paragraph(text).visit(builder, this.properties, this.textRenderer));
                 }
                 builder.advancePage();
+            } else if (stack.isOf(DataDrivenPageItem.INSTANCE)) {
+                var elements = stack.get(DataDrivenPageItem.ELEMENTS);
+                if (elements == null) {
+                    continue;
+                }
+                for (var element : elements) {
+                    element.visit(builder, this.properties, this.textRenderer);
+                }
             }
         }
 
