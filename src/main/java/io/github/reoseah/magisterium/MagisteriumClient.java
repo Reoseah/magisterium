@@ -5,6 +5,7 @@ import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.particle.EnergyParticle;
 import io.github.reoseah.magisterium.particle.GlyphParticle;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
@@ -15,11 +16,13 @@ import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
 public class MagisteriumClient implements ClientModInitializer {
@@ -45,5 +48,31 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_E, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_F, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_G, GlyphParticle.Factory::new);
+
+        ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, (payload, context) -> {
+            var world = context.client().world;
+            var random = world.random;
+            for (var pos : payload.positions()) {
+                for (int i = 0; i < 2; i++) {
+                    var x = pos.getX() + random.nextFloat();
+                    var y = pos.getY() + random.nextFloat();
+                    var z = pos.getZ() + random.nextFloat();
+                    var particle = MagisteriumParticles.GLYPHS[random.nextInt(MagisteriumParticles.GLYPHS.length)];
+
+                    world.addParticle(particle, x, y, z, 0, 0, 0);
+                }
+
+                for (int i = 0; i < 6; i++) {
+                    var x = pos.getX() + random.nextFloat();
+                    var y = pos.getY() + random.nextFloat();
+                    var z = pos.getZ() + random.nextFloat();
+                    var dx = .01 * (random.nextFloat() - .5);
+                    var dy = .01 * (random.nextFloat() - .5);
+                    var dz = .01 * (random.nextFloat() - .5);
+
+                    world.addParticle(MagisteriumParticles.ENERGY, x, y, z, dx, dy, dz);
+                }
+            }
+        });
     }
 }

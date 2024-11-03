@@ -4,20 +4,26 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
+import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
 
 // TODO make a more general set block property effect
 public class AwakenFlameEffect extends SpellEffect {
@@ -46,16 +52,16 @@ public class AwakenFlameEffect extends SpellEffect {
 
     @Override
     public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        boolean hasTargets = false;
+        var targets = new ArrayList<BlockPos>();
         boolean hasSuccess = false;
         boolean hasFailure = false;
 
         World world = input.player.getWorld();
         BlockPos center = input.player.getBlockPos();
-        for (BlockPos pos : BlockPos.iterate(center.add(-this.maxRange, -this.maxRange, -this.maxRange), center.add(this.maxRange, this.maxRange, this.maxRange))) {
+        for (BlockPos pos : BlockPos.iterateOutwards(center, this.maxRange, this.maxRange, this.maxRange)) {
             BlockState state = world.getBlockState(pos);
             if (state.isIn(this.tag) && state.getProperties().contains(Properties.LIT)) {
-                hasTargets = true;
+                targets.add(pos.toImmutable());
                 if (input.trySetBlockState(pos, state.with(Properties.LIT, true))) {
                     hasSuccess = true;
                 } else {
@@ -63,15 +69,24 @@ public class AwakenFlameEffect extends SpellEffect {
                 }
             }
         }
-
-        if (!hasTargets) {
+        if (!targets.isEmpty()) {
+            var payload = new SpellParticlePayload(targets);
+            for (var player : PlayerLookup.tracking((ServerWorld) world, center)) {
+                ServerPlayNetworking.send(player, payload);
+            }
+        } else {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
             ((ServerPlayerEntity) input.player).closeHandledScreen();
-        } else if (hasFailure && hasSuccess) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
-        } else if (hasFailure) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
+            return;
+        }
+
+        if (hasFailure) {
+            if (hasSuccess) {
+                input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
+            } else {
+                input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+                ((ServerPlayerEntity) input.player).closeHandledScreen();
+            }
         }
     }
 }

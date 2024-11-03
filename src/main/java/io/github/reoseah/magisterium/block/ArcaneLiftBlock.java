@@ -76,7 +76,7 @@ public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
             double y = pos.getY() - .5 + random.nextFloat() + random.nextFloat();
             double z = pos.getZ() - .5 + random.nextFloat() + random.nextFloat();
             world.addParticle(MagisteriumParticles.ENERGY, x, y, z, //
-                    0.01 * random.nextFloat(), 0.05, 0.01 * random.nextFloat());
+                    0.01 * (random.nextFloat() - .5F), 0.05, 0.01 * (random.nextFloat() - .5F));
         }
         if (isBase) {
             for (int i = 0; i < 6; i++) {

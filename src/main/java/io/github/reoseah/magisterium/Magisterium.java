@@ -6,16 +6,14 @@ import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.*;
-import io.github.reoseah.magisterium.network.SlotLayoutPayload;
-import io.github.reoseah.magisterium.network.StartUtterancePayload;
-import io.github.reoseah.magisterium.network.StopUtterancePayload;
-import io.github.reoseah.magisterium.network.UseBookmarkPayload;
+import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
@@ -155,6 +153,7 @@ public class Magisterium implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SlotLayoutPayload.ID, SlotLayoutPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, (payload, context) -> {
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {

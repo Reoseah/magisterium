@@ -4,19 +4,25 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
+import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
-import org.apache.commons.lang3.stream.Streams;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class IllusoryWallEffect extends SpellEffect {
@@ -62,10 +68,7 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        var startPos = Streams.of(BlockPos.iterateOutwards(playerPos, this.glyphSearchRadius, this.glyphSearchRadius, this.glyphSearchRadius))
-                .filter(pos -> world.getBlockState(pos).isOf(GlyphBlock.INSTANCE))
-                .findFirst()
-                .orElse(null);
+        BlockPos startPos = findClosestGlyph(playerPos, world, this.glyphSearchRadius);
 
         if (startPos == null) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_glyphs_found"), true);
@@ -73,7 +76,9 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        boolean hasSuccess = false, hasFailure = false;
+        var targets = new ArrayList<BlockPos>();
+        boolean hasSuccess = false;
+        boolean hasFailure = false;
 
         var queue = new ArrayDeque<BlockPos>();
         queue.add(startPos);
@@ -89,6 +94,7 @@ public class IllusoryWallEffect extends SpellEffect {
 
             var state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
+                targets.add(pos.toImmutable());
                 if (IllusoryWallBlock.setBlock(world, pos, illusionState, input.player)) {
                     hasSuccess = true;
                 } else {
@@ -97,6 +103,7 @@ public class IllusoryWallEffect extends SpellEffect {
                 for (int dy = 1; dy < this.maxHeight; dy++) {
                     var wallPos = pos.up(dy);
                     if (world.getBlockState(wallPos).isAir()) {
+                        targets.add(wallPos.toImmutable());
                         if (IllusoryWallBlock.setBlock(world, wallPos, illusionState, input.player)) {
                             hasSuccess = true;
                         } else {
@@ -115,11 +122,30 @@ public class IllusoryWallEffect extends SpellEffect {
                 }
             }
         }
+
+        if (!targets.isEmpty()) {
+            var payload = new SpellParticlePayload(targets);
+            for (var player : PlayerLookup.tracking((ServerWorld) world, startPos)) {
+                ServerPlayNetworking.send(player, payload);
+            }
+        }
+
         if (hasFailure && hasSuccess) {
             input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
         } else if (hasFailure) {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
             ((ServerPlayerEntity) input.player).closeHandledScreen();
         }
+    }
+
+    private static @Nullable BlockPos findClosestGlyph(BlockPos playerPos, World world, int maxRange) {
+        BlockPos startPos = null;
+        for (var pos : BlockPos.iterateOutwards(playerPos, maxRange, maxRange, maxRange)) {
+            if (world.getBlockState(pos).isOf(GlyphBlock.INSTANCE)) {
+                startPos = pos;
+                break;
+            }
+        }
+        return startPos;
     }
 }
