@@ -6,6 +6,7 @@ import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
+import io.github.reoseah.magisterium.item.RuneItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
@@ -76,6 +77,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:fire_rune", RuneItem.FIRE);
+        Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
@@ -96,6 +99,8 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.ARCANE_LIFT);
                     entries.add(SpellPageItem.DISPEL_MAGIC);
                     entries.add(BookmarkItem.INSTANCE);
+//                    entries.add(RuneItem.FIRE);
+//                    entries.add(RuneItem.WIND);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
