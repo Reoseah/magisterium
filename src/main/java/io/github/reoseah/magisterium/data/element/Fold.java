@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class Fold implements BookElement {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         builder.startNewFold();
         builder.allowWrap(false);

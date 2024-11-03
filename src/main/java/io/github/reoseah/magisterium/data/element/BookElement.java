@@ -5,6 +5,8 @@ import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -18,6 +20,7 @@ public interface BookElement {
 
     MapCodec<? extends BookElement> getCodec();
 
+    @Environment(EnvType.CLIENT)
     void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer);
 }
 

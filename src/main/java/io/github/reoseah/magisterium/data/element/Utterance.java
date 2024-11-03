@@ -9,6 +9,8 @@ import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -47,6 +49,7 @@ public class Utterance extends SimpleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected int getHeight(int width, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, width - 12);
         var linesAsString = lines.stream().map(t -> {
@@ -70,15 +73,19 @@ public class Utterance extends SimpleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected int getTopMargin() {
         return super.getTopMargin() + 2;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         return new UtteranceWidget(this.text, x, y, properties, properties.pageWidth, textRenderer);
     }
 
+    // TODO make this a static class
+    @Environment(EnvType.CLIENT)
     private class UtteranceWidget implements Drawable, Element {
         private final int buttonX;
         private final int buttonY;

@@ -3,6 +3,8 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
@@ -23,12 +25,14 @@ public class VerticallyCenteredElement extends SimpleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected int getHeight(int width, TextRenderer textRenderer) {
         // forces new page
         return 10000;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         int height = this.element.getHeight(properties.pageWidth, textRenderer);
         int newY = y + (maxHeight - height) / 2;

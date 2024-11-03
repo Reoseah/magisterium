@@ -3,6 +3,8 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -40,10 +42,12 @@ public class BookInventory extends SimpleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         return new Widget(properties, x, y, background, slots);
     }
 
+    @Environment(EnvType.CLIENT)
     private static class Widget implements Drawable, SlotPropertiesProvider {
         private final BookProperties properties;
         private final int x;

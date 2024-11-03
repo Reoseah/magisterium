@@ -2,11 +2,14 @@ package io.github.reoseah.magisterium.data.element;
 
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
 public abstract class DivisibleBlock extends SimpleBlock {
     @Override
+    @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getTopMargin());
         int elementHeight = this.getHeight(properties.pageWidth, textRenderer);
@@ -31,10 +34,13 @@ public abstract class DivisibleBlock extends SimpleBlock {
         builder.setCurrentY(builder.getMinY() + pair.nextHeight());
     }
 
+    @Environment(EnvType.CLIENT)
     protected abstract boolean canDivide(int height, int maxHeight, TextRenderer textRenderer);
 
+    @Environment(EnvType.CLIENT)
     protected abstract WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextHeight, TextRenderer textRenderer);
 
+    @Environment(EnvType.CLIENT)
     protected record WidgetPair(Drawable current, Drawable next, int nextHeight) {
     }
 }

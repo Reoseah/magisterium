@@ -3,6 +3,8 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.text.Text;
@@ -25,11 +27,13 @@ public class Paragraph extends DivisibleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected int getHeight(int width, TextRenderer textRenderer) {
         return textRenderer.getWrappedLinesHeight(this.text, width);
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, properties.pageWidth);
         return (matrices, mouseX, mouseY, delta) -> {
@@ -40,11 +44,13 @@ public class Paragraph extends DivisibleBlock {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected boolean canDivide(int height, int maxHeight, TextRenderer textRenderer) {
         return maxHeight >= textRenderer.fontHeight;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     protected WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, width);
         int lineCountOnCurrentPage = maxHeight / textRenderer.fontHeight;

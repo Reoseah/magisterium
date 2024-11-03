@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import io.github.reoseah.magisterium.spellbook.BookLayout;
 import io.github.reoseah.magisterium.spellbook.BookProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
@@ -16,6 +18,7 @@ public abstract class SimpleBlock implements BookElement {
     }, DataResult::success);
 
     @Override
+    @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         int elementHeight = this.getHeight(properties.pageWidth, textRenderer);
 
@@ -33,6 +36,7 @@ public abstract class SimpleBlock implements BookElement {
     /**
      * @return number of pixels to offset from the previous element
      */
+    @Environment(EnvType.CLIENT)
     protected int getTopMargin() {
         return 4;
     }
@@ -40,6 +44,7 @@ public abstract class SimpleBlock implements BookElement {
     /**
      * @return how many pixels this element wants to take on a page
      */
+    @Environment(EnvType.CLIENT)
     protected abstract int getHeight(int width, TextRenderer textRenderer);
 
     /**
@@ -51,5 +56,6 @@ public abstract class SimpleBlock implements BookElement {
      * @see net.minecraft.client.gui.Element
      * @see SlotPropertiesProvider
      */
+    @Environment(EnvType.CLIENT)
     protected abstract Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer);
 }
