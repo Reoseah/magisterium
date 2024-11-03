@@ -71,11 +71,5 @@
   "magisterium.spell.magisterium.dispel_magic": "Dispel Magic",
   "magisterium.spell.magisterium.dispel_magic.heading": "ᴅɪsᴘᴇʟ ᴍᴀɢɪᴄ",
   "magisterium.spell.magisterium.dispel_magic.description": "End the effects of the closest spell or magical effect.",
-  "magisterium.spell.magisterium.dispel_magic.utterance": "Mᴀɢɪᴀ ᴅɪssᴏʟᴠᴀᴛᴜʀ, ᴠɪɴᴄᴜʟᴀ ᴀʀᴄᴀɴᴀ ʀᴜᴍᴘᴀɴᴛᴜʀ!\n\nNɪʜɪʟ ᴍᴀɴᴇᴀᴛ, ᴀʀs ɪʟʟᴀ ᴇxsᴛɪɴɢᴜᴀᴛᴜʀ!",
-  "magisterium.spell.magisterium.unstable_charge": "Unstable Charge",
-  "magisterium.spell.magisterium.unstable_charge.heading": "ᴜɴsᴛᴀʙʟᴇ ᴄʜᴀʀɢᴇ",
-  "magisterium.spell.magisterium.unstable_charge.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: one measure of nether wart and a bottle of liquid magic",
-  "magisterium.spell.magisterium.unstable_charge.description.0": "Infuse the book with volatile energy that releases on impact.",
-  "magisterium.spell.magisterium.unstable_charge.description.1": "On next enemy hit, deal massive damage and knockback. Killing blow can behead the victim.",
-  "magisterium.spell.magisterium.unstable_charge.utterance": "Aʀᴄᴀɴᴜᴍ ɪɴsᴛᴀʙɪʟᴇ, ɪɴᴛʀᴀ ʜᴏᴄ ᴠᴀs ᴅᴏʀᴍɪ!\n\nPᴇʀᴄᴜᴛᴇ ᴀᴜᴛ ᴘᴇʀᴄᴜᴛᴇ, ᴇᴛ ᴠɪ ᴇxᴘʟᴏsɪᴠᴀ ʟɪʙᴇʀᴀ!"
+  "magisterium.spell.magisterium.dispel_magic.utterance": "Mᴀɢɪᴀ ᴅɪssᴏʟᴠᴀᴛᴜʀ, ᴠɪɴᴄᴜʟᴀ ᴀʀᴄᴀɴᴀ ʀᴜᴍᴘᴀɴᴛᴜʀ!\n\nNɪʜɪʟ ᴍᴀɴᴇᴀᴛ, ᴀʀs ɪʟʟᴀ ᴇxsᴛɪɴɢᴜᴀᴛᴜʀ!"
 }

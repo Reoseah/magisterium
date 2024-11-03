@@ -1,5 +1,35 @@
 {
-  "type": "magisterium:dispel_magic",
-  "utterance": "magisterium:dispel_magic",
-  "duration": 4
+  "type": "magisterium:spell",
+  "elements": [
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.spell.magisterium.dispel_magic.heading"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.spell.magisterium.dispel_magic.description"
+      }
+    },
+    {
+      "type": "magisterium:utterance",
+      "id": "magisterium:dispel_magic",
+      "text": {
+        "translate": "magisterium.spell.magisterium.dispel_magic.utterance"
+      },
+      "duration": 4
+    },
+    {
+      "type": "magisterium:page_break"
+    }
+  ],
+  "effects": [
+    {
+      "type": "magisterium:dispel_magic",
+      "utterance": "magisterium:dispel_magic",
+      "duration": 4
+    }
+  ]
 }

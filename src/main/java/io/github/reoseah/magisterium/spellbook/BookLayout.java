@@ -1,15 +1,14 @@
 package io.github.reoseah.magisterium.spellbook;
 
-import io.github.reoseah.magisterium.spellbook.element.Bookmark;
-import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
-import io.github.reoseah.magisterium.spellbook.element.SlotPropertiesProvider;
+import io.github.reoseah.magisterium.data.element.Bookmark;
+import io.github.reoseah.magisterium.data.element.SlotProperties;
+import io.github.reoseah.magisterium.data.element.SlotPropertiesProvider;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minecraft.client.gui.Drawable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,10 +36,10 @@ public record BookLayout(
         // TODO build and keep a separate map of slots per page
         Stream<SlotProperties> leftSlots = this.getPage(leftPage).stream()
                 .filter(drawable -> drawable instanceof SlotPropertiesProvider)
-                .flatMap(drawable -> Arrays.stream(((SlotPropertiesProvider) drawable).getSlotProperties()));
+                .flatMap(drawable -> ((SlotPropertiesProvider) drawable).getSlotProperties().stream());
         Stream<SlotProperties> rightSlots = this.getPage(leftPage + 1).stream()
                 .filter(drawable -> drawable instanceof SlotPropertiesProvider)
-                .flatMap(drawable -> Arrays.stream(((SlotPropertiesProvider) drawable).getSlotProperties()));
+                .flatMap(drawable -> ((SlotPropertiesProvider) drawable).getSlotProperties().stream());
 
         return Stream.concat(leftSlots, rightSlots).limit(16).toArray(SlotProperties[]::new);
     }

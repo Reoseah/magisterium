@@ -1,5 +1,86 @@
 {
-  "type": "magisterium:cold_snap",
-  "utterance": "magisterium:cold_snap",
-  "duration": 10
+  "type": "magisterium:spell",
+  "elements": [
+    {
+      "type": "magisterium:fold",
+      "left": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.description.0"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.description.1"
+          }
+        }
+      ],
+      "right": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+          }
+        },
+        {
+          "type": "magisterium:inventory",
+          "slots": [
+            {
+              "x": 33,
+              "y": 0,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 51,
+              "y": 0,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 42,
+              "y": 18,
+              "ingredient": {
+                "tag": "magisterium:cold_snap_ingredients"
+              },
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "magisterium:utterance",
+          "id": "magisterium:cold_snap",
+          "duration": 10,
+          "text": {
+            "translate": "magisterium.spell.magisterium.cold_snap.utterance"
+          }
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "type": "magisterium:cold_snap",
+      "utterance": "magisterium:cold_snap",
+      "duration": 10
+    }
+  ]
 }

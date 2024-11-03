@@ -1,7 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
+import io.github.reoseah.magisterium.data.element.SlotProperties;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -30,7 +30,7 @@ public class SpellBookSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return this.config != null && !this.config.output && (this.config.ingredient == null || this.config.ingredient.test(stack));
+        return this.config != null && !this.config.output && (this.config.ingredient.isEmpty() || this.config.ingredient.get().test(stack));
     }
 
     @Nullable

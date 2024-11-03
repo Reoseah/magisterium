@@ -1,5 +1,61 @@
 {
-  "type": "magisterium:illusory_wall",
-  "utterance": "magisterium:illusory_wall",
-  "duration": 8
+  "type": "magisterium:spell",
+  "elements": [
+    {
+      "type": "magisterium:fold",
+      "left": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.illusory_wall.heading"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.illusory_wall.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.illusory_wall.description"
+          }
+        }
+      ],
+      "right": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.illusory_wall.heading"
+          }
+        },
+        {
+          "type": "magisterium:inventory",
+          "slots": [
+            {
+              "x": 42,
+              "y": 0,
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "magisterium:utterance",
+          "id": "magisterium:illusory_wall",
+          "text": {
+            "translate": "magisterium.spell.magisterium.illusory_wall.utterance"
+          },
+          "duration": 8
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "type": "magisterium:illusory_wall",
+      "utterance": "magisterium:illusory_wall",
+      "duration": 8
+    }
+  ]
 }

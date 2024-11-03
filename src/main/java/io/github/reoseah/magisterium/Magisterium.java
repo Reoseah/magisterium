@@ -3,6 +3,10 @@ package io.github.reoseah.magisterium;
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.data.ItemValuesLoader;
+import io.github.reoseah.magisterium.data.effect.*;
+import io.github.reoseah.magisterium.data.element.BookElement;
+import io.github.reoseah.magisterium.data.SpellRecipe;
+import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
@@ -11,10 +15,8 @@ import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
-import io.github.reoseah.magisterium.recipe.*;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
-import io.github.reoseah.magisterium.spellbook.SpellDataLoader;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -24,7 +26,6 @@ import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.LecternBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,14 +44,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Magisterium implements ModInitializer {
@@ -74,7 +73,6 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", SpellPageItem.GLYPHIC_IGNITION);
         Registry.register(Registries.ITEM, "magisterium:conflagrate_page", SpellPageItem.CONFLAGRATE);
         Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
-        Registry.register(Registries.ITEM, "magisterium:unstable_charge_page", SpellPageItem.UNSTABLE_CHARGE);
         Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
@@ -96,7 +94,6 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.GLYPHIC_IGNITION);
                     entries.add(SpellPageItem.CONFLAGRATE);
                     entries.add(SpellPageItem.ILLUSORY_WALL);
-//                    entries.add(SpellPageItem.UNSTABLE_CHARGE);
                     entries.add(SpellPageItem.COLD_SNAP);
                     entries.add(SpellPageItem.ARCANE_LIFT);
                     entries.add(SpellPageItem.DISPEL_MAGIC);
@@ -105,21 +102,9 @@ public class Magisterium implements ModInitializer {
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
 
-        // TODO if spell data is server loaded, won't need these recipes anymore
-        //      currently, they load parts of the spell data that the server needs to know
-        //      and they have to match the client data...
-        Registry.register(Registries.RECIPE_TYPE, "magisterium:spell_book", SpellBookRecipe.TYPE);
+        Registry.register(Registries.RECIPE_TYPE, "magisterium:spell", SpellRecipe.TYPE);
 
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell_crafting", SpellBookCraftingRecipe.Serializer.INSTANCE);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:awaken_the_flame", AwakenFlameRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:quench_the_flame", QuenchFlameRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:glyphic_ignition", GlyphicIgnitionRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:conflagrate", ConflagrateRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:illusory_wall", IllusoryWallRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:unstable_charge", UnstableChargeRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:cold_snap", ColdSnapRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:arcane_lift", ArcaneLiftRecipe.SERIALIZER);
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:dispel_magic", DispelMagicRecipe.SERIALIZER);
+        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell", SpellRecipe.SERIALIZER);
 
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
@@ -133,6 +118,24 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
         Registry.register(Registries.SOUND_EVENT, "magisterium:arcane_lift_loop", MagisteriumSounds.ARCANE_LIFT_LOOP);
+
+        Registry.register(BookElement.REGISTRY, "magisterium:heading", Heading.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:paragraph", Paragraph.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:page_break", PageBreak.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:inventory", BookInventory.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:utterance", Utterance.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:fold", Fold.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:bookmark", BookmarkElement.CODEC);
+        Registry.register(BookElement.REGISTRY, "magisterium:vertically_centered", VerticallyCenteredElement.CODEC);
+
+        Registry.register(SpellEffect.REGISTRY, "magisterium:awaken_the_flame", AwakenFlameEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:quench_the_flame", QuenchFlameEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:glyphic_ignition", GlyphicIgnitionEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:conflagrate", ConflagrateEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:cold_snap", ColdSnapEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:illusory_wall", IllusoryWallEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:arcane_lift", ArcaneLiftEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ItemValuesLoader());
 
@@ -179,8 +182,7 @@ public class Magisterium implements ModInitializer {
         var state = world.getBlockState(pos);
         var be = world.getBlockEntity(pos);
 
-        if (state.getBlock() instanceof LecternBlock
-                && be instanceof LecternBlockEntity lectern) {
+        if (state.getBlock() instanceof LecternBlock && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
                 if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
@@ -240,8 +242,7 @@ public class Magisterium implements ModInitializer {
             }
         }
         var sounds = placementState.getSoundGroup();
-        world.playSound(player, placementPos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F,
-                sounds.getPitch());
+        world.playSound(player, placementPos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F, sounds.getPitch());
         world.emitGameEvent(player, GameEvent.BLOCK_PLACE, placementPos);
 
         return true;

@@ -1,5 +1,61 @@
 {
-  "type": "magisterium:arcane_lift",
-  "utterance": "magisterium:arcane_lift",
-  "duration": 8
+  "type": "magisterium:spell",
+  "elements": [
+    {
+      "type": "magisterium:fold",
+      "left": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.arcane_lift.heading"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.arcane_lift.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.arcane_lift.description"
+          }
+        }
+      ],
+      "right": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.arcane_lift.heading"
+          }
+        },
+        {
+          "type": "magisterium:inventory",
+          "slots": [
+            {
+              "x": 42,
+              "y": 0,
+              "background": "magisterium:item/placeholder/question_mark"
+            }
+          ]
+        },
+        {
+          "type": "magisterium:utterance",
+          "id": "magisterium:arcane_lift",
+          "text": {
+            "translate": "magisterium.spell.magisterium.arcane_lift.utterance"
+          },
+          "duration": 8
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "type": "magisterium:arcane_lift",
+      "utterance": "magisterium:arcane_lift",
+      "duration": 8
+    }
+  ]
 }

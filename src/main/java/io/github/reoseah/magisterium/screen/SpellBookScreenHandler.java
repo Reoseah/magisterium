@@ -1,10 +1,10 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
+import io.github.reoseah.magisterium.data.SpellRecipe;
 import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipe;
 import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
-import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
+import io.github.reoseah.magisterium.data.element.SlotProperties;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,6 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import io.github.reoseah.magisterium.data.effect.SpellEffect;
 
 public class SpellBookScreenHandler extends ScreenHandler {
     public static final ScreenHandlerType<SpellBookScreenHandler> TYPE = new ScreenHandlerType<>(SpellBookScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);
@@ -42,7 +43,8 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     private long utteranceStart;
 
-    private @Nullable SpellBookRecipe utteranceRecipe;
+    // TODO change this to a list of effects
+    private @Nullable SpellEffect spellEffect;
 
     public SpellBookScreenHandler(int syncId, PlayerInventory playerInv) {
         this(syncId, playerInv, new ClientContext());
@@ -77,13 +79,14 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
         player.getWorld().getRecipeManager() //
-                .getAllMatches(SpellBookRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld()) //
+                .getAllMatches(SpellRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld()) //
                 .stream() //
                 .map(RecipeEntry::value) //
-                .filter(recipe -> recipe.utterance.equals(id)) //
+                .flatMap(recipe -> recipe.effects.stream()) //
+                .filter(effect -> effect.utterance.equals(id)) //
                 .findFirst() //
-                .ifPresent(recipe -> this.utteranceRecipe = recipe);
-        if (this.utteranceRecipe != null) {
+                .ifPresent(effect -> this.spellEffect = effect);
+        if (this.spellEffect != null) {
             this.isUttering.set(1);
             this.utteranceStart = player.getWorld().getTime();
         }
@@ -92,7 +95,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public void stopUtterance() {
         this.isUttering.set(0);
         this.utteranceStart = 0;
-        this.utteranceRecipe = null;
+        this.spellEffect = null;
 
         this.sendContentUpdates();
     }
@@ -115,7 +118,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             int total = 0;
             for (int i = 0; i < 16; i++) {
                 SlotProperties definition = ((SpellBookSlot) this.getSlot(i)).config;
-                if (definition != null && !definition.output && (definition.ingredient == null || definition.ingredient.test(stack))) {
+                if (definition != null && !definition.output && (definition.ingredient.isEmpty() || definition.ingredient.get().test(stack))) {
                     ItemStack slotStack = this.getSlot(i).getStack();
                     if (slotStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(slotStack, stack)) {
                         slotsToSpreadStackTo.add(i);
@@ -168,17 +171,16 @@ public class SpellBookScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         // this gets called every tick, so it's a tick method effectively
-
-        // TODO allow for spells that are active as long as the player holds the casting button down?
-        if (this.utteranceRecipe != null) {
-            var recipeDuration = this.utteranceRecipe.duration;
+        if (this.spellEffect != null) {
+            var recipeDuration = this.spellEffect.duration;
             long time = player.getWorld().getTime();
             if (time - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
-                ItemStack result = this.utteranceRecipe.craft(new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
+//                ItemStack result =
+                this.spellEffect.finish(new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
 
-                if (!result.isEmpty()) {
-                    this.insertResult(result, player);
-                }
+//                if (!result.isEmpty()) {
+//                    this.insertResult(result, player);
+//                }
                 this.stopUtterance();
             } else if (this.lastSoundTime == null || time - this.lastSoundTime >= 50) {
                 if (this.lastSoundTime == null || time - this.utteranceStart <= recipeDuration * player.getWorld().getTickManager().getTickRate() - 50) {

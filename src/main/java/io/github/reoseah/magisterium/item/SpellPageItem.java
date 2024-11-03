@@ -15,7 +15,6 @@ public class SpellPageItem extends Item {
     public static final Item GLYPHIC_IGNITION = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:glyphic_ignition"));
     public static final Item CONFLAGRATE = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:conflagrate"));
     public static final Item ILLUSORY_WALL = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:illusory_wall"));
-    public static final Item UNSTABLE_CHARGE = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:unstable_charge"));
     public static final Item COLD_SNAP = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:cold_snap"));
     public static final Item ARCANE_LIFT = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:arcane_lift"));
     public static final Item DISPEL_MAGIC = new SpellPageItem(new Item.Settings().maxCount(16), Identifier.of("magisterium:dispel_magic"));

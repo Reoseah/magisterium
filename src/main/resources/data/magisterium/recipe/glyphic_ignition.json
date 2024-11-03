@@ -1,5 +1,41 @@
 {
-  "type": "magisterium:glyphic_ignition",
-  "utterance": "magisterium:glyphic_ignition",
-  "duration": 3
+  "type": "magisterium:spell",
+  "elements": [
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.spell.magisterium.glyphic_ignition.heading"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.spell.magisterium.glyphic_ignition.components"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.spell.magisterium.glyphic_ignition.description"
+      }
+    },
+    {
+      "type": "magisterium:utterance",
+      "id": "magisterium:glyphic_ignition",
+      "text": {
+        "translate": "magisterium.spell.magisterium.glyphic_ignition.utterance"
+      },
+      "duration": 3
+    },
+    {
+      "type": "magisterium:page_break"
+    }
+  ],
+  "effects": [
+    {
+      "type": "magisterium:glyphic_ignition",
+      "utterance": "magisterium:glyphic_ignition",
+      "duration": 3
+    }
+  ]
 }

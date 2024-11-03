@@ -1,7 +1,7 @@
 package io.github.reoseah.magisterium.network;
 
 
-import io.github.reoseah.magisterium.spellbook.element.SlotProperties;
+import io.github.reoseah.magisterium.data.element.SlotProperties;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;

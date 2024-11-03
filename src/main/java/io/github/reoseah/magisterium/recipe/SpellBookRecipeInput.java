@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.input.RecipeInput;
 
 public class SpellBookRecipeInput implements RecipeInput {
-    protected final Inventory inventory;
-    protected final PlayerEntity player;
-    protected final SpellBookScreenHandler.Context context;
+    public final Inventory inventory;
+    public final PlayerEntity player;
+    public final SpellBookScreenHandler.Context context;
 
     public SpellBookRecipeInput(Inventory inventory, PlayerEntity player, SpellBookScreenHandler.Context context) {
         this.inventory = inventory;
