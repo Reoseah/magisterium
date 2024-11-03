@@ -31,6 +31,12 @@ public class ArcaneLiftEffect extends SpellEffect {
 
     @Override
     public void finish(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        if (input.getStackInSlot(0).isEmpty()) {
+            return;
+        }
+        var stack = input.getStackInSlot(0);
+        stack.decrement(1);
+
         var world = input.getPlayer().getWorld();
         var pos = input.getPlayer().getBlockPos();
 
