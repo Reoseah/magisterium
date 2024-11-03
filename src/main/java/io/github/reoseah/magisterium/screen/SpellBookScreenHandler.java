@@ -89,6 +89,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         if (this.spellEffect != null) {
             this.isUttering.set(1);
             this.utteranceStart = player.getWorld().getTime();
+            this.lastSoundTime = null;
         }
     }
 
@@ -96,6 +97,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.isUttering.set(0);
         this.utteranceStart = 0;
         this.spellEffect = null;
+        this.lastSoundTime = null;
 
         this.sendContentUpdates();
     }
@@ -170,11 +172,15 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
+        if (player.currentScreenHandler != this) {
+            return false;
+        }
+
         // this gets called every tick, so it's a tick method effectively
         if (this.spellEffect != null) {
-            var recipeDuration = this.spellEffect.duration;
+            var recipeTicks = this.spellEffect.duration * player.getWorld().getTickManager().getTickRate();
             long time = player.getWorld().getTime();
-            if (time - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
+            if (time - this.utteranceStart >= recipeTicks) {
 //                ItemStack result =
                 this.spellEffect.finish(new SpellRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
 
@@ -182,10 +188,10 @@ public class SpellBookScreenHandler extends ScreenHandler {
 //                    this.insertResult(result, player);
 //                }
                 this.stopUtterance();
-            } else if (this.lastSoundTime == null || time - this.lastSoundTime >= 50) {
-                if (this.lastSoundTime == null || time - this.utteranceStart <= recipeDuration * player.getWorld().getTickManager().getTickRate() - 50) {
-                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.5F, 1.0F);
-                }
+            }
+
+            if (this.lastSoundTime == null || time - this.lastSoundTime >= 25) {
+                player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1.0f);
                 this.lastSoundTime = time;
             }
         }
