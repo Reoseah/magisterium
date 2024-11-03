@@ -9,8 +9,10 @@ public class MagisteriumParticles {
     public static final SimpleParticleType GLYPH_C = new MagisteriumParticleType(true);
     public static final SimpleParticleType GLYPH_D = new MagisteriumParticleType(true);
     public static final SimpleParticleType GLYPH_E = new MagisteriumParticleType(true);
+    public static final SimpleParticleType GLYPH_F = new MagisteriumParticleType(true);
+    public static final SimpleParticleType GLYPH_G = new MagisteriumParticleType(true);
 
-    public static final SimpleParticleType[] GLYPHS = {GLYPH_A, GLYPH_B, GLYPH_C, GLYPH_D, GLYPH_E};
+    public static final SimpleParticleType[] GLYPHS = {GLYPH_A, GLYPH_B, GLYPH_C, GLYPH_D, GLYPH_E, GLYPH_F, GLYPH_G};
 
     // makes constructor public
     public static class MagisteriumParticleType extends SimpleParticleType {
