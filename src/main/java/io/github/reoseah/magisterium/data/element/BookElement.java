@@ -3,8 +3,6 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.spellbook.BookLayout;
-import io.github.reoseah.magisterium.spellbook.BookProperties;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;

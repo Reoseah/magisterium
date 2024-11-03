@@ -34,9 +34,6 @@ public class SpellBookItem extends Item {
             .codec(ItemStack.OPTIONAL_CODEC.listOf()) //
             .packetCodec(ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList())) //
             .build();
-    public static final ComponentType<Unit> UNSTABLE_CHARGE = ComponentType.<Unit>builder() //
-            .codec(Unit.CODEC) //
-            .build();
 
     public static final Item INSTANCE = new SpellBookItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(CURRENT_PAGE, 0));
 
@@ -96,40 +93,5 @@ public class SpellBookItem extends Item {
         } else {
             tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
         }
-        if (stack.contains(UNSTABLE_CHARGE)) {
-            tooltip.add(Text.translatable("item.magisterium.spell_book.unstable_charge").formatted(Formatting.GRAY));
-        }
-    }
-
-    @Override
-    public float getBonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
-        var stack = damageSource.getWeaponStack();
-        if (stack != null && stack.contains(UNSTABLE_CHARGE)) {
-            return baseAttackDamage + 9;
-        }
-        return super.getBonusAttackDamage(target, baseAttackDamage, damageSource);
-    }
-
-    @Override
-    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (stack.contains(UNSTABLE_CHARGE)) {
-            stack.remove(UNSTABLE_CHARGE);
-            if (target.isDead() && target.getWorld().getRandom().nextFloat() < .5) {
-                if (target.getType() == EntityType.ZOMBIE) {
-                    target.dropItem(Items.ZOMBIE_HEAD);
-                } else if (target.getType() == EntityType.SKELETON) {
-                    target.dropItem(Items.SKELETON_SKULL);
-                } else if (target.getType() == EntityType.CREEPER) {
-                    target.dropItem(Items.CREEPER_HEAD);
-                } else if (target.getType() == EntityType.PLAYER) {
-                    var player = (PlayerEntity) target;
-                    var head = new ItemStack(Items.PLAYER_HEAD);
-                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(player.getGameProfile()));
-                    target.dropStack(head);
-                }
-            }
-            // TODO sent a packet to spawn particles and play a sound
-        }
-        return super.postHit(stack, target, attacker);
     }
 }

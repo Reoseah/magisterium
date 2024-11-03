@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 
-public class IllusoryWallBlock extends BlockWithEntity implements Dispelable {
+public class IllusoryWallBlock extends BlockWithEntity {
     public static final MapCodec<IllusoryWallBlock> CODEC = createCodec(IllusoryWallBlock::new);
     public static final Settings SETTINGS = Settings.create().nonOpaque().noCollision().strength(0.5F);
     public static final Block INSTANCE = new IllusoryWallBlock(SETTINGS);
@@ -80,10 +80,5 @@ public class IllusoryWallBlock extends BlockWithEntity implements Dispelable {
                 }
             }
         }
-    }
-
-    @Override
-    public void dispel(World world, BlockPos pos, PlayerEntity player) {
-        MagisteriumPlaygrounds.trySetBlockState(world, pos, Blocks.AIR.getDefaultState(), player);
     }
 }

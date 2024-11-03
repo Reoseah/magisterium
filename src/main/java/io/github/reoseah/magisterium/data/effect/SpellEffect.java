@@ -3,7 +3,7 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
+import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
@@ -25,5 +25,5 @@ public abstract class SpellEffect {
 
     public abstract MapCodec<? extends SpellEffect> getCodec();
 
-    public abstract void finish(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup);
+    public abstract void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup);
 }

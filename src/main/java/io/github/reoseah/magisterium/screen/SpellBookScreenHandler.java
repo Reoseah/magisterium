@@ -1,9 +1,9 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
-import io.github.reoseah.magisterium.data.SpellRecipe;
+import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
+import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.data.element.SlotProperties;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
@@ -79,7 +79,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
         player.getWorld().getRecipeManager() //
-                .getAllMatches(SpellRecipe.TYPE, new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld()) //
+                .getAllMatches(SpellRecipe.TYPE, new SpellRecipeInput(this.inventory, player, this.context), player.getWorld()) //
                 .stream() //
                 .map(RecipeEntry::value) //
                 .flatMap(recipe -> recipe.effects.stream()) //
@@ -176,7 +176,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             long time = player.getWorld().getTime();
             if (time - this.utteranceStart >= recipeDuration * player.getWorld().getTickManager().getTickRate()) {
 //                ItemStack result =
-                this.spellEffect.finish(new SpellBookRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
+                this.spellEffect.finish(new SpellRecipeInput(this.inventory, player, this.context), player.getWorld().getRegistryManager());
 
 //                if (!result.isEmpty()) {
 //                    this.insertResult(result, player);

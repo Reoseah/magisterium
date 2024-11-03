@@ -1,10 +1,9 @@
 package io.github.reoseah.magisterium.data.effect;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.data.ItemValuesLoader;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
+import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -34,7 +33,7 @@ public class ColdSnapEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         int totalValue = 0;
         for (int i = 0; i < input.getSize(); i++) {
             var stack = input.getStackInSlot(i);

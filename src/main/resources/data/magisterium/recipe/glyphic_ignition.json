@@ -35,7 +35,8 @@
     {
       "type": "magisterium:glyphic_ignition",
       "utterance": "magisterium:glyphic_ignition",
-      "duration": 3
+      "duration": 3,
+      "max_range": 16
     }
   ]
 }

@@ -27,7 +27,7 @@ public class OldSpellBookCraftingRecipe extends OldSpellBookRecipe {
     }
 
     @Override
-    public boolean matches(SpellBookRecipeInput input, World world) {
+    public boolean matches(SpellRecipeInput input, World world) {
         for (int i = 0; i < this.ingredients.size(); i++) {
             if (!this.ingredients.get(i).test(input.getStackInSlot(i))) {
                 return false;
@@ -37,7 +37,7 @@ public class OldSpellBookCraftingRecipe extends OldSpellBookRecipe {
     }
 
     @Override
-    public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         ItemStack result = this.getResult(lookup);
 
         int count = result.getMaxCount();

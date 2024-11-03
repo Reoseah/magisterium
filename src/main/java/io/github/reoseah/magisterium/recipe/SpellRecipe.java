@@ -1,9 +1,8 @@
-package io.github.reoseah.magisterium.data;
+package io.github.reoseah.magisterium.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.data.element.BookElement;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -17,7 +16,7 @@ import io.github.reoseah.magisterium.data.effect.SpellEffect;
 
 import java.util.List;
 
-public class SpellRecipe implements Recipe<SpellBookRecipeInput> {
+public class SpellRecipe implements Recipe<SpellRecipeInput> {
     public static final RecipeType<SpellRecipe> TYPE = new RecipeType<>() {
     };
 
@@ -57,13 +56,13 @@ public class SpellRecipe implements Recipe<SpellBookRecipeInput> {
     }
 
     @Override
-    public boolean matches(SpellBookRecipeInput input, World world) {
+    public boolean matches(SpellRecipeInput input, World world) {
         // TODO implement
         return true;
     }
 
     @Override
-    public ItemStack craft(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         return ItemStack.EMPTY;
     }
 

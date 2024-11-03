@@ -1,27 +1,31 @@
 package io.github.reoseah.magisterium.data.effect;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
+import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 
 public class ArcaneLiftEffect extends SpellEffect {
     public static final MapCodec<ArcaneLiftEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
-            Codec.INT.fieldOf("duration").forGetter(effect -> effect.duration) //
+            Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
+            Codecs.POSITIVE_INT.fieldOf("max_range").forGetter(effect -> effect.maxRange) //
     ).apply(instance, ArcaneLiftEffect::new));
 
-    private static final int SEARCH_RADIUS = 8;
+    public final int maxRange;
 
-    public ArcaneLiftEffect(Identifier utterance, int duration) {
+    public ArcaneLiftEffect(Identifier utterance, int duration, int maxRange) {
         super(utterance, duration);
+        this.maxRange = maxRange;
     }
 
     @Override
@@ -30,31 +34,36 @@ public class ArcaneLiftEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         if (input.getStackInSlot(0).isEmpty()) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.missing_ingredients"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
             return;
         }
         var stack = input.getStackInSlot(0);
         stack.decrement(1);
 
-        var world = input.getPlayer().getWorld();
-        var pos = input.getPlayer().getBlockPos();
+        var world = input.getWorld();
+        var pos = input.getPos();
 
-        var circlePos = find3x3GlyphCircle(world, pos);
+        var circlePos = find3x3GlyphCircle(world, pos, this.maxRange);
         if (circlePos == null) {
+            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
+            ((ServerPlayerEntity) input.player).closeHandledScreen();
             return;
         }
 
         if (world.isAir(circlePos)) {
-//            world.setBlockState(circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState());
-
-            MagisteriumPlaygrounds.trySetBlockState(world, circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState(), input.getPlayer());
-            // TODO check result and send feedback
+            boolean success = input.trySetBlockState(circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState());
+            if (!success) {
+                input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+                ((ServerPlayerEntity) input.player).closeHandledScreen();
+            }
         }
     }
 
-    private static BlockPos find3x3GlyphCircle(WorldAccess world, BlockPos start) {
-        for (var pos : BlockPos.iterateOutwards(start, SEARCH_RADIUS, SEARCH_RADIUS, SEARCH_RADIUS)) {
+    private static BlockPos find3x3GlyphCircle(WorldAccess world, BlockPos start, int maxRange) {
+        for (var pos : BlockPos.iterateOutwards(start, maxRange, maxRange, maxRange)) {
             boolean isCircle = true;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {

@@ -12,7 +12,7 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.function.BiFunction;
 
-public abstract class OldSpellBookRecipe implements Recipe<SpellBookRecipeInput> {
+public abstract class OldSpellBookRecipe implements Recipe<SpellRecipeInput> {
     public static final RecipeType<OldSpellBookRecipe> TYPE = new RecipeType<>() {
         @Override
         public String toString() {

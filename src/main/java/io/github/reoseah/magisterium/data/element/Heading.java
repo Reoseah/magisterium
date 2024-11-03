@@ -2,7 +2,6 @@ package io.github.reoseah.magisterium.data.element;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.spellbook.BookProperties;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

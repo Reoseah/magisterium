@@ -4,11 +4,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
-import io.github.reoseah.magisterium.recipe.SpellBookRecipeInput;
+import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -21,17 +20,23 @@ import java.util.ArrayDeque;
 import java.util.HashSet;
 
 public class IllusoryWallEffect extends SpellEffect {
-    public static final MapCodec<IllusoryWallEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance),
-            Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration)
+    public static final MapCodec<IllusoryWallEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
+            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
+            Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
+            Codecs.POSITIVE_INT.fieldOf("glyph_search_radius").forGetter(effect -> effect.glyphSearchRadius), //
+            Codecs.POSITIVE_INT.fieldOf("max_width").forGetter(effect -> effect.maxWidth), //
+            Codecs.POSITIVE_INT.fieldOf("max_height").forGetter(effect -> effect.maxHeight) //
     ).apply(instance, IllusoryWallEffect::new));
 
-    private static final int GLYPH_SEARCH_RADIUS = 5;
-    private static final int MAX_GLYPHS_CONVERTED = 8;
-    private static final int MAX_HEIGHT = 3;
+    public final int glyphSearchRadius;
+    public final int maxWidth;
+    public final int maxHeight;
 
-    public IllusoryWallEffect(Identifier utterance, int duration) {
+    public IllusoryWallEffect(Identifier utterance, int duration, int glyphSearchRadius, int maxWidth, int maxHeight) {
         super(utterance, duration);
+        this.glyphSearchRadius = glyphSearchRadius;
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class IllusoryWallEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellBookRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         var world = input.player.getWorld();
         var playerPos = input.player.getBlockPos();
 
@@ -57,7 +62,7 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        var startPos = Streams.of(BlockPos.iterateOutwards(playerPos, GLYPH_SEARCH_RADIUS, GLYPH_SEARCH_RADIUS, GLYPH_SEARCH_RADIUS))
+        var startPos = Streams.of(BlockPos.iterateOutwards(playerPos, this.glyphSearchRadius, this.glyphSearchRadius, this.glyphSearchRadius))
                 .filter(pos -> world.getBlockState(pos).isOf(GlyphBlock.INSTANCE))
                 .findFirst()
                 .orElse(null);
@@ -75,7 +80,7 @@ public class IllusoryWallEffect extends SpellEffect {
         var visited = new HashSet<BlockPos>();
 
         var glyphsConverted = 0;
-        while (!queue.isEmpty() && glyphsConverted < MAX_GLYPHS_CONVERTED) {
+        while (!queue.isEmpty() && glyphsConverted < this.maxWidth) {
             var pos = queue.poll();
             if (visited.contains(pos)) {
                 continue;
@@ -89,7 +94,7 @@ public class IllusoryWallEffect extends SpellEffect {
                 } else {
                     hasFailure = true;
                 }
-                for (int dy = 1; dy < MAX_HEIGHT; dy++) {
+                for (int dy = 1; dy < this.maxHeight; dy++) {
                     var wallPos = pos.up(dy);
                     if (world.getBlockState(wallPos).isAir()) {
                         if (IllusoryWallBlock.setBlock(world, wallPos, illusionState, input.player)) {
@@ -116,6 +121,5 @@ public class IllusoryWallEffect extends SpellEffect {
             input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
             ((ServerPlayerEntity) input.player).closeHandledScreen();
         }
-
     }
 }

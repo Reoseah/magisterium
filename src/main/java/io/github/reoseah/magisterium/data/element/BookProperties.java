@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.spellbook;
+package io.github.reoseah.magisterium.data.element;
 
 import net.minecraft.util.Identifier;
 

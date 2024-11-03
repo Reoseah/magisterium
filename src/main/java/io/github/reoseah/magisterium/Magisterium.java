@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.data.effect.*;
-import io.github.reoseah.magisterium.data.element.BookElement;
-import io.github.reoseah.magisterium.data.SpellRecipe;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
@@ -15,6 +13,7 @@ import io.github.reoseah.magisterium.network.StartUtterancePayload;
 import io.github.reoseah.magisterium.network.StopUtterancePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
+import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
@@ -80,7 +79,6 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
-        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:unstable_charge", SpellBookItem.UNSTABLE_CHARGE);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //

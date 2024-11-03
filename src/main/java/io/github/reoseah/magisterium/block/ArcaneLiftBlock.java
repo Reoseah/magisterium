@@ -2,6 +2,7 @@ package io.github.reoseah.magisterium.block;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
+import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;
@@ -20,7 +21,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class ArcaneLiftBlock extends Block implements Dispelable {
+public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
     //    public static final BooleanProperty BASE = BooleanProperty.of("base");
     public static final IntProperty HEIGHT = IntProperty.of("height", 0, 15);
 
@@ -58,8 +59,8 @@ public class ArcaneLiftBlock extends Block implements Dispelable {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (random.nextInt(10) == 0) {
-            world.playSoundAtBlockCenter(pos, MagisteriumSounds.ARCANE_LIFT_LOOP, SoundCategory.BLOCKS, 0.15F, 1.0F, true);
+        if (random.nextInt(50) == 0) {
+            world.playSoundAtBlockCenter(pos, MagisteriumSounds.ARCANE_LIFT_LOOP, SoundCategory.BLOCKS, 0.1F, .5F + random.nextFloat() * .5F, true);
         }
 
         if (random.nextInt(4) == 0) {
@@ -158,22 +159,12 @@ public class ArcaneLiftBlock extends Block implements Dispelable {
     }
 
     @Override
-    public void dispel(World world, BlockPos pos, PlayerEntity player) {
+    public boolean dispel(World world, BlockPos pos, PlayerEntity player) {
         var state = world.getBlockState(pos);
         var height = state.get(HEIGHT);
-        for (var ipos : BlockPos.iterate(pos, pos.add(0, -height, 0))) {
-            if (world.getBlockState(ipos).getBlock() != this) {
-                break;
-            }
-            world.setBlockState(ipos, Blocks.AIR.getDefaultState(), 3);
-            world.syncWorldEvent(null, 2001, ipos, Block.getRawIdFromState(state));
-        }
-        for (var ipos : BlockPos.iterate(pos, pos.add(0, 15 - height, 0))) {
-            if (world.getBlockState(ipos).getBlock() != GlyphBlock.INSTANCE) {
-                break;
-            }
-            world.setBlockState(ipos, Blocks.AIR.getDefaultState(), 3);
-            world.syncWorldEvent(null, 2001, ipos, Block.getRawIdFromState(state));
-        }
+
+        var base = pos.down(height);
+
+        return MagisteriumPlaygrounds.trySetBlockState(world, base, Blocks.AIR.getDefaultState(), player);
     }
 }
