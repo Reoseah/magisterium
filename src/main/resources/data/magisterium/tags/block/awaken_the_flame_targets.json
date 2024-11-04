@@ -1,7 +1,5 @@
 {
   "values": [
-    "#minecraft:candles",
-    "#minecraft:candle_cakes",
-    "#minecraft:campfires"
+    "#magisterium:flame_receptacles"
   ]
 }

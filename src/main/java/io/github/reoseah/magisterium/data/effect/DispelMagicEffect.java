@@ -43,7 +43,7 @@ public class DispelMagicEffect extends SpellEffect {
                 boolean success = (state.getBlock() instanceof CustomDispellingHandler dispelable) ? dispelable.dispel(world, pos, input.getPlayer()) : input.trySetBlockState(pos, Blocks.AIR.getDefaultState());
 
                 if (success) {
-                    // TODO send a packet spawn particles, play sound
+                    // TODO send a packet to spawn particles, play sound
                 } else {
                     input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
                     ((ServerPlayerEntity) input.player).closeHandledScreen();

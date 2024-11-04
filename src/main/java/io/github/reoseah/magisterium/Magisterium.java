@@ -149,11 +149,12 @@ public class Magisterium implements ModInitializer {
         UseBlockCallback.EVENT.register(Magisterium::interact);
         LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
 
+        PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
+
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SlotLayoutPayload.ID, SlotLayoutPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, (payload, context) -> {
             if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {

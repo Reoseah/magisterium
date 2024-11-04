@@ -24,7 +24,6 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 // TODO: have the utterance text shortly highlight to indicate finishing
-// TODO: consider renaming this and other Utterance* classes to Spell or SpellElement
 public class Utterance extends SimpleBlock {
     public static final MapCodec<Utterance> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.CODEC.fieldOf("text").forGetter(utterance -> utterance.text), //
