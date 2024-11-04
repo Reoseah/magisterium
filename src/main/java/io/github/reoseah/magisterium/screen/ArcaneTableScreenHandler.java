@@ -18,6 +18,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArcaneTableScreenHandler extends ScreenHandler {
     public static final ScreenHandlerType<ArcaneTableScreenHandler> TYPE = new ScreenHandlerType<>(ArcaneTableScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);

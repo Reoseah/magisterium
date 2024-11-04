@@ -14,10 +14,10 @@ import java.util.Optional;
 
 public class SlotProperties {
     public static final MapCodec<SlotProperties> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Codecs.NONNEGATIVE_INT.fieldOf("x").forGetter(slot -> slot.x), //
-            Codecs.NONNEGATIVE_INT.fieldOf("y").forGetter(slot -> slot.y), //
+            Codecs.NON_NEGATIVE_INT.fieldOf("x").forGetter(slot -> slot.x), //
+            Codecs.NON_NEGATIVE_INT.fieldOf("y").forGetter(slot -> slot.y), //
             Codec.BOOL.optionalFieldOf("output", false).forGetter(slot -> slot.output), //
-            Ingredient.ALLOW_EMPTY_CODEC.optionalFieldOf("ingredient").forGetter(slot -> slot.ingredient), //
+            Ingredient.CODEC.optionalFieldOf("ingredient").forGetter(slot -> slot.ingredient), //
             Identifier.CODEC.optionalFieldOf("background").forGetter(slot -> slot.background) //
     ).apply(instance, SlotProperties::new));
 

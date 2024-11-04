@@ -1,6 +1,5 @@
 package io.github.reoseah.magisterium.network;
 
-
 import io.github.reoseah.magisterium.data.element.SlotProperties;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

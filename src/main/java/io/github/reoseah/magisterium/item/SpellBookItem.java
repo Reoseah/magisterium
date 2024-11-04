@@ -2,17 +2,10 @@ package io.github.reoseah.magisterium.item;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ProfileComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -27,7 +20,7 @@ import java.util.List;
 
 public class SpellBookItem extends Item {
     public static final ComponentType<Integer> CURRENT_PAGE = ComponentType.<Integer>builder() //
-            .codec(Codecs.NONNEGATIVE_INT) //
+            .codec(Codecs.NON_NEGATIVE_INT) //
             .packetCodec(PacketCodecs.VAR_INT) //
             .build();
     public static final ComponentType<List<ItemStack>> CONTENTS = ComponentType.<List<ItemStack>>builder() //
@@ -37,7 +30,7 @@ public class SpellBookItem extends Item {
 
     public static final Item INSTANCE = new SpellBookItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(CURRENT_PAGE, 0));
 
-    protected SpellBookItem(Settings settings) {
+    protected SpellBookItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
     }
 
@@ -60,11 +53,11 @@ public class SpellBookItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public ActionResult use(World world, PlayerEntity player, Hand hand) {
         var book = player.getStackInHand(hand);
 
         if (!book.contains(CONTENTS)) {
-            return TypedActionResult.fail(book);
+            return ActionResult.FAIL;
         }
 
         if (!world.isClient) {
@@ -80,7 +73,7 @@ public class SpellBookItem extends Item {
                 }
             });
         }
-        return TypedActionResult.success(book, false);
+        return ActionResult.SUCCESS;
     }
 
     @Override

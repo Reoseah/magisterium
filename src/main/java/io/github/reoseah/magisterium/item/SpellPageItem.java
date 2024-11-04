@@ -22,15 +22,10 @@ public class SpellPageItem extends Item {
     public final Identifier spell;
     protected final Text tooltip;
 
-    protected SpellPageItem(Settings settings, Identifier spell) {
+    protected SpellPageItem(net.minecraft.item.Item.Settings settings, Identifier spell) {
         super(settings);
         this.spell = spell;
         this.tooltip = Text.translatable("magisterium.spell." + spell.getNamespace() + "." + spell.getPath()).formatted(Formatting.GRAY);
-    }
-
-    @Override
-    protected String getOrCreateTranslationKey() {
-        return "item.magisterium.spell_page";
     }
 
     @Override

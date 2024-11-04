@@ -1,5 +1,8 @@
 package io.github.reoseah.magisterium.block;
 
+import com.google.common.collect.ImmutableSet;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityType;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class IllusoryWallBlockEntity extends BlockEntity {
-    public static final BlockEntityType<IllusoryWallBlockEntity> TYPE = BlockEntityType.Builder.create(IllusoryWallBlockEntity::new, IllusoryWallBlock.INSTANCE).build(null);
+    public static final BlockEntityType<IllusoryWallBlockEntity> TYPE = FabricBlockEntityTypeBuilder.create(IllusoryWallBlockEntity::new, IllusoryWallBlock.INSTANCE).build();
 
     protected BlockState illusoryState = Blocks.STONE.getDefaultState();
 
@@ -38,7 +41,7 @@ public class IllusoryWallBlockEntity extends BlockEntity {
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
-        this.illusoryState = NbtHelper.toBlockState(registryLookup.getWrapperOrThrow(RegistryKeys.BLOCK), nbt.getCompound("IllusoryState"));
+        this.illusoryState = NbtHelper.toBlockState(registryLookup.getOrThrow(RegistryKeys.BLOCK), nbt.getCompound("IllusoryState"));
     }
 
     @Override

@@ -79,8 +79,8 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
-        player.getWorld().getRecipeManager() //
-                .getAllMatches(SpellRecipe.TYPE, new SpellRecipeInput(this.inventory, player, this.context), player.getWorld()) //
+        player.getServerWorld().getRecipeManager() //
+                .get(SpellRecipe.TYPE, new SpellRecipeInput(this.inventory, player, this.context), player.getWorld()) //
                 .stream() //
                 .map(RecipeEntry::value) //
                 .flatMap(recipe -> recipe.effects.stream()) //

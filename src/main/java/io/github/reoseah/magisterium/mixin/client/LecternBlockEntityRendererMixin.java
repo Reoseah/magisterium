@@ -38,7 +38,7 @@ public class LecternBlockEntityRendererMixin {
             matrices.translate(0, -0.125F, 0);
             this.book.setPageAngles(0, 0.1F, 0.9F, 1.2F);
             VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.book.getLayer(TEXTURE));
-            this.book.renderBook(matrices, vertexConsumer, light, overlay, 0xFFFFFFFF);
+            this.book.render(matrices, vertexConsumer, light, overlay, 0xFFFFFFFF);
             matrices.pop();
 
             ci.cancel();

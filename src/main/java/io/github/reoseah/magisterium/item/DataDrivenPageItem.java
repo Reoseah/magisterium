@@ -18,12 +18,7 @@ public class DataDrivenPageItem extends Item {
             .codec(SpellEffect.CODEC.listOf())
             .build();
 
-    public DataDrivenPageItem(Settings settings) {
+    public DataDrivenPageItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
-    }
-
-    @Override
-    protected String getOrCreateTranslationKey() {
-        return "item.magisterium.spell_page";
     }
 }

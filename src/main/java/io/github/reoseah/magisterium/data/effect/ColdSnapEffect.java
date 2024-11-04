@@ -7,6 +7,7 @@ import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -14,7 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
+import net.minecraft.world.World;
 import java.util.HashMap;
 
 public class ColdSnapEffect extends SpellEffect {
@@ -35,7 +36,7 @@ public class ColdSnapEffect extends SpellEffect {
     @Override
     public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         int totalValue = 0;
-        for (int i = 0; i < input.getSize(); i++) {
+        for (int i = 0; i < input.size(); i++) {
             var stack = input.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 int value = ItemValuesLoader.getValue(stack);

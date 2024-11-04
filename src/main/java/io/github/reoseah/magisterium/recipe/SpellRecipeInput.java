@@ -28,7 +28,7 @@ public class SpellRecipeInput implements RecipeInput {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return this.inventory.size();
     }
 

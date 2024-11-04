@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 public class BookmarkItem extends Item {
     public static final Item INSTANCE = new BookmarkItem(new Item.Settings());
 
-    public BookmarkItem(Settings settings) {
+    public BookmarkItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
     }
 }

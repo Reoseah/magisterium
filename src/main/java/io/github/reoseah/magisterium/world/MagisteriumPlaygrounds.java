@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Limits world-modifying spells to specially designated areas,
@@ -53,13 +54,14 @@ public class MagisteriumPlaygrounds extends PersistentState {
     }
 
     public static boolean canModifyWorld(World world, BlockPos pos, PlayerEntity player) {
-        if (world instanceof ServerWorld) {
-            if (world.getGameRules().getBoolean(MagisteriumGameRules.ENABLE_MAGISTERIUM_PLAYGROUNDS) //
+        if (world instanceof ServerWorld serverWorld) {
+            if (serverWorld.getGameRules().getBoolean(MagisteriumGameRules.ENABLE_MAGISTERIUM_PLAYGROUNDS) //
                     && !player.isCreative()) {
                 return isInsidePlayground((ServerWorld) world, pos);
             }
+            return player.canModifyBlocks() && player.canModifyAt(serverWorld, pos);
         }
-        return player.canModifyBlocks() && player.canModifyAt(world, pos);
+        return player.canModifyBlocks();
     }
 
     public static boolean trySetBlockState(World world, BlockPos pos, BlockState state, PlayerEntity player) {

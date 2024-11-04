@@ -8,10 +8,10 @@ import net.minecraft.client.render.entity.model.BookModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public class BuiltinItemModelRendererMixin {
         if (item == SpellBookItem.INSTANCE) {
             matrices.push();
             matrices.scale(1, -1, -1);
-            VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, this.bookModel.getLayer(TEXTURE), false, false);
+            VertexConsumer vertexConsumer = ItemRenderer.getDynamicDisplayGlintConsumer(vertexConsumers, this.bookModel.getLayer(TEXTURE), matrices.peek());
             this.bookModel.setPageAngles(0, 0.1F, 0.9F, 1.2F);
             this.bookModel.render(matrices, vertexConsumer, light, overlay, 0xFFFFFF);
             matrices.pop();
