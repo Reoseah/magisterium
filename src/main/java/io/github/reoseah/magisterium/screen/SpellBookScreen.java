@@ -1,5 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
+import io.github.reoseah.magisterium.data.SpellPage;
+import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.DataDrivenPageItem;
@@ -7,7 +9,6 @@ import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
-import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
@@ -20,7 +21,6 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -30,7 +30,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -110,15 +109,10 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             .formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
 
     private void buildPages() {
-        var clientWorld = this.client.world;
-        var recipeManager = clientWorld.getRecipeManager();
-        Map<Identifier, SpellRecipe> spellRecipes = recipeManager.listAllOfType(SpellRecipe.TYPE) //
-                .stream() //
-                .collect(Collectors.toMap(RecipeEntry::id, RecipeEntry::value));
-
+        var pageData = SpellPageLoader.getInstance().pages;
         var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
-        var builder = new BookLayout.Builder(this.properties);
+        var layoutBuilder = new BookLayout.Builder(this.properties);
         for (ItemStack stack : pages) {
             if (stack.getItem() instanceof SpellPageItem spellPage) {
                 var id = spellPage.spell;
@@ -126,16 +120,16 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     LOGGER.warn("Spell id not found in stack {}", stack);
                     continue;
                 }
-                var spell = spellRecipes.get(id);
+                var spell = pageData.get(id);
                 if (spell == null) {
                     LOGGER.warn("Spell data for id {} not found", id);
                     continue;
                 }
                 for (var element : spell.elements) {
-                    element.visit(builder, this.properties, this.textRenderer);
+                    element.visit(layoutBuilder, this.properties, this.textRenderer);
                 }
             } else if (stack.isOf(BookmarkItem.INSTANCE)) {
-                int currentChapter = builder.getCurrentBookmark() + 1;
+                int currentChapter = layoutBuilder.getCurrentBookmark() + 1;
                 if (currentChapter > 7) {
                     // more bookmarks won't fit into the book with the current layout
                     continue;
@@ -143,36 +137,36 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
                 var name = stack.get(DataComponentTypes.CUSTOM_NAME);
 
-                new BookmarkElement(name != null ? name : UNTITLED_SECTION).visit(builder, this.properties, this.textRenderer);
-                builder.setCurrentY(builder.getCurrentY() + 20);
-                new Heading(Text.literal(RomanNumbers.toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(builder, this.properties, this.textRenderer);
-                new Heading(name != null ? name : UNTITLED_SECTION).visit(builder, this.properties, this.textRenderer);
+                new BookmarkElement(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
+                layoutBuilder.setCurrentY(layoutBuilder.getCurrentY() + 20);
+                new Heading(Text.literal(RomanNumbers.toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(layoutBuilder, this.properties, this.textRenderer);
+                new Heading(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
 
                 if (name == null) {
-                    builder.setCurrentY(builder.getCurrentY() + 4);
-                    new Paragraph(UNTITLED_SECTION_DESCRIPTION).visit(builder, this.properties, this.textRenderer);
-                    builder.advancePage();
+                    layoutBuilder.setCurrentY(layoutBuilder.getCurrentY() + 4);
+                    new Paragraph(UNTITLED_SECTION_DESCRIPTION).visit(layoutBuilder, this.properties, this.textRenderer);
+                    layoutBuilder.advancePage();
                     continue;
                 }
 
                 var lore = stack.get(DataComponentTypes.LORE);
                 if (lore != null) {
-                    builder.setCurrentY(builder.getCurrentY() + 4);
-                    lore.lines().forEach(text -> new Paragraph(text).visit(builder, this.properties, this.textRenderer));
+                    layoutBuilder.setCurrentY(layoutBuilder.getCurrentY() + 4);
+                    lore.lines().forEach(text -> new Paragraph(text).visit(layoutBuilder, this.properties, this.textRenderer));
                 }
-                builder.advancePage();
+                layoutBuilder.advancePage();
             } else if (stack.isOf(DataDrivenPageItem.INSTANCE)) {
                 var elements = stack.get(DataDrivenPageItem.ELEMENTS);
                 if (elements == null) {
                     continue;
                 }
                 for (var element : elements) {
-                    element.visit(builder, this.properties, this.textRenderer);
+                    element.visit(layoutBuilder, this.properties, this.textRenderer);
                 }
             }
         }
 
-        this.layout = builder.build();
+        this.layout = layoutBuilder.build();
         this.updatePage(this.handler.currentPage.get());
     }
 

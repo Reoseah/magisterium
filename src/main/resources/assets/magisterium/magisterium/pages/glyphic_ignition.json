@@ -1,5 +1,4 @@
 {
-  "type": "magisterium:spell",
   "elements": [
     {
       "type": "magisterium:heading",
@@ -29,14 +28,6 @@
     },
     {
       "type": "magisterium:page_break"
-    }
-  ],
-  "effects": [
-    {
-      "type": "magisterium:glyphic_ignition",
-      "utterance": "magisterium:glyphic_ignition",
-      "duration": 3,
-      "max_range": 16
     }
   ]
 }

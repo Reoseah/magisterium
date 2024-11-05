@@ -1,5 +1,4 @@
 {
-  "type": "magisterium:spell",
   "elements": [
     {
       "type": "magisterium:fold",
@@ -52,14 +51,6 @@
           "duration": 8
         }
       ]
-    }
-  ],
-  "effects": [
-    {
-      "type": "magisterium:arcane_lift",
-      "utterance": "magisterium:arcane_lift",
-      "duration": 8,
-      "max_range": 10
     }
   ]
 }

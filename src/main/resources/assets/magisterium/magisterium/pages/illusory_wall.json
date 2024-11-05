@@ -1,5 +1,4 @@
 {
-  "type": "magisterium:spell",
   "elements": [
     {
       "type": "magisterium:fold",
@@ -49,16 +48,6 @@
           "duration": 8
         }
       ]
-    }
-  ],
-  "effects": [
-    {
-      "type": "magisterium:illusory_wall",
-      "utterance": "magisterium:illusory_wall",
-      "duration": 8,
-      "glyph_search_radius": 5,
-      "max_width": 8,
-      "max_height": 3
     }
   ]
 }

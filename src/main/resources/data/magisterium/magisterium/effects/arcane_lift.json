@@ -1,0 +1,6 @@
+{
+  "type": "magisterium:arcane_lift",
+  "utterance": "magisterium:arcane_lift",
+  "duration": 8,
+  "max_range": 10
+}

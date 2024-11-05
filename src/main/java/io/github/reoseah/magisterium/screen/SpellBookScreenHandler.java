@@ -1,8 +1,9 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
+import io.github.reoseah.magisterium.data.SpellEffectLoader;
+import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
 import io.github.reoseah.magisterium.item.DataDrivenPageItem;
-import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.data.element.SlotProperties;
@@ -16,7 +17,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandler;
@@ -79,35 +79,30 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
-        player.getServerWorld().getRecipeManager() //
-                .get(SpellRecipe.TYPE, new SpellRecipeInput(this.inventory, player, this.context), player.getWorld()) //
+        this.spellEffect = SpellEffectLoader.getInstance().effects.values() //
                 .stream() //
-                .map(RecipeEntry::value) //
-                .flatMap(recipe -> recipe.effects.stream()) //
                 .filter(effect -> effect.utterance.equals(id)) //
                 .findFirst() //
-                .ifPresent(effect -> this.spellEffect = effect);
-        if (this.spellEffect == null) {
-            var pages = this.context.stack.get(SpellBookItem.CONTENTS);
-            if (pages != null) {
-                outer:
-                for (var page : pages) {
-                    if (page.isOf(DataDrivenPageItem.INSTANCE)) {
-                        var effects = page.get(DataDrivenPageItem.EFFECTS);
-                        if (effects != null) {
-                            for (var effect : effects) {
-                                if (effect.utterance.equals(id)) {
-                                    this.spellEffect = effect;
-                                    break outer;
+                .orElseGet(() -> {
+                    var pages = this.context.stack.get(SpellBookItem.CONTENTS);
+                    if (pages != null) {
+                        for (var page : pages) {
+                            if (page.isOf(DataDrivenPageItem.INSTANCE)) {
+                                var effects = page.get(DataDrivenPageItem.EFFECTS);
+                                if (effects != null) {
+                                    for (var effect : effects) {
+                                        if (effect.utterance.equals(id)) {
+                                            return effect;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            }
-        }
+                    return EmptySpellEffect.INSTANCE;
+                });
 
-        if (this.spellEffect != null) {
+        if (this.spellEffect != EmptySpellEffect.INSTANCE) {
             this.isUttering.set(1);
             this.utteranceStart = player.getWorld().getTime();
             this.lastSoundTime = null;

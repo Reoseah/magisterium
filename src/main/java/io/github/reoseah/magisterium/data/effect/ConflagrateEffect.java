@@ -2,16 +2,12 @@ package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.data.ItemValuesLoader;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry.Entry;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ConnectingBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -40,16 +36,16 @@ public class ConflagrateEffect extends SpellEffect {
     public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         // TODO: extract this to a helper method, reuse in other recipes
         int totalValue = 0;
-        for (int i = 0; i < input.size(); i++) {
-            var stack = input.getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                int value = ItemValuesLoader.getValue(stack);
-                totalValue += value;
-
-                stack.decrement(1);
-                input.inventory.setStack(i, stack);
-            }
-        }
+//        for (int i = 0; i < input.size(); i++) {
+//            var stack = input.getStackInSlot(i);
+//            if (!stack.isEmpty()) {
+//                int value = ItemValuesLoader.getValue(stack);
+//                totalValue += value;
+//
+//                stack.decrement(1);
+//                input.inventory.setStack(i, stack);
+//            }
+//        }
 
         // TODO spawn a bunch of fire particles in the area
 

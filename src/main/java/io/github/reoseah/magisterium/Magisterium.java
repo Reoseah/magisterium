@@ -2,13 +2,12 @@ package io.github.reoseah.magisterium;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
-import io.github.reoseah.magisterium.data.ItemValuesLoader;
+import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.*;
 import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
-import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
@@ -102,10 +101,6 @@ public class Magisterium implements ModInitializer {
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);
 
-        Registry.register(Registries.RECIPE_TYPE, "magisterium:spell", SpellRecipe.TYPE);
-
-        Registry.register(Registries.RECIPE_SERIALIZER, "magisterium:spell", SpellRecipe.SERIALIZER);
-
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:spell_book", SpellBookScreenHandler.TYPE);
         Registry.register(Registries.SCREEN_HANDLER, "magisterium:arcane_table", ArcaneTableScreenHandler.TYPE);
 
@@ -130,6 +125,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(BookElement.REGISTRY, "magisterium:bookmark", BookmarkElement.CODEC);
         Registry.register(BookElement.REGISTRY, "magisterium:vertically_centered", VerticallyCenteredElement.CODEC);
 
+        Registry.register(SpellEffect.REGISTRY, "magisterium:empty", EmptySpellEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:awaken_the_flame", AwakenFlameEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:quench_the_flame", QuenchFlameEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:glyphic_ignition", GlyphicIgnitionEffect.CODEC);
@@ -140,7 +136,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:command", ExecuteCommandEffect.CODEC);
 
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ItemValuesLoader());
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellEffectLoader.ID, SpellEffectLoader::new);
 
         MagisteriumGameRules.initialize();
         MagisteriumCommands.initialize();

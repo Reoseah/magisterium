@@ -4,6 +4,7 @@ import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
+import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.particle.EnergyParticle;
@@ -18,12 +19,14 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -51,6 +54,8 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_E, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_F, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_G, GlyphParticle.Factory::new);
+
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
 
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, (payload, context) -> {
             var world = context.client().world;
