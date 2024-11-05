@@ -16,6 +16,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
@@ -138,9 +139,9 @@ public class Utterance extends SimpleBlock {
         public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
             if (this.mouseDown || mouseX > buttonX && mouseY > buttonY
                     && mouseX < buttonX + properties.spellButtonWidth && mouseY < buttonY + properties.spellButtonHeight) {
-                ctx.drawTexture(properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonActiveV, properties.spellButtonWidth, properties.spellButtonHeight);
+                ctx.drawTexture(RenderLayer::getGuiTextured, properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonActiveV, properties.spellButtonWidth, properties.spellButtonHeight, 256, 256);
             } else {
-                ctx.drawTexture(properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonV, properties.spellButtonWidth, properties.spellButtonHeight);
+                ctx.drawTexture(RenderLayer::getGuiTextured, properties.texture, buttonX, buttonY, properties.spellButtonU, properties.spellButtonV, properties.spellButtonWidth, properties.spellButtonHeight, 256, 256);
             }
 
             float readTime = this.mouseDown ? (System.currentTimeMillis() - this.mouseDownTime) / 1000F : 0;

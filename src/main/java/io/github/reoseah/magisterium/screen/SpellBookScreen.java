@@ -1,14 +1,13 @@
 package io.github.reoseah.magisterium.screen;
 
-import io.github.reoseah.magisterium.item.DataDrivenPageItem;
-import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import io.github.reoseah.magisterium.data.element.*;
-import io.github.reoseah.magisterium.data.element.BookLayout.Builder;
 import io.github.reoseah.magisterium.item.BookmarkItem;
+import io.github.reoseah.magisterium.item.DataDrivenPageItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.SlotLayoutPayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
+import io.github.reoseah.magisterium.recipe.SpellRecipe;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
@@ -16,15 +15,12 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.PageTurnWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -32,7 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.List;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -214,8 +210,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         int mouseXInGui = mouseX - this.x;
         int mouseYInGui = mouseY - this.y;
 
-        context.drawTexture(this.properties.texture, 0, 0, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        context.drawTexture(this.properties.texture, (this.backgroundWidth - PLAYER_SLOTS_WIDTH) / 2, this.playerSlotsY, PLAYER_SLOTS_U, PLAYER_SLOTS_V, PLAYER_SLOTS_WIDTH, PLAYER_SLOTS_HEIGHT);
+        context.drawTexture(RenderLayer::getGuiTextured, this.properties.texture, 0, 0, 0, 0, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.drawTexture(RenderLayer::getGuiTextured, this.properties.texture, (this.backgroundWidth - PLAYER_SLOTS_WIDTH) / 2, this.playerSlotsY, PLAYER_SLOTS_U, PLAYER_SLOTS_V, PLAYER_SLOTS_WIDTH, PLAYER_SLOTS_HEIGHT, 256, 256);
 
         for (var element : this.layout.getPage(this.page)) {
             element.render(context, mouseXInGui, mouseYInGui, delta);
@@ -234,9 +230,9 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                 boolean hovered = mouseXInGui > bookmarkX && mouseXInGui < bookmarkX + this.properties.bookmarkTipWidth && mouseYInGui > bookmarkY && mouseYInGui < bookmarkY + this.properties.bookmarkHeight;
 
                 if (bookmarkPage < this.page) {
-                    context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
+                    context.drawTexture(RenderLayer::getGuiTextured, this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight, 256, 256);
                 } else {
-                    context.drawTexture(this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU + this.properties.bookmarkTipWidth, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight);
+                    context.drawTexture(RenderLayer::getGuiTextured, this.properties.texture, bookmarkX, bookmarkY, this.properties.bookmarkTipU + this.properties.bookmarkTipWidth, this.properties.bookmarkTipV + (hovered ? this.properties.bookmarkHeight : 0), this.properties.bookmarkTipWidth, this.properties.bookmarkHeight, 256, 256);
                 }
             }
             i++;

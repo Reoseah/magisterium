@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 
@@ -66,13 +67,13 @@ public class BookInventory extends SimpleBlock {
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             if (this.background.isPresent()) {
                 var background = this.background.get();
-                context.drawTexture(background.texture, x + background.x, y + background.y, background.u, background.v, background.width, background.height);
+                context.drawTexture(RenderLayer::getGuiTextured, background.texture, x + background.x, y + background.y, background.u, background.v, background.width, background.height, 256, 256);
             }
             for (SlotProperties slot : this.slots) {
                 if (slot.output) {
-                    context.drawTexture(properties.texture, x + slot.x - 5, y + slot.y - 5, properties.resultSlotU, properties.resultSlotV, 26, 26);
+                    context.drawTexture(RenderLayer::getGuiTextured, properties.texture, x + slot.x - 5, y + slot.y - 5, properties.resultSlotU, properties.resultSlotV, 26, 26, 256, 256);
                 } else {
-                    context.drawTexture(properties.texture, x + slot.x - 1, y + slot.y - 1, properties.slotU, properties.slotV, 18, 18);
+                    context.drawTexture(RenderLayer::getGuiTextured, properties.texture, x + slot.x - 1, y + slot.y - 1, properties.slotU, properties.slotV, 18, 18, 256, 256);
                 }
             }
         }

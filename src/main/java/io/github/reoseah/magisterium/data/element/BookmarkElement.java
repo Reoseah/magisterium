@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
 
@@ -37,7 +38,7 @@ public class BookmarkElement implements BookElement, Bookmark {
         int y = properties.getBookmarkY(builder.getCurrentBookmark());
 
         builder.addWidget((context, mouseX, mouseY, delta) -> {
-            context.drawTexture(properties.texture, x, y, properties.bookmarkU, properties.bookmarkV, properties.bookmarkWidth, properties.bookmarkHeight);
+            context.drawTexture(RenderLayer::getGuiTextured, properties.texture, x, y, properties.bookmarkU, properties.bookmarkV, properties.bookmarkWidth, properties.bookmarkHeight, 256, 256);
         });
         builder.markBookmark(this);
         builder.advancePage();
