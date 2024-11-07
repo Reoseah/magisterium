@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class ConflagrateEffect extends SpellEffect {
-    private static final MapCodec<Pair<Ingredient, Integer>> BONUS_CODEC = RecordCodecBuilder.mapCodec(bonus -> bonus.group( //
+    public static final MapCodec<Pair<Ingredient, Integer>> BONUS_CODEC = RecordCodecBuilder.mapCodec(bonus -> bonus.group( //
             Ingredient.CODEC.fieldOf("ingredient").forGetter(Pair::getLeft), //
             Codecs.POSITIVE_INT.fieldOf("range_increase").forGetter(Pair::getRight) //
     ).apply(bonus, Pair::new));
@@ -84,7 +84,7 @@ public class ConflagrateEffect extends SpellEffect {
 
         var world = input.player.getWorld();
         var center = input.player.getBlockPos();
-        for (var pos : BlockPos.iterateOutwards(center, max, max, max)) {
+        for (var pos : BlockPos.iterate(center.add(-max, -max, -max), center.add(max, max, max))) {
             var state = world.getBlockState(pos);
             var block = state.getBlock();
             var entry = FlammableBlockRegistry.getInstance(Blocks.FIRE).get(block);

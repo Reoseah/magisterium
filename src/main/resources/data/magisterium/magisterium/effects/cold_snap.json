@@ -1,5 +1,17 @@
 {
   "type": "magisterium:cold_snap",
   "utterance": "magisterium:cold_snap",
-  "duration": 10
+  "duration": 10,
+  "range": 7,
+  "ramp_length": 4,
+  "bonuses": [
+    {
+      "ingredient": "minecraft:breeze_rod",
+      "range_increase": 4
+    },
+    {
+      "ingredient": "minecraft:wind_charge",
+      "range_increase": 1
+    }
+  ]
 }
