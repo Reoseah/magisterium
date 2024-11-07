@@ -6,12 +6,14 @@ import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -31,55 +33,44 @@ import java.util.Objects;
 public abstract class ItemRendererMixin {
     @Unique
     private static final ModelIdentifier SPELL_BOOK = ModelIdentifier.ofInventoryVariant(Identifier.of("magisterium", "spell_book"));
-    @Unique
-    private static final Identifier SPELL_BOOK_IN_HAND = Identifier.of("magisterium", "item/spell_book_in_hand");
 
     @Shadow
-    private @Final ItemModels models;
-    @Shadow
-    private @Final BuiltinModelItemRenderer builtinModelItemRenderer;
+    @Final
+    private BakedModelManager bakedModelManager;
 
     @Shadow
-    protected abstract void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices);
+    protected abstract void renderItem(
+            ItemStack stack,
+            ModelTransformationMode transformationMode,
+            boolean leftHanded,
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            int overlay,
+            BakedModel model,
+            boolean useInventoryModel,
+            float z
+    );
 
-//    @Inject(at = @At("HEAD"), method = "getModel", cancellable = true)
-//    public void setHemonomiconModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
-//        Item item = stack.getItem();
-//        if (item == SpellBookItem.INSTANCE) {
-//            BakedModel model = this.models.getodel(SPELL_BOOK_IN_HAND);
-//            ClientWorld clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
-//            model = model.getOverrides().apply(model, stack, clientWorld, entity, seed);
-//            ci.setReturnValue(model == null ? this.models.getModelManager().getMissingModel() : model);
-//        }
-//    }
-//
-//    @Inject(at = @At("HEAD"), method = "renderItem", cancellable = true)
-//    public void renderHemonomicon(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, boolean useInventoryModel, CallbackInfo ci) {
-//        if (!stack.isEmpty() && stack.getItem() == SpellBookItem.INSTANCE) {
-//            matrices.push();
-//            boolean gui = mode == ModelTransformationMode.GUI;
-//            boolean notInHand = gui || mode == ModelTransformationMode.GROUND || mode == ModelTransformationMode.FIXED;
-//            if (notInHand) {
-//                model = this.models.getModel(SPELL_BOOK.id());
-//            }
-//            model.getTransformation().getTransformation(mode).apply(leftHanded, matrices);
-//            matrices.translate(-0.5D, -0.5D, -0.5D);
-//            if (model.isBuiltin() || !notInHand) {
-//                this.builtinModelItemRenderer.render(stack, mode, matrices, vertexConsumers, light, overlay);
-//            } else {
-//                RenderLayer itemLayer = RenderLayers.getItemLayer(stack, true);
-//                RenderLayer layer;
-//                if (gui && Objects.equals(itemLayer, TexturedRenderLayers.getEntityTranslucentCull())) {
-//                    layer = TexturedRenderLayers.getEntityTranslucentCull();
-//                } else {
-//                    layer = itemLayer;
-//                }
-//
-//                VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, layer, true, stack.hasGlint());
-//                this.renderBakedItemModel(model, stack, light, overlay, matrices, vertexConsumer);
-//            }
-//            matrices.pop();
-//            ci.cancel();
-//        }
-//    }
+
+
+    @Inject(method = "Lnet/minecraft/client/render/item/ItemRenderer;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;Z)V", at = @At("HEAD"), cancellable = true)
+    private void renderItem(
+            ItemStack stack,
+            ModelTransformationMode transformationMode,
+            boolean leftHanded,
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            int overlay,
+            BakedModel model,
+            boolean useInventoryModel,
+            CallbackInfo info
+    ) {
+        if (useInventoryModel && stack.isOf(SpellBookItem.INSTANCE)) {
+            model = this.bakedModelManager.getModel(SPELL_BOOK);
+            this.renderItem(stack, transformationMode, leftHanded, matrices, vertexConsumers, light, overlay, model, useInventoryModel, -0.5F);
+            info.cancel();
+        }
+    }
 }

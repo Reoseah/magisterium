@@ -39,7 +39,7 @@ public class BuiltinItemModelRendererMixin {
         if (item == SpellBookItem.INSTANCE) {
             matrices.push();
             matrices.scale(1, -1, -1);
-            VertexConsumer vertexConsumer = ItemRenderer.getDynamicDisplayGlintConsumer(vertexConsumers, this.bookModel.getLayer(TEXTURE), matrices.peek());
+            VertexConsumer vertexConsumer = ItemRenderer.getItemGlintConsumer(vertexConsumers, this.bookModel.getLayer(TEXTURE), true, stack.hasGlint());
             this.bookModel.setPageAngles(0, 0.1F, 0.9F, 1.2F);
             this.bookModel.render(matrices, vertexConsumer, light, overlay, 0xFFFFFF);
             matrices.pop();

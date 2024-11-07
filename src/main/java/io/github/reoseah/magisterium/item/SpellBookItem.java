@@ -38,7 +38,8 @@ public class SpellBookItem extends Item {
             .rarity(Rarity.RARE)//
             .component(CURRENT_PAGE, 0) //
             .component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.spell_book")) //
-            .registryKey(KEY));
+            .registryKey(KEY)
+            .modelId(Identifier.of("magisterium", "spell_book_in_hand")));
 
     protected SpellBookItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
