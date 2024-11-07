@@ -3,7 +3,6 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -29,7 +28,7 @@ public class ExecuteCommandEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
         var formattedCommand = this.getFormattedCommand(input);
 
         var server = ((ServerWorld) (input.getPlayer().getWorld())).getServer();
@@ -38,7 +37,7 @@ public class ExecuteCommandEffect extends SpellEffect {
         server.getCommandManager().execute(parsedCommand, formattedCommand);
     }
 
-    private @NotNull String getFormattedCommand(SpellRecipeInput input) {
+    private @NotNull String getFormattedCommand(SpellEffectContext input) {
         var formattedCommand = this.command.replace("{player}", input.getPlayer().getName().getString()) //
                 .replace("{player_pos}", input.getPlayer().getBlockPos().getX() + " " + input.getPlayer().getBlockPos().getY() + " " + input.getPlayer().getBlockPos().getZ());
         formattedCommand = "execute as " + input.getPlayer().getName().getString() + //

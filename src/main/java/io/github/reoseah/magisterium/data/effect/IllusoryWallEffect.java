@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockRenderType;
@@ -51,7 +50,7 @@ public class IllusoryWallEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
         var world = input.player.getWorld();
         var playerPos = input.player.getBlockPos();
 

@@ -1,7 +1,6 @@
 package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 
@@ -20,7 +19,7 @@ public class EmptySpellEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
 
     }
 }

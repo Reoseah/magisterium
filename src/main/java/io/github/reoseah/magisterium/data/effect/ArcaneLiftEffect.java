@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -33,7 +32,7 @@ public class ArcaneLiftEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
         if (input.getStackInSlot(0).isEmpty()) {
             input.player.sendMessage(Text.translatable("magisterium.gui.missing_ingredients"), true);
             ((ServerPlayerEntity) input.player).closeHandledScreen();

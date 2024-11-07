@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.recipe;
+package io.github.reoseah.magisterium.data.effect;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.WorldHelper;
@@ -10,12 +10,12 @@ import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SpellRecipeInput implements RecipeInput {
+public class SpellEffectContext implements RecipeInput {
     public final Inventory inventory;
     public final PlayerEntity player;
     public final SpellBookScreenHandler.Context context;
 
-    public SpellRecipeInput(Inventory inventory, PlayerEntity player, SpellBookScreenHandler.Context context) {
+    public SpellEffectContext(Inventory inventory, PlayerEntity player, SpellBookScreenHandler.Context context) {
         this.inventory = inventory;
         this.player = player;
         this.context = context;

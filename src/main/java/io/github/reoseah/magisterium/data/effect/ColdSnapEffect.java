@@ -3,7 +3,6 @@ package io.github.reoseah.magisterium.data.effect;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.world.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -64,7 +63,7 @@ public class ColdSnapEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
         int bonusRange = 0;
         for (int i = 0; i < input.size(); i++) {
             var stack = input.getStackInSlot(i);

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.CustomDispellingHandler;
 import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
-import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -33,7 +32,7 @@ public class DispelMagicEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
         var world = input.getPlayer().getWorld();
         var center = input.getPlayer().getBlockPos();
 
