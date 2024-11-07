@@ -3,14 +3,13 @@ package io.github.reoseah.magisterium.data.effect;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.world.WorldHelper;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.dynamic.Codecs;
@@ -63,12 +62,12 @@ public class ColdSnapEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
         int bonusRange = 0;
-        for (int i = 0; i < input.size(); i++) {
-            var stack = input.getStackInSlot(i);
+        for (int i = 0; i < inventory.size(); i++) {
+            var stack = inventory.getStack(i);
             if (!stack.isEmpty()) {
-                for (var bonus : bonuses) {
+                for (var bonus : this.bonuses) {
                     if (bonus.getLeft().test(stack)) {
                         bonusRange += bonus.getRight();
                         stack.decrement(1);
@@ -79,55 +78,32 @@ public class ColdSnapEffect extends SpellEffect {
         }
         int max = this.range + bonusRange;
 
-        // TODO record targets and sent particles packet
-        boolean hasTargets = false;
-        boolean hasFrozen = false;
-        boolean hasFailed = false;
-
-        var world = input.player.getWorld();
-        var center = input.player.getBlockPos();
+        var world = player.getWorld();
+        var center = player.getBlockPos();
+        var helper = new SpellWorldChangeTracker(player);
         for (var pos : BlockPos.iterate(center.add(-max, -max, -max), center.add(max, max, max))) {
-            if (world.getBlockState(pos).isAir()) {
-                var below = world.getBlockState(pos.down());
-                var frozen = FROZEN_STATES.get(below);
-                if (frozen != null) {
-                    hasTargets = true;
-
-                    double distance = Math.sqrt(center.getSquaredDistance(pos));
-                    double chance = getChance(distance, max - this.rampLength, max);
-                    if (world.random.nextDouble() < chance) {
-                        if (WorldHelper.trySetBlockState(world, pos.down(), frozen, input.player)) {
-                            hasFrozen = true;
-                        } else {
-                            hasFailed = true;
-                        }
-                    }
-                } else if (!below.isIn(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON) //
-                        && below.isSideSolidFullSquare(world, pos.down(), Direction.UP)) {
-                    hasTargets = true;
-
-                    double distance = Math.sqrt(center.getSquaredDistance(pos));
-                    double chance = getChance(distance, max - this.rampLength, max);
-                    if (world.random.nextDouble() < chance) {
-                        if (WorldHelper.trySetBlockState(world, pos, Blocks.SNOW.getDefaultState(), input.player)) {
-                            hasFrozen = true;
-                        } else {
-                            hasFailed = true;
-                        }
-                    }
+            if (!world.getBlockState(pos).isAir()) {
+                continue;
+            }
+            var surface = world.getBlockState(pos.down());
+            var surfaceFrozen = FROZEN_STATES.get(surface);
+            if (surfaceFrozen != null) {
+                double distance = Math.sqrt(center.getSquaredDistance(pos));
+                double chance = getChance(distance, max - this.rampLength, max);
+                if (world.random.nextDouble() < chance) {
+                    helper.trySetBlockState(pos.down(), surfaceFrozen);
+                }
+            } else if (!surface.isIn(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON) //
+                    && surface.isSideSolidFullSquare(world, pos.down(), Direction.UP)) {
+                double distance = Math.sqrt(center.getSquaredDistance(pos));
+                double chance = getChance(distance, max - this.rampLength, max);
+                if (world.random.nextDouble() < chance) {
+                    helper.trySetBlockState(pos, Blocks.SNOW.getDefaultState());
                 }
             }
         }
 
-        if (!hasTargets) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
-        } else if (hasFailed && hasFrozen) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
-        } else if (hasFailed) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
-        }
+        helper.finishWorldChanges(true);
     }
 
     private static double getChance(double distance, int rampDownStart, int max) {

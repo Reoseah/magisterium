@@ -5,6 +5,5 @@ import net.minecraft.util.Identifier;
 
 public class MagisteriumSounds {
     public static final SoundEvent CHANT = SoundEvent.of(Identifier.of("magisterium:magisterium.chant"));
-    public static final SoundEvent ARCANE_LIFT_LOOP = SoundEvent.of(Identifier.of("magisterium:magisterium.arcane_lift_loop"));
-
+    public static final SoundEvent MAGIC_HUM = SoundEvent.of(Identifier.of("magisterium:magisterium.magic_hum"));
 }

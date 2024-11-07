@@ -1,9 +1,6 @@
 package io.github.reoseah.magisterium;
 
-import io.github.reoseah.magisterium.block.ArcaneTableBlock;
-import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
-import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
+import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.data.SpellPage;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.network.SpellPageDataPayload;
@@ -34,7 +31,7 @@ public class MagisteriumClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE, MagicBarrierBlock.INSTANCE);
 
         ModelLoadingPlugin.register(ctx -> ctx.addModels(Identifier.of("magisterium", "item/spell_book_in_hand")));
 
@@ -54,6 +51,8 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_E, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_F, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_G, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_SPARK, GlyphParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_ENERGY, GlyphParticle.Factory::new);
 
         ClientPlayNetworking.registerGlobalReceiver(SpellPageDataPayload.ID, (payload, context) -> pages = payload.pages());
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, (payload, context) -> {

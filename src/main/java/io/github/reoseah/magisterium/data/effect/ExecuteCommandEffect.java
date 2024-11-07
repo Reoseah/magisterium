@@ -3,7 +3,9 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.registry.RegistryWrapper;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -28,20 +30,20 @@ public class ExecuteCommandEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
-        var formattedCommand = this.getFormattedCommand(input);
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
+        var formattedCommand = this.getFormattedCommand(player);
 
-        var server = ((ServerWorld) (input.getPlayer().getWorld())).getServer();
+        var server = player.getServerWorld().getServer();
         var commandSource = server.getCommandSource();
         var parsedCommand = server.getCommandSource().getDispatcher().parse(formattedCommand, commandSource);
         server.getCommandManager().execute(parsedCommand, formattedCommand);
     }
 
-    private @NotNull String getFormattedCommand(SpellEffectContext input) {
-        var formattedCommand = this.command.replace("{player}", input.getPlayer().getName().getString()) //
-                .replace("{player_pos}", input.getPlayer().getBlockPos().getX() + " " + input.getPlayer().getBlockPos().getY() + " " + input.getPlayer().getBlockPos().getZ());
-        formattedCommand = "execute as " + input.getPlayer().getName().getString() + //
-                " in " + input.getPlayer().getWorld().getDimensionEntry().getIdAsString() + //
+    private @NotNull String getFormattedCommand(ServerPlayerEntity player) {
+        var formattedCommand = this.command.replace("{player}", player.getName().getString()) //
+                .replace("{player_pos}", player.getBlockPos().getX() + " " + player.getBlockPos().getY() + " " + player.getBlockPos().getZ());
+        formattedCommand = "execute as " + player.getName().getString() + //
+                " in " + player.getWorld().getDimensionEntry().getIdAsString() + //
                 " run " + formattedCommand;
         return formattedCommand;
     }

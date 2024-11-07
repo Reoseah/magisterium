@@ -1,7 +1,9 @@
 package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.registry.RegistryWrapper;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public class EmptySpellEffect extends SpellEffect {
@@ -19,7 +21,7 @@ public class EmptySpellEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
 
     }
 }

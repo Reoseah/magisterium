@@ -63,8 +63,10 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:glyph", GlyphBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:arcane_lift", ArcaneLiftBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:magic_barrier", MagicBarrierBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlock.MagicBarrierBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
@@ -116,9 +118,11 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_e", MagisteriumParticles.GLYPH_E);
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_f", MagisteriumParticles.GLYPH_F);
         Registry.register(Registries.PARTICLE_TYPE, "magisterium:glyph_g", MagisteriumParticles.GLYPH_G);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:barrier_spark", MagisteriumParticles.BARRIER_SPARK);
+        Registry.register(Registries.PARTICLE_TYPE, "magisterium:barrier_energy", MagisteriumParticles.BARRIER_ENERGY);
 
         Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
-        Registry.register(Registries.SOUND_EVENT, "magisterium:arcane_lift_loop", MagisteriumSounds.ARCANE_LIFT_LOOP);
+        Registry.register(Registries.SOUND_EVENT, "magisterium:magic_hum", MagisteriumSounds.MAGIC_HUM);
 
         Registry.register(BookElement.REGISTRY, "magisterium:heading", Heading.CODEC);
         Registry.register(BookElement.REGISTRY, "magisterium:paragraph", Paragraph.CODEC);

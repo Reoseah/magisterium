@@ -20,6 +20,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -31,6 +32,9 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static final Identifier TEXTURE = Identifier.of("magisterium:textures/gui/spell_book.png");
+
+    public static final MutableText UNTITLED_SECTION = Text.translatable("container.magisterium.spell_book.untitled_section");
+    public static final MutableText UNTITLED_SECTION_DESCRIPTION = Text.translatable("container.magisterium.spell_book.untitled_section.description").formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
 
     private static final int PAGE_WIDTH = 102;
     private static final int PAGE_HEIGHT = 140;
@@ -99,10 +103,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         }, true));
 
     }
-
-    private static final Text UNTITLED_SECTION = Text.translatable("magisterium.gui.untitled_section");
-    private static final Text UNTITLED_SECTION_DESCRIPTION = Text.translatable("magisterium.gui.untitled_section.description") //
-            .formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
 
     private void buildPages() {
         var pageData = MagisteriumClient.pages;

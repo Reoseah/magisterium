@@ -1,18 +1,16 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.world.WorldHelper;
+import io.github.reoseah.magisterium.data.effect.SpellWorldChangeTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,16 +34,12 @@ public class IllusoryWallBlock extends BlockWithEntity {
         super(settings);
     }
 
-    public static boolean setBlock(World world, BlockPos pos, BlockState illusoryState, PlayerEntity player) {
-        if (WorldHelper.canModifyWorld(world, pos, player)) {
-
-            if (world.setBlockState(pos, INSTANCE.getDefaultState())) {
-                var be = world.getBlockEntity(pos);
-                ((IllusoryWallBlockEntity) be).setIllusoryState(illusoryState);
-                return true;
+    public static void setBlock(SpellWorldChangeTracker ctx, BlockPos pos, BlockState illusoryState) {
+        if (ctx.trySetBlockState(pos, INSTANCE.getDefaultState())) {
+            if (ctx.player.getWorld().getBlockEntity(pos) instanceof IllusoryWallBlockEntity be) {
+                be.setIllusoryState(illusoryState);
             }
         }
-        return false;
     }
 
     @Override

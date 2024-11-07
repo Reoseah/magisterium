@@ -4,7 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
-import net.minecraft.registry.RegistryWrapper;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -32,35 +33,33 @@ public class ArcaneLiftEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
-        if (input.getStackInSlot(0).isEmpty()) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.missing_ingredients"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
+        if (inventory.getStack(0).isEmpty()) {
+            player.sendMessage(Text.translatable("magisterium.missing_spell_ingredients"), true);
+            player.closeHandledScreen();
             return;
         }
-        var stack = input.getStackInSlot(0);
+        var stack = inventory.getStack(0);
         stack.decrement(1);
 
-        var world = input.getWorld();
-        var pos = input.getPos();
+        var world = player.getWorld();
+        var pos = player.getBlockPos();
 
         var circlePos = find3x3GlyphCircle(world, pos, this.maxRange);
         if (circlePos == null) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
+            player.sendMessage(SpellWorldChangeTracker.NO_TARGETS_FOUND, true);
+            player.closeHandledScreen();
             return;
         }
 
+        var helper = new SpellWorldChangeTracker(player);
         if (world.isAir(circlePos)) {
-            boolean success = input.trySetBlockState(circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState());
-            if (!success) {
-                input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
-                ((ServerPlayerEntity) input.player).closeHandledScreen();
-            }
+            helper.trySetBlockState(circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState());
         }
+        helper.finishWorldChanges(true);
     }
 
-    private static BlockPos find3x3GlyphCircle(WorldAccess world, BlockPos start, int maxRange) {
+    public static BlockPos find3x3GlyphCircle(WorldAccess world, BlockPos start, int maxRange) {
         for (var pos : BlockPos.iterateOutwards(start, maxRange, maxRange, maxRange)) {
             boolean isCircle = true;
             for (int dx = -1; dx <= 1; dx++) {

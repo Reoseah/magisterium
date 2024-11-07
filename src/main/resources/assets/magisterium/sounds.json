@@ -18,19 +18,19 @@
       "magisterium:chant_13"
     ]
   },
-  "magisterium.arcane_lift_loop": {
+  "magisterium.magic_hum": {
     "subtitle": "subtitles.magisterium.magic_hum",
     "sounds": [
       {
-        "name": "magisterium:arcane_lift_loop_0",
+        "name": "magisterium:magic_hum_0",
         "attenuation_distance": 2
       },
       {
-        "name": "magisterium:arcane_lift_loop_1",
+        "name": "magisterium:magic_hum_1",
         "attenuation_distance": 2
       },
       {
-        "name": "magisterium:arcane_lift_loop_2",
+        "name": "magisterium:magic_hum_2",
         "attenuation_distance": 2
       }
     ]

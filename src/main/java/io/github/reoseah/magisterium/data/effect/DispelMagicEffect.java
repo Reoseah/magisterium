@@ -4,10 +4,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.CustomDispellingHandler;
 import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.Blocks;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
@@ -32,20 +32,24 @@ public class DispelMagicEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
-        var world = input.getPlayer().getWorld();
-        var center = input.getPlayer().getBlockPos();
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
+        var world = player.getWorld();
+        var center = player.getBlockPos();
 
+        var helper = new SpellWorldChangeTracker(player);
         for (var pos : BlockPos.iterateOutwards(center, this.maxRange, this.maxRange, this.maxRange)) {
             var state = world.getBlockState(pos);
             if (state.isIn(MagisteriumBlockTags.DISPEL_MAGIC_SUSCEPTIBLE)) {
-                boolean success = (state.getBlock() instanceof CustomDispellingHandler dispelable) ? dispelable.dispel(world, pos, input.getPlayer()) : input.trySetBlockState(pos, Blocks.AIR.getDefaultState());
+                boolean success = (state.getBlock() instanceof CustomDispellingHandler dispelable) ? dispelable.dispel(world, pos, player) : helper.trySetBlockState(pos, Blocks.AIR.getDefaultState());
 
                 if (success) {
-                    // TODO send a packet to spawn particles, play sound
+                    // TODO: pass helper to dispel method instead
+                    helper.setHasSucceeded(true);
+
+                    helper.finishWorldChanges(true);
                 } else {
-                    input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
-                    ((ServerPlayerEntity) input.player).closeHandledScreen();
+                    player.sendMessage(SpellWorldChangeTracker.FAILED_ALL_WORLD_CHANGES, true);
+                    player.closeHandledScreen();
                 }
                 return;
             }

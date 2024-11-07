@@ -2,6 +2,6 @@
   "type": "magisterium:awaken_the_flame",
   "utterance": "magisterium:awaken_the_flame",
   "duration": 4,
-  "max_range": 16,
+  "range": 16,
   "tag": "magisterium:awaken_the_flame_targets"
 }

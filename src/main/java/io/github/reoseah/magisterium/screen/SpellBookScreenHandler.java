@@ -6,7 +6,6 @@ import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
 import io.github.reoseah.magisterium.data.effect.SpellEffect;
 import io.github.reoseah.magisterium.data.element.SlotProperties;
 import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.data.effect.SpellEffectContext;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -175,16 +174,12 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
 
         // this gets called every tick, so it's a tick method effectively
-        if (this.spellEffect != null) {
+        if (this.spellEffect != null && !player.getWorld().isClient) {
             var recipeTicks = this.spellEffect.duration * player.getWorld().getTickManager().getTickRate();
             long time = player.getWorld().getTime();
             if (time - this.utteranceStart >= recipeTicks) {
-//                ItemStack result =
-                this.spellEffect.finish(new SpellEffectContext(this.inventory, player, this.context), player.getWorld().getRegistryManager());
+                this.spellEffect.finish((ServerPlayerEntity) player, this.inventory, this.context);
 
-//                if (!result.isEmpty()) {
-//                    this.insertResult(result, player);
-//                }
                 this.stopUtterance();
             }
 

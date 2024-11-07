@@ -41,7 +41,8 @@ public class GlyphParticle extends SpriteBillboardParticle {
             this.markDead();
         } else {
             this.velocityY = this.velocityY - this.gravityStrength;
-            this.move(this.velocityX, this.velocityY, this.velocityZ);
+            double delta = this.age / (double) this.maxAge;
+            this.move(delta * this.velocityX, delta * this.velocityY, delta * this.velocityZ);
             this.setSpriteForAge(this.spriteProvider);
         }
     }
@@ -49,13 +50,22 @@ public class GlyphParticle extends SpriteBillboardParticle {
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleFactory<SimpleParticleType> {
         private final SpriteProvider spriteProvider;
+        private final int maxAge;
 
         public Factory(SpriteProvider spriteProvider) {
+            this(spriteProvider, 32);
+        }
+
+        public Factory(SpriteProvider spriteProvider, int maxAge) {
             this.spriteProvider = spriteProvider;
+            this.maxAge = maxAge;
         }
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            return new GlyphParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
+            GlyphParticle particle = new GlyphParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
+            particle.maxAge = this.maxAge;
+            particle.setSpriteForAge(this.spriteProvider);
+            return particle;
         }
     }
 }

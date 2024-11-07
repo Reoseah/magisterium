@@ -2,15 +2,14 @@ package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.world.WorldHelper;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ConnectingBlock;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.dynamic.Codecs;
@@ -40,12 +39,12 @@ public class ConflagrateEffect extends SpellEffect {
     public final int rampLength;
     public final List<Pair<Ingredient, Integer>> bonuses;
 
-    public ConflagrateEffect(Identifier utterance,
-                             int duration,
-                             int offset,
-                             int range,
-                             int rampLength,
-                             List<Pair<Ingredient, Integer>> bonuses
+    public ConflagrateEffect(Identifier utterance, //
+                             int duration, //
+                             int offset, //
+                             int range, //
+                             int rampLength, //
+                             List<Pair<Ingredient, Integer>> bonuses //
     ) {
         super(utterance, duration);
         this.offset = offset;
@@ -60,10 +59,10 @@ public class ConflagrateEffect extends SpellEffect {
     }
 
     @Override
-    public void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup) {
+    public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
         int bonusRange = 0;
-        for (int i = 0; i < input.size(); i++) {
-            var stack = input.getStackInSlot(i);
+        for (int i = 0; i < inventory.size(); i++) {
+            var stack = inventory.getStack(i);
             if (!stack.isEmpty()) {
                 for (var bonus : bonuses) {
                     if (bonus.getLeft().test(stack)) {
@@ -74,15 +73,13 @@ public class ConflagrateEffect extends SpellEffect {
                 }
             }
         }
+        inventory.markDirty();
 
         int max = this.offset + this.range + bonusRange;
 
-        boolean hasTargets = false;
-        boolean hasLit = false;
-        boolean hasFailed = false;
-
-        var world = input.player.getWorld();
-        var center = input.player.getBlockPos();
+        var world = player.getWorld();
+        var center = player.getBlockPos();
+        var helper = new SpellWorldChangeTracker(player);
         for (var pos : BlockPos.iterate(center.add(-max, -max, -max), center.add(max, max, max))) {
             var state = world.getBlockState(pos);
             var block = state.getBlock();
@@ -94,30 +91,16 @@ public class ConflagrateEffect extends SpellEffect {
             if (entry != null && entry.getBurnChance() > 0) {
                 if (world.random.nextFloat() < chance) {
                     for (var direction : Direction.values()) {
-                        var side = pos.offset(direction);
-                        if (world.isAir(side)) {
-                            hasTargets = true;
-
-                            if (WorldHelper.trySetBlockState(world, side, getFireStateForPosition(world, side), input.player)) {
-                                hasLit = true;
-                            } else {
-                                hasFailed = true;
-                            }
+                        var neighbor = pos.offset(direction);
+                        if (world.isAir(neighbor)) {
+                            helper.trySetBlockState(neighbor, getFireStateForPosition(world, neighbor));
                         }
                     }
                 }
             }
         }
 
-        if (!hasTargets) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_targets"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
-        } else if (hasFailed && hasLit) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.partial_success"), true);
-        } else if (hasFailed) {
-            input.player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
-            ((ServerPlayerEntity) input.player).closeHandledScreen();
-        }
+        helper.finishWorldChanges(true);
     }
 
     private static double getChance(double distance, int min, int plateauStart, int plateauEnd, int max) {

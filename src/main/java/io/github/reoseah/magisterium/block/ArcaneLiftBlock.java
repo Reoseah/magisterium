@@ -68,7 +68,7 @@ public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (random.nextInt(50) == 0) {
-            world.playSoundAtBlockCenter(pos, MagisteriumSounds.ARCANE_LIFT_LOOP, SoundCategory.BLOCKS, 0.1F, .5F + random.nextFloat() * .5F, true);
+            world.playSoundAtBlockCenter(pos, MagisteriumSounds.MAGIC_HUM, SoundCategory.BLOCKS, 0.1F, .5F + random.nextFloat() * .5F, true);
         }
 
         if (random.nextInt(4) == 0) {

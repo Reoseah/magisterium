@@ -6,12 +6,16 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
     public static final Identifier TEXTURE = Identifier.of("magisterium:textures/gui/arcane_table.png");
+
+    public static final MutableText ONLY_FIRST_SEVEN_BOOKMARKS_WILL_SHOW = Text.translatable("container.magisterium.arcane_table.only_first_seven_bookmarks_will_show");
+    public static final MutableText NAME_BOOKMARKS_TO_GIVE_TITLE = Text.translatable("container.magisterium.arcane_table.name_bookmarks_to_give_title");
 
     public ArcaneTableScreen(ArcaneTableScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -47,14 +51,13 @@ public class ArcaneTableScreen extends HandledScreen<ArcaneTableScreenHandler> {
                 }
                 if (bookmarks > 7) {
                     var tooltip = this.getTooltipFromItem(stack);
-                    tooltip.add(Text.translatable("magisterium.gui.only_first_seven_bookmarks_will_show").formatted(Formatting.RED));
+                    tooltip.add(ONLY_FIRST_SEVEN_BOOKMARKS_WILL_SHOW.formatted(Formatting.RED));
                     context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
                     return;
                 }
                 if (!stack.contains(DataComponentTypes.CUSTOM_NAME)) {
                     var tooltip = this.getTooltipFromItem(stack);
-                    // TODO rename this to container.magisterium.arcane_table.name_bookmarks_to_give_title
-                    tooltip.add(Text.translatable("magisterium.gui.name_bookmarks_to_give_title").formatted(Formatting.RED));
+                    tooltip.add(NAME_BOOKMARKS_TO_GIVE_TITLE.formatted(Formatting.RED));
                     context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
                     return;
                 }

@@ -80,7 +80,7 @@ public class SpellBookItem extends Item {
 
                 @Override
                 public Text getDisplayName() {
-                    return book.getName();
+                    return Text.translatable("container.magisterium.spell_book");
                 }
             });
         }

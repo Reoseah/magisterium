@@ -2,6 +2,6 @@
   "type": "magisterium:quench_the_flame",
   "utterance": "magisterium:quench_the_flame",
   "duration": 4,
-  "max_range": 16,
+  "range": 16,
   "tag": "magisterium:quench_the_flame_targets"
 }

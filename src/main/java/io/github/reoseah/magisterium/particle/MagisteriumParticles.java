@@ -11,6 +11,8 @@ public class MagisteriumParticles {
     public static final SimpleParticleType GLYPH_E = new MagisteriumParticleType(true);
     public static final SimpleParticleType GLYPH_F = new MagisteriumParticleType(true);
     public static final SimpleParticleType GLYPH_G = new MagisteriumParticleType(true);
+    public static final SimpleParticleType BARRIER_SPARK = new MagisteriumParticleType(true);
+    public static final SimpleParticleType BARRIER_ENERGY = new MagisteriumParticleType(true);
 
     public static final SimpleParticleType[] GLYPHS = {GLYPH_A, GLYPH_B, GLYPH_C, GLYPH_D, GLYPH_E, GLYPH_F, GLYPH_G};
 

@@ -3,10 +3,12 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.SimpleRegistry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 public abstract class SpellEffect {
@@ -24,5 +26,5 @@ public abstract class SpellEffect {
 
     public abstract MapCodec<? extends SpellEffect> getCodec();
 
-    public abstract void finish(SpellEffectContext input, RegistryWrapper.WrapperLookup lookup);
+    public abstract void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext);
 }
