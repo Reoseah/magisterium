@@ -1,5 +1,18 @@
 {
   "type": "magisterium:conflagrate",
   "utterance": "magisterium:conflagrate",
-  "duration": 10
+  "duration": 10,
+  "offset": 1,
+  "range": 8,
+  "ramp_length": 4,
+  "bonuses": [
+    {
+      "ingredient": "minecraft:blaze_rod",
+      "range_increase": 4
+    },
+    {
+      "ingredient": "minecraft:blaze_powder",
+      "range_increase": 1
+    }
+  ]
 }
