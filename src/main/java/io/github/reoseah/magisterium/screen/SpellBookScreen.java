@@ -1,7 +1,6 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumClient;
-import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;

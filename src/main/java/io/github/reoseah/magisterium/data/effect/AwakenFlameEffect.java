@@ -3,10 +3,8 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
@@ -19,7 +17,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

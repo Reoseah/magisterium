@@ -1,13 +1,10 @@
 package io.github.reoseah.magisterium.data.effect;
 
-import com.mojang.brigadier.ParseResults;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

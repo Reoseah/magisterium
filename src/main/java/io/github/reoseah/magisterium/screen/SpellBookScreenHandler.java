@@ -3,9 +3,10 @@ package io.github.reoseah.magisterium.screen;
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
+import io.github.reoseah.magisterium.data.effect.SpellEffect;
+import io.github.reoseah.magisterium.data.element.SlotProperties;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
-import io.github.reoseah.magisterium.data.element.SlotProperties;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,7 +29,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import io.github.reoseah.magisterium.data.effect.SpellEffect;
 
 public class SpellBookScreenHandler extends ScreenHandler {
     public static final ScreenHandlerType<SpellBookScreenHandler> TYPE = new ScreenHandlerType<>(SpellBookScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);

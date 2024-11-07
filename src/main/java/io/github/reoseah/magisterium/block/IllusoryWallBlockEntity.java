@@ -1,7 +1,5 @@
 package io.github.reoseah.magisterium.block;
 
-import com.google.common.collect.ImmutableSet;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityType;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

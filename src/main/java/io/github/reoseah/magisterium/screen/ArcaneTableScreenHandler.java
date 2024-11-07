@@ -1,8 +1,8 @@
 package io.github.reoseah.magisterium.screen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.reoseah.magisterium.item.MagisteriumItemTags;
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.item.MagisteriumItemTags;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,7 +18,6 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArcaneTableScreenHandler extends ScreenHandler {
     public static final ScreenHandlerType<ArcaneTableScreenHandler> TYPE = new ScreenHandlerType<>(ArcaneTableScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);

@@ -3,7 +3,7 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import io.github.reoseah.magisterium.world.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryWrapper;
@@ -81,7 +81,7 @@ public class ColdSnapEffect extends SpellEffect {
                         chance = 0;
                     }
                     if (world.random.nextDouble() < chance) {
-                        if (MagisteriumPlaygrounds.trySetBlockState(world, pos.down(), frozen, input.player)) {
+                        if (WorldHelper.trySetBlockState(world, pos.down(), frozen, input.player)) {
                             hasFrozen = true;
                         } else {
                             hasFailed = true;
@@ -100,7 +100,7 @@ public class ColdSnapEffect extends SpellEffect {
                         chance = 0;
                     }
                     if (world.random.nextDouble() < chance) {
-                        if (MagisteriumPlaygrounds.trySetBlockState(world, pos, Blocks.SNOW.getDefaultState(), input.player)) {
+                        if (WorldHelper.trySetBlockState(world, pos, Blocks.SNOW.getDefaultState(), input.player)) {
                             hasFrozen = true;
                         } else {
                             hasFailed = true;

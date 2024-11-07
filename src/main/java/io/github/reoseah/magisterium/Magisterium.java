@@ -14,13 +14,12 @@ import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import io.github.reoseah.magisterium.world.WorldHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -29,7 +28,9 @@ import net.minecraft.block.LecternBlock;
 import net.minecraft.block.entity.LecternBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.LootTableEntry;
@@ -38,8 +39,6 @@ import net.minecraft.registry.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -144,9 +143,6 @@ public class Magisterium implements ModInitializer {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellEffectLoader.ID, SpellEffectLoader::new);
 
-        MagisteriumGameRules.initialize();
-        MagisteriumCommands.initialize();
-
         UseBlockCallback.EVENT.register(Magisterium::interact);
         LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
 
@@ -183,12 +179,12 @@ public class Magisterium implements ModInitializer {
         if (state.getBlock() instanceof LecternBlock && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
-                if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+                if (WorldHelper.canModifyWorld(world, pos, player)) {
                     return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.PASS;
                 }
                 return ActionResult.PASS;
             } else if (book.isOf(SpellBookItem.INSTANCE)) {
-                if (player.isSneaking() && MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+                if (player.isSneaking() && WorldHelper.canModifyWorld(world, pos, player)) {
                     lectern.setBook(ItemStack.EMPTY);
                     LecternBlock.setHasBook(player, world, pos, state, false);
                     if (!player.getInventory().insertStack(book)) {
@@ -234,7 +230,7 @@ public class Magisterium implements ModInitializer {
             return false;
         }
         if (!world.isClient) {
-            if (!MagisteriumPlaygrounds.trySetBlockState(world, placementPos, placementState, player)) {
+            if (!WorldHelper.trySetBlockState(world, placementPos, placementState, player)) {
                 player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
                 return false;
             }

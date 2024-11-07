@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import io.github.reoseah.magisterium.world.WorldHelper;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -52,7 +52,7 @@ public class GlyphicIgnitionEffect extends SpellEffect {
             BlockState state = world.getBlockState(pos);
             if (state.isOf(GlyphBlock.INSTANCE)) {
                 targets.add(pos.toImmutable());
-                if (MagisteriumPlaygrounds.trySetBlockState(world, pos, Blocks.FIRE.getDefaultState(), input.player)) {
+                if (WorldHelper.trySetBlockState(world, pos, Blocks.FIRE.getDefaultState(), input.player)) {
                     hasSuccess = true;
                 } else {
                     hasFailure = true;

@@ -1,8 +1,7 @@
 package io.github.reoseah.magisterium.recipe;
 
-import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import io.github.reoseah.magisterium.world.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -53,6 +52,6 @@ public class SpellRecipeInput implements RecipeInput {
     }
 
     public boolean trySetBlockState(BlockPos pos, BlockState state) {
-        return MagisteriumPlaygrounds.trySetBlockState(this.getWorld(), pos, state, this.player);
+        return WorldHelper.trySetBlockState(this.getWorld(), pos, state, this.player);
     }
 }

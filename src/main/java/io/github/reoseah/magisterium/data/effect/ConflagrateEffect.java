@@ -3,7 +3,7 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
-import io.github.reoseah.magisterium.world.MagisteriumPlaygrounds;
+import io.github.reoseah.magisterium.world.WorldHelper;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -86,7 +86,7 @@ public class ConflagrateEffect extends SpellEffect {
                         if (world.isAir(side)) {
                             hasTargets = true;
 
-                            if (MagisteriumPlaygrounds.trySetBlockState(world, side, getFireStateForPosition(world, side), input.player)) {
+                            if (WorldHelper.trySetBlockState(world, side, getFireStateForPosition(world, side), input.player)) {
                                 hasLit = true;
                             } else {
                                 hasFailed = true;

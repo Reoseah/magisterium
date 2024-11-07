@@ -1,19 +1,19 @@
 {
-	"variants": {
-		"facing=east": {
-			"model": "magisterium:block/arcane_table",
-			"y": 90
-		},
-		"facing=north": {
-			"model": "magisterium:block/arcane_table"
-		},
-		"facing=south": {
-			"model": "magisterium:block/arcane_table",
-			"y": 180
-		},
-		"facing=west": {
-			"model": "magisterium:block/arcane_table",
-			"y": 270
-		}
-	}
+  "variants": {
+    "facing=east": {
+      "model": "magisterium:block/arcane_table",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "magisterium:block/arcane_table"
+    },
+    "facing=south": {
+      "model": "magisterium:block/arcane_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "magisterium:block/arcane_table",
+      "y": 270
+    }
+  }
 }
