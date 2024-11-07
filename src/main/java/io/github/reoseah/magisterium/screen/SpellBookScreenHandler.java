@@ -3,7 +3,6 @@ package io.github.reoseah.magisterium.screen;
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
-import io.github.reoseah.magisterium.item.DataDrivenPageItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.recipe.SpellRecipeInput;
 import io.github.reoseah.magisterium.data.element.SlotProperties;
@@ -83,24 +82,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 .stream() //
                 .filter(effect -> effect.utterance.equals(id)) //
                 .findFirst() //
-                .orElseGet(() -> {
-                    var pages = this.context.stack.get(SpellBookItem.CONTENTS);
-                    if (pages != null) {
-                        for (var page : pages) {
-                            if (page.isOf(DataDrivenPageItem.INSTANCE)) {
-                                var effects = page.get(DataDrivenPageItem.EFFECTS);
-                                if (effects != null) {
-                                    for (var effect : effects) {
-                                        if (effect.utterance.equals(id)) {
-                                            return effect;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return EmptySpellEffect.INSTANCE;
-                });
+                .orElse(EmptySpellEffect.INSTANCE);
 
         if (this.spellEffect != EmptySpellEffect.INSTANCE) {
             this.isUttering.set(1);
@@ -250,7 +232,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         return stack;
     }
 
-
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
         switch (id) {
@@ -259,20 +240,26 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 if (page < 2) {
                     return false;
                 }
-                this.currentPage.set(page - 2);
-                this.dropInventory(player, this.inventory);
+                this.changePage(page - 2, player);
 
                 return true;
             }
             case NEXT_PAGE_BUTTON -> {
                 int page = this.currentPage.get();
-                this.currentPage.set(page + 2);
-                this.dropInventory(player, this.inventory);
+                this.changePage(page + 2, player);
 
                 return true;
             }
         }
         return false;
+    }
+
+    private void changePage(int page, PlayerEntity player) {
+        this.currentPage.set(page);
+        this.dropInventory(player, this.inventory);
+        for (int i = 0; i < 16; i++) {
+            ((SpellBookSlot) this.slots.get(i)).setConfiguration(null);
+        }
     }
 
     public void applySlotProperties(SlotProperties[] properties) {

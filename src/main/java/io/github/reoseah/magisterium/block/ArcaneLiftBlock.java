@@ -8,10 +8,13 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.SimpleParticleType;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -25,10 +28,13 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 
+import java.util.Optional;
+
 public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
     //    public static final BooleanProperty BASE = BooleanProperty.of("base");
     public static final IntProperty HEIGHT = IntProperty.of("height", 0, 15);
 
+    public static final RegistryKey<Block> KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium:arcane_lift"));
     public static final Block INSTANCE = new ArcaneLiftBlock(Settings.create() //
             .resistance(6000000.0F) //
             .replaceable() //
@@ -36,9 +42,10 @@ public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
             .noBlockBreakParticles() //
             .nonOpaque() //
             .noCollision() //
-            .pistonBehavior(PistonBehavior.DESTROY)//
+            .pistonBehavior(PistonBehavior.DESTROY) //
             .luminance(state -> state.get(HEIGHT) == 0 ? 13 : 8) //
-    );
+            .registryKey(KEY) //
+            .lootTable(Optional.empty()));
 
     public ArcaneLiftBlock(Settings settings) {
         super(settings);

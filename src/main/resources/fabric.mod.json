@@ -1,42 +1,36 @@
 {
-	"schemaVersion": 1,
-	"id": "magisterium",
-	"version": "${version}",
-	"name": "Magisterium",
-	"description": "A magic mod about finding spell pages, binding them in a spell tome, then reading it!",
-	"authors": [
-		"Reoseah",
-		"Reoseah from the past"
-	],
-	"contact": {
-		"homepage": "https://modrinth.com/mod/magisterium",
-		"sources": "https://github.com/reoseah/magisterium"
-	},
-	"license": "MIT",
-	"icon": "assets/magisterium/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"io.github.reoseah.magisterium.Magisterium"
-		],
-		"client": [
-			"io.github.reoseah.magisterium.MagisteriumClient"
-		]
-	},
-	"mixins": [
-		"magisterium.mixins.json",
-		{
-			"config": "magisterium.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.16.2",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "magisterium",
+  "version": "${version}",
+  "name": "Magisterium",
+  "description": "A magic mod about finding spell pages, binding them in a spell tome, then reading it!",
+  "authors": [
+    "Reoseah"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/magisterium",
+    "sources": "https://github.com/reoseah/magisterium"
+  },
+  "license": "MIT",
+  "icon": "assets/magisterium/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.reoseah.magisterium.Magisterium"
+    ],
+    "client": [
+      "io.github.reoseah.magisterium.MagisteriumClient"
+    ]
+  },
+  "mixins": [
+    "magisterium.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.2",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+  }
 }

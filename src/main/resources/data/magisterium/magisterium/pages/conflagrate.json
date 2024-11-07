@@ -6,25 +6,25 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+            "translate": "magisterium.spell.magisterium.conflagrate.heading"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.components"
+            "translate": "magisterium.spell.magisterium.conflagrate.components"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.description.0"
+            "translate": "magisterium.spell.magisterium.conflagrate.description.0"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.description.1"
+            "translate": "magisterium.spell.magisterium.conflagrate.description.1"
           }
         }
       ],
@@ -32,44 +32,38 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+            "translate": "magisterium.spell.magisterium.conflagrate.heading"
           }
         },
         {
           "type": "magisterium:inventory",
           "slots": [
             {
-              "x": 33,
+              "x": 42,
               "y": 0,
-              "ingredient": {
-                "tag": "magisterium:cold_snap_ingredients"
-              },
+              "ingredient": "#magisterium:conflagrate_ingredients",
+              "background": "magisterium:item/placeholder/question_mark"
+            },
+            {
+              "x": 33,
+              "y": 18,
+              "ingredient": "#magisterium:conflagrate_ingredients",
               "background": "magisterium:item/placeholder/question_mark"
             },
             {
               "x": 51,
-              "y": 0,
-              "ingredient": {
-                "tag": "magisterium:cold_snap_ingredients"
-              },
-              "background": "magisterium:item/placeholder/question_mark"
-            },
-            {
-              "x": 42,
               "y": 18,
-              "ingredient": {
-                "tag": "magisterium:cold_snap_ingredients"
-              },
+              "ingredient": "#magisterium:conflagrate_ingredients",
               "background": "magisterium:item/placeholder/question_mark"
             }
           ]
         },
         {
           "type": "magisterium:utterance",
-          "id": "magisterium:cold_snap",
+          "id": "magisterium:conflagrate",
           "duration": 10,
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.utterance"
+            "translate": "magisterium.spell.magisterium.conflagrate.utterance"
           }
         }
       ]

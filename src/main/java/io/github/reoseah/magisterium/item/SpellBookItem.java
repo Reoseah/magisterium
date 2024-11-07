@@ -2,12 +2,15 @@ package io.github.reoseah.magisterium.item;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -28,7 +31,14 @@ public class SpellBookItem extends Item {
             .packetCodec(ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList())) //
             .build();
 
-    public static final Item INSTANCE = new SpellBookItem(new Item.Settings().maxCount(1).rarity(Rarity.RARE).component(CURRENT_PAGE, 0));
+    public static final Identifier ID = Identifier.of("magisterium:spell_book");
+    public static final RegistryKey<Item> KEY = RegistryKey.of(RegistryKeys.ITEM, ID);
+    public static final Item INSTANCE = new SpellBookItem(new Item.Settings() //
+            .maxCount(1)//
+            .rarity(Rarity.RARE)//
+            .component(CURRENT_PAGE, 0) //
+            .component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.spell_book")) //
+            .registryKey(KEY));
 
     protected SpellBookItem(net.minecraft.item.Item.Settings settings) {
         super(settings);

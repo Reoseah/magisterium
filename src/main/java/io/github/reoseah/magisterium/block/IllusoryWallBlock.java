@@ -8,18 +8,28 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.Optional;
 
 public class IllusoryWallBlock extends BlockWithEntity {
     public static final MapCodec<IllusoryWallBlock> CODEC = createCodec(IllusoryWallBlock::new);
-    public static final Settings SETTINGS = Settings.create().nonOpaque().noCollision().strength(0.5F);
+    public static final RegistryKey<Block> KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium:illusory_wall"));
+    public static final Settings SETTINGS = Settings.create() //
+            .nonOpaque() //
+            .noCollision() //
+            .strength(0.5F) //
+            .lootTable(Optional.empty()) //
+            .registryKey(KEY);
+
     public static final Block INSTANCE = new IllusoryWallBlock(SETTINGS);
 
     protected IllusoryWallBlock(Settings settings) {

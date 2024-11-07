@@ -3,9 +3,13 @@ package io.github.reoseah.magisterium;
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
+import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
-import io.github.reoseah.magisterium.item.*;
+import io.github.reoseah.magisterium.item.BookmarkItem;
+import io.github.reoseah.magisterium.item.RuneItem;
+import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.item.SpellPageItem;
 import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
@@ -16,7 +20,9 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.LecternBlock;
@@ -32,6 +38,8 @@ import net.minecraft.registry.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -59,7 +67,7 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
 
-        Registry.register(Registries.ITEM, "magisterium:arcane_table", new BlockItem(ArcaneTableBlock.INSTANCE, new Item.Settings()));
+        Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:awaken_the_flame_page", SpellPageItem.AWAKEN_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", SpellPageItem.QUENCH_THE_FLAME);
@@ -69,15 +77,12 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
-        Registry.register(Registries.ITEM, "magisterium:data_driven_page", DataDrivenPageItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:fire_rune", RuneItem.FIRE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
-        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:elements", DataDrivenPageItem.ELEMENTS);
-        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:effects", DataDrivenPageItem.EFFECTS);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
@@ -136,6 +141,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:command", ExecuteCommandEffect.CODEC);
 
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellEffectLoader.ID, SpellEffectLoader::new);
 
         MagisteriumGameRules.initialize();
@@ -144,32 +150,23 @@ public class Magisterium implements ModInitializer {
         UseBlockCallback.EVENT.register(Magisterium::interact);
         LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
 
+        PayloadTypeRegistry.playS2C().register(SpellPageDataPayload.ID, SpellPageDataPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
 
+        PayloadTypeRegistry.playC2S().register(SpellBookScreenStatePayload.ID, SpellBookScreenStatePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
         PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(SlotLayoutPayload.ID, SlotLayoutPayload.CODEC);
 
-        ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, (payload, context) -> {
-            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-                handler.startUtterance(payload.id(), context.player());
-            }
-        });
-        ServerPlayNetworking.registerGlobalReceiver(StopUtterancePayload.ID, (payload, context) -> {
-            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-                handler.stopUtterance();
-            }
-        });
-        ServerPlayNetworking.registerGlobalReceiver(SlotLayoutPayload.ID, (payload, context) -> {
-            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-                handler.applySlotProperties(payload.layout());
-            }
-        });
-        ServerPlayNetworking.registerGlobalReceiver(UseBookmarkPayload.ID, (payload, context) -> {
-            if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-                handler.currentPage.set(payload.page());
-            }
+        ServerPlayNetworking.registerGlobalReceiver(SpellBookScreenStatePayload.ID, SpellBookScreenStatePayload::receive);
+        ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, StartUtterancePayload::receive);
+        ServerPlayNetworking.registerGlobalReceiver(StopUtterancePayload.ID, StopUtterancePayload::receive);
+        ServerPlayNetworking.registerGlobalReceiver(UseBookmarkPayload.ID, UseBookmarkPayload::receive);
+
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            var pages = SpellPageLoader.getInstance().pages;
+            var payload = new SpellPageDataPayload(pages);
+            sender.sendPacket(payload);
         });
     }
 

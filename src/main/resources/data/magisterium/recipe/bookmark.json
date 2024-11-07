@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "minecraft:gold_nugget"
-    },
-    "S": {
-      "item": "minecraft:string"
-    }
+    "G": "minecraft:gold_nugget",
+    "S": "minecraft:string"
   },
   "pattern": [
     "SGS",

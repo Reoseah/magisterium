@@ -4,15 +4,24 @@ import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -21,6 +30,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ArcaneTableBlock extends BlockWithEntity {
     public static final MapCodec<ArcaneTableBlock> CODEC = createCodec(ArcaneTableBlock::new);
@@ -33,7 +44,22 @@ public class ArcaneTableBlock extends BlockWithEntity {
             Block.createCuboidShape(0, 8, 0, 16, 16, 16) //
     );
 
-    public static final Block INSTANCE = new ArcaneTableBlock(Settings.copy(Blocks.CRAFTING_TABLE).mapColor(MapColor.BLUE));
+    public static final Identifier ID = Identifier.of("magisterium", "arcane_table");
+    public static final RegistryKey<Block> KEY = RegistryKey.of(RegistryKeys.BLOCK, ID);
+    public static final Block INSTANCE = new ArcaneTableBlock(Settings.create() //
+            .registryKey(KEY) //
+            .strength(2.5F) //
+            .sounds(BlockSoundGroup.WOOD) //
+            .instrument(NoteBlockInstrument.BASS) //
+            .burnable() //
+            .mapColor(MapColor.BLUE));
+
+    public static final RegistryKey<Item> ITEM_KEY = RegistryKey.of(RegistryKeys.ITEM, ID);
+    public static final Item ITEM = new BlockItem(INSTANCE, new Item.Settings()//
+            .registryKey(ITEM_KEY) //
+            // .component(DataComponentTypes.ITEM_NAME, Text.translatable("block.magisterium.arcane_table")) //
+            .useBlockPrefixedTranslationKey());
+
 
     protected ArcaneTableBlock(Settings settings) {
         super(settings);

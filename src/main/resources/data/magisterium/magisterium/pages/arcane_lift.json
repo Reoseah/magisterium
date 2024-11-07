@@ -36,9 +36,7 @@
               "x": 42,
               "y": 0,
               "background": "magisterium:item/placeholder/bottle",
-              "ingredient": {
-                "item": "minecraft:experience_bottle"
-              }
+              "ingredient": "minecraft:experience_bottle"
             }
           ]
         },

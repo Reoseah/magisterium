@@ -1,13 +1,12 @@
 package io.github.reoseah.magisterium.screen;
 
-import io.github.reoseah.magisterium.data.SpellPage;
+import io.github.reoseah.magisterium.MagisteriumClient;
 import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
-import io.github.reoseah.magisterium.item.DataDrivenPageItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.SpellPageItem;
-import io.github.reoseah.magisterium.network.SlotLayoutPayload;
+import io.github.reoseah.magisterium.network.SpellBookScreenStatePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -28,8 +27,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
 
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -109,7 +106,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             .formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
 
     private void buildPages() {
-        var pageData = SpellPageLoader.getInstance().pages;
+        var pageData = MagisteriumClient.pages;
         var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var layoutBuilder = new BookLayout.Builder(this.properties);
@@ -131,7 +128,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             } else if (stack.isOf(BookmarkItem.INSTANCE)) {
                 int currentChapter = layoutBuilder.getCurrentBookmark() + 1;
                 if (currentChapter > 7) {
-                    // more bookmarks won't fit into the book with the current layout
+                    // more bookmarks won't fit into the book with the current slots
                     continue;
                 }
 
@@ -155,14 +152,6 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     lore.lines().forEach(text -> new Paragraph(text).visit(layoutBuilder, this.properties, this.textRenderer));
                 }
                 layoutBuilder.advancePage();
-            } else if (stack.isOf(DataDrivenPageItem.INSTANCE)) {
-                var elements = stack.get(DataDrivenPageItem.ELEMENTS);
-                if (elements == null) {
-                    continue;
-                }
-                for (var element : elements) {
-                    element.visit(layoutBuilder, this.properties, this.textRenderer);
-                }
             }
         }
 
@@ -180,7 +169,9 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
         SlotProperties[] slots = this.layout.getFoldSlots(this.page);
         this.handler.applySlotProperties(slots);
-        ClientPlayNetworking.send(new SlotLayoutPayload(slots));
+        if (slots.length > 0) {
+            ClientPlayNetworking.send(new SpellBookScreenStatePayload(slots));
+        }
     }
 
     @Override

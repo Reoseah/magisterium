@@ -4,8 +4,9 @@ import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.IllusoryWallBlockEntityRenderer;
-import io.github.reoseah.magisterium.data.SpellPageLoader;
+import io.github.reoseah.magisterium.data.SpellPage;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.network.SpellPageDataPayload;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.particle.EnergyParticle;
 import io.github.reoseah.magisterium.particle.GlyphParticle;
@@ -17,21 +18,20 @@ import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.SimpleParticleType;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+
+import java.util.Map;
 
 public class MagisteriumClient implements ClientModInitializer {
+    public static Map<Identifier, SpellPage> pages;
+
     @Override
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE);
@@ -55,8 +55,7 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_F, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.GLYPH_G, GlyphParticle.Factory::new);
 
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
-
+        ClientPlayNetworking.registerGlobalReceiver(SpellPageDataPayload.ID, (payload, context) -> pages = payload.pages());
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, (payload, context) -> {
             var world = context.client().world;
             var random = world.random;
@@ -82,5 +81,7 @@ public class MagisteriumClient implements ClientModInitializer {
                 }
             }
         });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> pages = null);
     }
 }

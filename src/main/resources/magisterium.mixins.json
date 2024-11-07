@@ -6,6 +6,11 @@
     "LecternBlockMixin",
     "SlotMixin"
   ],
+  "client": [
+    "client.BuiltinItemModelRendererMixin",
+    "client.ItemRendererMixin",
+    "client.LecternBlockEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
 	}

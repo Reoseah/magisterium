@@ -4,23 +4,31 @@ import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class GlyphBlock extends Block {
     public static final EnumProperty<Direction> TYPE = EnumProperty.of("type", Direction.class);
     protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
 
-    public static final GlyphBlock INSTANCE = new GlyphBlock(Settings.copy(Blocks.REDSTONE_WIRE).mapColor(MapColor.BLUE));
+    public static final RegistryKey<Block> KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium:glyph"));
+    public static final GlyphBlock INSTANCE = new GlyphBlock(Settings.copy(Blocks.REDSTONE_WIRE) //
+            .mapColor(MapColor.BLUE) //
+            .lootTable(Optional.empty()) //
+            .registryKey(KEY));
 
     protected GlyphBlock(AbstractBlock.Settings settings) {
         super(settings);

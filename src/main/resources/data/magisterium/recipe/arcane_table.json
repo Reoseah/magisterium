@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "L": {
-      "item": "minecraft:lapis_lazuli"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "G": "minecraft:gold_ingot",
+    "L": "minecraft:lapis_lazuli",
+    "P": "#minecraft:planks"
   },
   "pattern": [
     "LGL",

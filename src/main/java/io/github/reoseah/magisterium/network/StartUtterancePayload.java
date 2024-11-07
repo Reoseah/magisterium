@@ -1,5 +1,7 @@
 package io.github.reoseah.magisterium.network;
 
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
@@ -20,5 +22,11 @@ public record StartUtterancePayload(Identifier id) implements CustomPayload {
 
     private void write(PacketByteBuf buf) {
         Identifier.PACKET_CODEC.encode(buf, this.id);
+    }
+
+    public static void receive(StartUtterancePayload payload, ServerPlayNetworking.Context context) {
+        if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
+            handler.startUtterance(payload.id(), context.player());
+        }
     }
 }
