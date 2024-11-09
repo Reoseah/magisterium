@@ -5,11 +5,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.MagicBarrierBlock;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.hit.BlockHitResult;
 
 import java.util.List;
 
@@ -44,11 +48,13 @@ public class MagicBarrierEffect extends SpellEffect {
     @Override
     public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
         for (int i = 0; i < this.ingredients.size(); i++) {
-            if (!this.ingredients.get(i).test(inventory.getStack(i))) {
+            var stack = inventory.getStack(i);
+            if (!this.ingredients.get(i).test(stack)) {
                 player.sendMessage(Text.translatable("magisterium.missing_spell_ingredients"), true);
                 player.closeHandledScreen();
                 return;
             }
+            stack.decrement(1);
         }
 
         var startPos = SpellEffectUtil.findClosestGlyph(player.getBlockPos(), player.getWorld(), this.glyphSearchRadius);
@@ -58,7 +64,9 @@ public class MagicBarrierEffect extends SpellEffect {
         for (var glyph : line) {
             for (int y = 0; y < this.maxHeight; y++) {
                 var pos = glyph.up(y);
-                context.trySetBlockState(pos, MagicBarrierBlock.INSTANCE.getDefaultState());
+                var placementCtx = new ItemPlacementContext(player, Hand.MAIN_HAND, ItemStack.EMPTY, BlockHitResult.createMissed(pos.toCenterPos(), player.getHorizontalFacing(), pos));
+                var state = MagicBarrierBlock.INSTANCE.getPlacementState(placementCtx);
+                context.trySetBlockState(pos, state);
             }
         }
         context.finishWorldChanges(true);

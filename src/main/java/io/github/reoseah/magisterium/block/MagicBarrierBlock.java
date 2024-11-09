@@ -81,17 +81,17 @@ public class MagicBarrierBlock extends BlockWithEntity implements CustomDispelBe
         var world = ctx.getWorld();
         var pos = ctx.getBlockPos();
         return super.getDefaultState() //
-                .with(DOWN, world.getBlockState(pos.down()).isSideSolidFullSquare(world, pos.down(), Direction.UP)) //
-                .with(UP, world.getBlockState(pos.up()).isSideSolidFullSquare(world, pos.up(), Direction.DOWN)) //
-                .with(NORTH, world.getBlockState(pos.north()).isSideSolidFullSquare(world, pos.north(), Direction.SOUTH)) //
-                .with(EAST, world.getBlockState(pos.east()).isSideSolidFullSquare(world, pos.east(), Direction.WEST)) //
-                .with(SOUTH, world.getBlockState(pos.south()).isSideSolidFullSquare(world, pos.south(), Direction.NORTH)) //
-                .with(WEST, world.getBlockState(pos.west()).isSideSolidFullSquare(world, pos.west(), Direction.EAST));
+                .with(DOWN, !world.getBlockState(pos.down()).isOf(this) && world.getBlockState(pos.down()).isSideSolidFullSquare(world, pos.down(), Direction.UP)) //
+                .with(UP, !world.getBlockState(pos.up()).isOf(this) && world.getBlockState(pos.up()).isSideSolidFullSquare(world, pos.up(), Direction.DOWN)) //
+                .with(NORTH, !world.getBlockState(pos.north()).isOf(this) && world.getBlockState(pos.north()).isSideSolidFullSquare(world, pos.north(), Direction.SOUTH)) //
+                .with(EAST, !world.getBlockState(pos.east()).isOf(this) && world.getBlockState(pos.east()).isSideSolidFullSquare(world, pos.east(), Direction.WEST)) //
+                .with(SOUTH, !world.getBlockState(pos.south()).isOf(this) && world.getBlockState(pos.south()).isSideSolidFullSquare(world, pos.south(), Direction.NORTH)) //
+                .with(WEST, !world.getBlockState(pos.west()).isOf(this) && world.getBlockState(pos.west()).isSideSolidFullSquare(world, pos.west(), Direction.EAST));
     }
 
     @Override
     protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        return state.with(ConnectingBlock.FACING_PROPERTIES.get(direction), neighborState.isSideSolidFullSquare(world, neighborPos, direction.getOpposite()));
+        return state.with(ConnectingBlock.FACING_PROPERTIES.get(direction), !neighborState.isOf(this) && neighborState.isSideSolidFullSquare(world, neighborPos, direction.getOpposite()));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class MagicBarrierBlock extends BlockWithEntity implements CustomDispelBe
 
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.empty();
+        return VoxelShapes.fullCube();
     }
 
     @Override
@@ -134,42 +134,42 @@ public class MagicBarrierBlock extends BlockWithEntity implements CustomDispelBe
         }
 
         if (state.get(DOWN) && random.nextInt(2) == 0) {
-            var y = pos.getY() + .5F * random.nextFloat() * random.nextFloat();
+            var y = pos.getY() + .25F * random.nextFloat() * random.nextFloat();
             var x = pos.getX() + random.nextFloat();
             var z = pos.getZ() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(UP) && random.nextInt(2) == 0) {
-            var y = pos.getY() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var y = pos.getY() + 1 - .25F * random.nextFloat() * random.nextFloat();
             var x = pos.getX() + random.nextFloat();
             var z = pos.getZ() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(NORTH) && random.nextInt(2) == 0) {
-            var z = pos.getZ() + .5F * random.nextFloat() * random.nextFloat();
+            var z = pos.getZ() + .25F * random.nextFloat() * random.nextFloat();
             var x = pos.getX() + random.nextFloat();
             var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(EAST) && random.nextInt(2) == 0) {
-            var x = pos.getX() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + 1 - .25F * random.nextFloat() * random.nextFloat();
             var z = pos.getZ() + random.nextFloat();
             var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(SOUTH) && random.nextInt(2) == 0) {
-            var z = pos.getZ() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var z = pos.getZ() + 1 - .25F * random.nextFloat() * random.nextFloat();
             var x = pos.getX() + random.nextFloat();
             var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(WEST) && random.nextInt(2) == 0) {
-            var x = pos.getX() + .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + .25F * random.nextFloat() * random.nextFloat();
             var z = pos.getZ() + random.nextFloat();
             var y = pos.getY() + random.nextFloat();
 
