@@ -3,28 +3,25 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
-import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldAccess;
 
 public class ArcaneLiftEffect extends SpellEffect {
     public static final MapCodec<ArcaneLiftEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
-            Codecs.POSITIVE_INT.fieldOf("max_range").forGetter(effect -> effect.maxRange) //
+            Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range) //
     ).apply(instance, ArcaneLiftEffect::new));
 
-    public final int maxRange;
+    public final int range;
 
-    public ArcaneLiftEffect(Identifier utterance, int duration, int maxRange) {
+    public ArcaneLiftEffect(Identifier utterance, int duration, int range) {
         super(utterance, duration);
-        this.maxRange = maxRange;
+        this.range = range;
     }
 
     @Override
@@ -45,7 +42,7 @@ public class ArcaneLiftEffect extends SpellEffect {
         var world = player.getWorld();
         var pos = player.getBlockPos();
 
-        var circlePos = find3x3GlyphCircle(world, pos, this.maxRange);
+        var circlePos = SpellEffectUtil.find3x3GlyphCircle(world, pos, this.range);
         if (circlePos == null) {
             player.sendMessage(SpellWorldChangeTracker.NO_TARGETS_FOUND, true);
             player.closeHandledScreen();
@@ -57,29 +54,5 @@ public class ArcaneLiftEffect extends SpellEffect {
             helper.trySetBlockState(circlePos, ArcaneLiftBlock.INSTANCE.getDefaultState());
         }
         helper.finishWorldChanges(true);
-    }
-
-    public static BlockPos find3x3GlyphCircle(WorldAccess world, BlockPos start, int maxRange) {
-        for (var pos : BlockPos.iterateOutwards(start, maxRange, maxRange, maxRange)) {
-            boolean isCircle = true;
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    if (dx == 0 && dz == 0) {
-                        if (!world.isAir(pos.add(dx, 0, dz))) {
-                            isCircle = false;
-                        }
-                        continue;
-                    }
-                    if (!world.getBlockState(pos.add(dx, 0, dz)).isOf(GlyphBlock.INSTANCE)) {
-                        isCircle = false;
-                    }
-                }
-            }
-            if (isCircle) {
-                return pos;
-            }
-        }
-
-        return null;
     }
 }

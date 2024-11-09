@@ -61,7 +61,7 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        BlockPos startPos = GlyphUtil.findClosestGlyph(playerPos, world, this.glyphSearchRadius);
+        BlockPos startPos = SpellEffectUtil.findClosestGlyph(playerPos, world, this.glyphSearchRadius);
 
         if (startPos == null) {
             player.sendMessage(Text.translatable("magisterium.no_glyphs_found"), true);
@@ -69,7 +69,7 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        var glyphs = GlyphUtil.getGlyphLine(world, startPos, this.maxWidth);
+        var glyphs = SpellEffectUtil.getGlyphLine(startPos, world, this.maxWidth);
         var tracker = new SpellWorldChangeTracker(player);
         for (var glyph : glyphs) {
             for (int dy = 0; dy < this.maxHeight; dy++) {

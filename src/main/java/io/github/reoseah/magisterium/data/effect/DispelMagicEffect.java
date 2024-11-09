@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.block.CustomDispellingHandler;
+import io.github.reoseah.magisterium.block.CustomDispelBehavior;
 import io.github.reoseah.magisterium.block.MagisteriumBlockTags;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.Blocks;
@@ -16,14 +16,14 @@ public class DispelMagicEffect extends SpellEffect {
     public static final MapCodec<DispelMagicEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
-            Codecs.POSITIVE_INT.fieldOf("max_range").forGetter(effect -> effect.maxRange) //
+            Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range) //
     ).apply(instance, DispelMagicEffect::new));
 
-    public final int maxRange;
+    public final int range;
 
-    public DispelMagicEffect(Identifier utterance, int duration, int maxRange) {
+    public DispelMagicEffect(Identifier utterance, int duration, int range) {
         super(utterance, duration);
-        this.maxRange = maxRange;
+        this.range = range;
     }
 
     @Override
@@ -37,22 +37,19 @@ public class DispelMagicEffect extends SpellEffect {
         var center = player.getBlockPos();
 
         var helper = new SpellWorldChangeTracker(player);
-        for (var pos : BlockPos.iterateOutwards(center, this.maxRange, this.maxRange, this.maxRange)) {
+        for (var pos : BlockPos.iterate(center.add(-this.range, -this.range, -this.range), //
+                center.add(this.range, this.range, this.range))) {
             var state = world.getBlockState(pos);
             if (state.isIn(MagisteriumBlockTags.DISPEL_MAGIC_SUSCEPTIBLE)) {
-                boolean success = (state.getBlock() instanceof CustomDispellingHandler dispelable) ? dispelable.dispel(world, pos, player) : helper.trySetBlockState(pos, Blocks.AIR.getDefaultState());
-
-                if (success) {
-                    // TODO: pass helper to dispel method instead
-                    helper.setHasSucceeded(true);
-
-                    helper.finishWorldChanges(true);
+                if (state.getBlock() instanceof CustomDispelBehavior behavior) {
+                    behavior.dispel(helper, pos);
                 } else {
-                    player.sendMessage(SpellWorldChangeTracker.FAILED_ALL_WORLD_CHANGES, true);
-                    player.closeHandledScreen();
+                    helper.trySetBlockState(pos, Blocks.AIR.getDefaultState());
                 }
-                return;
+
+                break;
             }
         }
+        helper.finishWorldChanges(true);
     }
 }

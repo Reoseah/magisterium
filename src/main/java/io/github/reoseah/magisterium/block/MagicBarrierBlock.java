@@ -3,6 +3,7 @@ package io.github.reoseah.magisterium.block;
 import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
+import io.github.reoseah.magisterium.data.effect.SpellWorldChangeTracker;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,7 +27,10 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
-public class MagicBarrierBlock extends BlockWithEntity {
+import java.util.ArrayDeque;
+import java.util.HashSet;
+
+public class MagicBarrierBlock extends BlockWithEntity implements CustomDispelBehavior {
     public static final BooleanProperty DOWN = ConnectingBlock.DOWN;
     public static final BooleanProperty UP = ConnectingBlock.UP;
     public static final BooleanProperty NORTH = ConnectingBlock.NORTH;
@@ -42,10 +46,13 @@ public class MagicBarrierBlock extends BlockWithEntity {
     public static final Block INSTANCE = new MagicBarrierBlock(AbstractBlock.Settings.create() //
             .registryKey(KEY) //
             .nonOpaque() //
-            .noCollision() //
             .strength(-1, 3600000) //
             .dropsNothing() //
-            .luminance(state -> 7));
+            .luminance(state -> 7)
+            .allowsSpawning(Blocks::never) //
+            .solidBlock(Blocks::never) //
+            .suffocates(Blocks::never) //
+            .blockVision(Blocks::never));
 
     public MagicBarrierBlock(Settings settings) {
         super(settings);
@@ -88,58 +95,83 @@ public class MagicBarrierBlock extends BlockWithEntity {
     }
 
     @Override
+    protected float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
+        return 1;
+    }
+
+    @Override
+    protected boolean isTransparent(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.empty();
+    }
+
+    @Override
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.empty();
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.fullCube();
+    }
+
+    @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (random.nextInt(50) == 0) {
             world.playSoundAtBlockCenter(pos, MagisteriumSounds.MAGIC_HUM, SoundCategory.BLOCKS, 0.1F, .5F + random.nextFloat() * .5F, true);
         }
 
         for (int i = 0; i < 1; i++) {
-            double x = pos.getX() + random.nextFloat();
-            double y = pos.getY() + random.nextFloat();
-            double z = pos.getZ() + random.nextFloat();
+            var x = pos.getX() + random.nextFloat();
+            var y = pos.getY() + random.nextFloat();
+            var z = pos.getZ() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_ENERGY, x, y, z, 0, 0, 0);
         }
 
         if (state.get(DOWN) && random.nextInt(2) == 0) {
-            double y = pos.getY() + .5F * random.nextFloat() * random.nextFloat();
-            double x = pos.getX() + random.nextFloat();
-            double z = pos.getZ() + random.nextFloat();
+            var y = pos.getY() + .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + random.nextFloat();
+            var z = pos.getZ() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(UP) && random.nextInt(2) == 0) {
-            double y = pos.getY() + 1 - .5F * random.nextFloat() * random.nextFloat();
-            double x = pos.getX() + random.nextFloat();
-            double z = pos.getZ() + random.nextFloat();
+            var y = pos.getY() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + random.nextFloat();
+            var z = pos.getZ() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(NORTH) && random.nextInt(2) == 0) {
-            double z = pos.getZ() + .5F * random.nextFloat() * random.nextFloat();
-            double x = pos.getX() + random.nextFloat();
-            double y = pos.getY() + random.nextFloat();
+            var z = pos.getZ() + .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + random.nextFloat();
+            var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(EAST) && random.nextInt(2) == 0) {
-            double x = pos.getX() + 1 - .5F * random.nextFloat() * random.nextFloat();
-            double z = pos.getZ() + random.nextFloat();
-            double y = pos.getY() + random.nextFloat();
+            var x = pos.getX() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var z = pos.getZ() + random.nextFloat();
+            var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(SOUTH) && random.nextInt(2) == 0) {
-            double z = pos.getZ() + 1 - .5F * random.nextFloat() * random.nextFloat();
-            double x = pos.getX() + random.nextFloat();
-            double y = pos.getY() + random.nextFloat();
+            var z = pos.getZ() + 1 - .5F * random.nextFloat() * random.nextFloat();
+            var x = pos.getX() + random.nextFloat();
+            var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
         if (state.get(WEST) && random.nextInt(2) == 0) {
-            double x = pos.getX() + .5F * random.nextFloat() * random.nextFloat();
-            double z = pos.getZ() + random.nextFloat();
-            double y = pos.getY() + random.nextFloat();
+            var x = pos.getX() + .5F * random.nextFloat() * random.nextFloat();
+            var z = pos.getZ() + random.nextFloat();
+            var y = pos.getY() + random.nextFloat();
 
             world.addParticle(MagisteriumParticles.BARRIER_SPARK, x, y, z, 0, 0, 0);
         }
@@ -156,13 +188,26 @@ public class MagicBarrierBlock extends BlockWithEntity {
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (world.getBlockEntity(pos) instanceof MagicBarrierBlockEntity be
-                && context instanceof EntityShapeContext entityCtx
-                && entityCtx.getEntity() != null
-                && entityCtx.getEntity().getUuid().equals(be.getCaster())) {
-            return VoxelShapes.empty();
+    public void dispel(SpellWorldChangeTracker context, BlockPos start) {
+        var queue = new ArrayDeque<BlockPos>();
+        queue.add(start);
+
+        var visited = new HashSet<BlockPos>();
+        var i = 0;
+        while (!queue.isEmpty() && i++ < 1000) {
+            var pos = queue.poll();
+            if (!visited.add(pos)) {
+                continue;
+            }
+            visited.add(pos.toImmutable());
+
+            if (context.world.getBlockState(pos).isOf(this)) {
+                context.trySetBlockState(pos, Blocks.AIR.getDefaultState());
+
+                for (var next : BlockPos.iterate(pos.add(-1, -1, -1), pos.add(1, 1, 1))) {
+                    queue.add(next.toImmutable());
+                }
+            }
         }
-        return VoxelShapes.fullCube();
     }
 }

@@ -25,7 +25,7 @@
   "subtitles.magisterium.magic_hum": "Magic hums",
   "magisterium.no_glyphs_found": "No glyphs were found in range",
   "magisterium.invalid_illusion_block": "Cannot create illusion of this block",
-  "magisterium.missing_spell_ingredients": "You are missing some ingredients",
+  "magisterium.missing_spell_ingredients": "You are missing spell ingredients",
   "magisterium.no_targets_found": "No targets found",
   "magisterium.failed_some_world_changes": "Failed to make some changes to the world",
   "magisterium.failed_all_world_changes": "Failed to make any changes to the world",
@@ -62,7 +62,7 @@
   "magisterium.spell.magisterium.arcane_lift": "Arcane Lift",
   "magisterium.spell.magisterium.arcane_lift.heading": "ᴀʀᴄᴀɴᴇ ʟɪꜰᴛ",
   "magisterium.spell.magisterium.arcane_lift.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: a three by three circle of arcane glyphs, bottle of liquid magic",
-  "magisterium.spell.magisterium.arcane_lift.description": "Call into existence a rising stream of arcane energy that lifts the creatures and objects into the air.",
+  "magisterium.spell.magisterium.arcane_lift.description": "Summon a rising stream of arcane energy that lifts the creatures and objects into the air.",
   "magisterium.spell.magisterium.arcane_lift.utterance": "Aʀᴄᴀɴᴜᴍ ʟᴇᴠᴀʀᴇ, ᴀᴇᴛʜᴇʀᴀ ᴛᴀɴɢᴀᴍᴜs!\n\nCᴏʀᴘᴏʀᴀ ᴇᴛ ᴍᴇɴs sᴜʀɢᴀɴᴛ, ɪɴ ᴀʟᴛᴜᴍ ᴇʟᴇᴠᴇɴᴛᴜʀ!",
   "magisterium.spell.magisterium.dispel_magic": "Dispel Magic",
   "magisterium.spell.magisterium.dispel_magic.heading": "ᴅɪsᴘᴇʟ ᴍᴀɢɪᴄ",
@@ -72,6 +72,6 @@
   "magisterium.spell.magisterium.magic_barrier": "Magic Barrier",
   "magisterium.spell.magisterium.magic_barrier.heading": "ᴍᴀɢɪᴄ ʙᴀʀʀɪᴇʀ",
   "magisterium.spell.magisterium.magic_barrier.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: a line of arcane glyphs on the ground, nether wart, magma cream and a bottle of liquid magic",
-  "magisterium.spell.magisterium.magic_barrier.description": "Call into existence an impenetrable barrier of arcane energy, solid to all except the caster.",
+  "magisterium.spell.magisterium.magic_barrier.description": "Call into existence an impenetrable barrier of arcane energy, solid even to the creator.",
   "magisterium.spell.magisterium.magic_barrier.utterance": "Pᴀʀɪᴇs ᴀʀᴄᴀɴᴀ, sᴜʀɢᴇ ᴇᴛ ᴛᴇɢɪ, ᴛᴇ ꜰɪʀᴍɪᴛᴇʀ ᴇʀɪɢᴇ!\n\nNᴜʟʟᴜs ᴛʀᴀɴsᴇᴀᴛ, ɴᴜʟʟᴜs ꜰʀᴀɴɢᴇʀᴇ ᴀᴜᴅᴇᴀᴛ.\n\nOᴍɴɪs ᴠɪʀᴇs ᴀʀᴄᴇ, ɪɴᴠɪᴄᴛᴀ ᴘᴇʀᴍᴀɴᴇ!\n\n"
 }

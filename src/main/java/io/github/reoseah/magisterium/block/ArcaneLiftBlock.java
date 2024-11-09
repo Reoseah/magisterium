@@ -1,12 +1,11 @@
 package io.github.reoseah.magisterium.block;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
+import io.github.reoseah.magisterium.data.effect.SpellWorldChangeTracker;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
-import io.github.reoseah.magisterium.data.effect.WorldUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
@@ -27,7 +26,7 @@ import net.minecraft.world.tick.ScheduledTickView;
 
 import java.util.Optional;
 
-public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
+public class ArcaneLiftBlock extends Block implements CustomDispelBehavior {
     //    public static final BooleanProperty BASE = BooleanProperty.of("base");
     public static final IntProperty HEIGHT = IntProperty.of("height", 0, 15);
 
@@ -167,12 +166,12 @@ public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
     }
 
     @Override
-    public boolean dispel(World world, BlockPos pos, PlayerEntity player) {
-        var state = world.getBlockState(pos);
+    public void dispel(SpellWorldChangeTracker context, BlockPos start) {
+        var state = context.world.getBlockState(start);
         var height = state.get(HEIGHT);
 
-        var base = pos.down(height);
+        var base = start.down(height);
 
-        return WorldUtil.trySetBlockState(world, base, Blocks.AIR.getDefaultState(), player);
+        context.trySetBlockState(base, Blocks.AIR.getDefaultState());
     }
 }

@@ -2,10 +2,12 @@ package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.reoseah.magisterium.block.MagicBarrierBlock;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 
@@ -41,6 +43,24 @@ public class MagicBarrierEffect extends SpellEffect {
 
     @Override
     public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            if (!this.ingredients.get(i).test(inventory.getStack(i))) {
+                player.sendMessage(Text.translatable("magisterium.missing_spell_ingredients"), true);
+                player.closeHandledScreen();
+                return;
+            }
+        }
 
+        var startPos = SpellEffectUtil.findClosestGlyph(player.getBlockPos(), player.getWorld(), this.glyphSearchRadius);
+        var line = SpellEffectUtil.getGlyphLine(startPos, player.getWorld(), this.maxWidth);
+
+        var context = new SpellWorldChangeTracker(player);
+        for (var glyph : line) {
+            for (int y = 0; y < this.maxHeight; y++) {
+                var pos = glyph.up(y);
+                context.trySetBlockState(pos, MagicBarrierBlock.INSTANCE.getDefaultState());
+            }
+        }
+        context.finishWorldChanges(true);
     }
 }

@@ -11,12 +11,8 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.UUID;
-
 public class MagicBarrierBlockEntity extends BlockEntity {
     public static final BlockEntityType<?> TYPE = FabricBlockEntityTypeBuilder.create(MagicBarrierBlockEntity::new, MagicBarrierBlock.INSTANCE).build();
-
-    protected UUID caster;
 
     public MagicBarrierBlockEntity(BlockPos pos, BlockState state) {
         super(TYPE, pos, state);
@@ -25,21 +21,11 @@ public class MagicBarrierBlockEntity extends BlockEntity {
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        if (nbt.contains("Caster")) {
-            this.caster = nbt.getUuid("Caster");
-        }
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.writeNbt(nbt, registries);
-        if (this.caster != null) {
-            nbt.putUuid("Caster", this.caster);
-        }
-    }
-
-    public UUID getCaster() {
-        return this.caster;
     }
 
     public static void tickClient(World world, BlockPos pos, BlockState state, BlockEntity entity) {
@@ -65,4 +51,5 @@ public class MagicBarrierBlockEntity extends BlockEntity {
         int z = pos.getZ();
         return mixBits(x) + mixBits(y) * 31 + mixBits(z) * 127;
     }
+
 }
