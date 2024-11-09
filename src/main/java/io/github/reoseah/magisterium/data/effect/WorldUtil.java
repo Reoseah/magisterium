@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.world;
+package io.github.reoseah.magisterium.data.effect;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -6,7 +6,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldHelper {
+public class WorldUtil {
     public static boolean canModifyWorld(World world, BlockPos pos, PlayerEntity player) {
         if (world instanceof ServerWorld serverWorld) {
             return player.canModifyBlocks() && player.canModifyAt(serverWorld, pos);

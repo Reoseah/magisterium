@@ -101,22 +101,20 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             this.client.interactionManager.clickButton(this.handler.syncId, SpellBookScreenHandler.NEXT_PAGE_BUTTON);
             this.handler.currentPage.set(this.handler.currentPage.get() + 2);
         }, true));
-
     }
 
     private void buildPages() {
-        var pageData = MagisteriumClient.pages;
-        var pages = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
+        var inventory = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var layoutBuilder = new BookLayout.Builder(this.properties);
-        for (ItemStack stack : pages) {
-            if (stack.getItem() instanceof SpellPageItem spellPage) {
-                var id = spellPage.spell;
+        for (ItemStack stack : inventory) {
+            if (stack.contains(SpellPageItem.PAGE_ID)) {
+                var id = stack.get(SpellPageItem.PAGE_ID);
                 if (id == null) {
                     LOGGER.warn("Spell id not found in stack {}", stack);
                     continue;
                 }
-                var spell = pageData.get(id);
+                var spell = MagisteriumClient.pages.get(id);
                 if (spell == null) {
                     LOGGER.warn("Spell data for id {} not found", id);
                     continue;
@@ -151,6 +149,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     lore.lines().forEach(text -> new Paragraph(text).visit(layoutBuilder, this.properties, this.textRenderer));
                 }
                 layoutBuilder.advancePage();
+            } else if (!stack.isEmpty()) {
+                LOGGER.warn("Unknown item in spell book: {}", stack);
             }
         }
 

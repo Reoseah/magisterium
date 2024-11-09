@@ -14,7 +14,7 @@ public class BookmarkItem extends Item {
             .registryKey(KEY) //
             .component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.bookmark")));
 
-    public BookmarkItem(net.minecraft.item.Item.Settings settings) {
+    public BookmarkItem(Settings settings) {
         super(settings);
     }
 }

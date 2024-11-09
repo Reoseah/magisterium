@@ -1,7 +1,6 @@
 package io.github.reoseah.magisterium.data.effect;
 
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
-import io.github.reoseah.magisterium.world.WorldHelper;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -36,7 +35,7 @@ public class SpellWorldChangeTracker {
 
     public boolean trySetBlockState(BlockPos pos, BlockState state) {
         this.targets.add(pos);
-        if (WorldHelper.trySetBlockState(this.world, pos, state, this.player)) {
+        if (WorldUtil.trySetBlockState(this.world, pos, state, this.player)) {
             this.hasSucceeded = true;
             return true;
         } else {

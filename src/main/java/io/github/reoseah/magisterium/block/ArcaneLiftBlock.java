@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium.block;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
-import io.github.reoseah.magisterium.world.WorldHelper;
+import io.github.reoseah.magisterium.data.effect.WorldUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;
@@ -173,6 +173,6 @@ public class ArcaneLiftBlock extends Block implements CustomDispellingHandler {
 
         var base = pos.down(height);
 
-        return WorldHelper.trySetBlockState(world, base, Blocks.AIR.getDefaultState(), player);
+        return WorldUtil.trySetBlockState(world, base, Blocks.AIR.getDefaultState(), player);
     }
 }

@@ -6,17 +6,17 @@
         {
           "type": "minecraft:item",
           "weight": 10,
+          "name": "magisterium:dispel_magic_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
           "name": "magisterium:awaken_the_flame_page"
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 5,
           "name": "magisterium:quench_the_flame_page"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "name": "magisterium:dispel_magic_page"
         },
         {
           "type": "minecraft:item",
@@ -37,6 +37,11 @@
           "type": "minecraft:item",
           "weight": 5,
           "name": "magisterium:illusory_wall_page"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "magisterium:magic_barrier_page"
         },
         {
           "type": "minecraft:item",

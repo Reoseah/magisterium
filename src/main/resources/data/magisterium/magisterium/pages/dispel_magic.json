@@ -9,7 +9,13 @@
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.dispel_magic.description"
+        "translate": "magisterium.spell.magisterium.dispel_magic.description.0"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.spell.magisterium.dispel_magic.description.1"
       }
     },
     {

@@ -2,6 +2,7 @@ package io.github.reoseah.magisterium;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
+import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.effect.*;
@@ -14,7 +15,6 @@ import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
-import io.github.reoseah.magisterium.world.WorldHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -44,6 +44,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -66,7 +68,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:magic_barrier", MagicBarrierBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
-        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlock.MagicBarrierBlockEntity.TYPE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
@@ -74,9 +76,10 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", SpellPageItem.QUENCH_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", SpellPageItem.GLYPHIC_IGNITION);
         Registry.register(Registries.ITEM, "magisterium:conflagrate_page", SpellPageItem.CONFLAGRATE);
-        Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
         Registry.register(Registries.ITEM, "magisterium:cold_snap_page", SpellPageItem.COLD_SNAP);
+        Registry.register(Registries.ITEM, "magisterium:illusory_wall_page", SpellPageItem.ILLUSORY_WALL);
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", SpellPageItem.ARCANE_LIFT);
+        Registry.register(Registries.ITEM, "magisterium:magic_barrier_page", SpellPageItem.MAGIC_BARRIER);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:fire_rune", RuneItem.FIRE);
@@ -91,14 +94,30 @@ public class Magisterium implements ModInitializer {
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
                     entries.add(SpellBookItem.INSTANCE);
-                    entries.add(SpellBookItem.createTestBook());
+
+                    var filledBook = new ItemStack(SpellBookItem.INSTANCE);
+                    filledBook.set(SpellBookItem.CONTENTS, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
+                        list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
+                        list.set(1, SpellPageItem.AWAKEN_THE_FLAME.getDefaultStack());
+                        list.set(2, SpellPageItem.QUENCH_THE_FLAME.getDefaultStack());
+                        list.set(3, SpellPageItem.GLYPHIC_IGNITION.getDefaultStack());
+                        list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
+                        list.set(5, SpellPageItem.COLD_SNAP.getDefaultStack());
+                        list.set(6, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
+                        list.set(7, SpellPageItem.ARCANE_LIFT.getDefaultStack());
+                        list.set(8, SpellPageItem.MAGIC_BARRIER.getDefaultStack());
+                        list.set(9, SpellPageItem.DISPEL_MAGIC.getDefaultStack());
+                    }));
+                    entries.add(filledBook);
+
                     entries.add(SpellPageItem.AWAKEN_THE_FLAME);
                     entries.add(SpellPageItem.QUENCH_THE_FLAME);
                     entries.add(SpellPageItem.GLYPHIC_IGNITION);
                     entries.add(SpellPageItem.CONFLAGRATE);
-                    entries.add(SpellPageItem.ILLUSORY_WALL);
                     entries.add(SpellPageItem.COLD_SNAP);
+                    entries.add(SpellPageItem.ILLUSORY_WALL);
                     entries.add(SpellPageItem.ARCANE_LIFT);
+                    entries.add(SpellPageItem.MAGIC_BARRIER);
                     entries.add(SpellPageItem.DISPEL_MAGIC);
                     entries.add(BookmarkItem.INSTANCE);
 //                    entries.add(RuneItem.FIRE);
@@ -142,6 +161,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(SpellEffect.REGISTRY, "magisterium:illusory_wall", IllusoryWallEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:arcane_lift", ArcaneLiftEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:magic_barrier", MagicBarrierEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:command", ExecuteCommandEffect.CODEC);
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
@@ -183,12 +203,12 @@ public class Magisterium implements ModInitializer {
         if (state.getBlock() instanceof LecternBlock && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
-                if (WorldHelper.canModifyWorld(world, pos, player)) {
+                if (WorldUtil.canModifyWorld(world, pos, player)) {
                     return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.PASS;
                 }
                 return ActionResult.PASS;
             } else if (book.isOf(SpellBookItem.INSTANCE)) {
-                if (player.isSneaking() && WorldHelper.canModifyWorld(world, pos, player)) {
+                if (player.isSneaking() && WorldUtil.canModifyWorld(world, pos, player)) {
                     lectern.setBook(ItemStack.EMPTY);
                     LecternBlock.setHasBook(player, world, pos, state, false);
                     if (!player.getInventory().insertStack(book)) {
@@ -234,8 +254,8 @@ public class Magisterium implements ModInitializer {
             return false;
         }
         if (!world.isClient) {
-            if (!WorldHelper.trySetBlockState(world, placementPos, placementState, player)) {
-                player.sendMessage(Text.translatable("magisterium.gui.no_success"), true);
+            if (!WorldUtil.trySetBlockState(world, placementPos, placementState, player)) {
+                player.sendMessage(Text.translatable("magisterium.failed_all_world_changes"), true);
                 return false;
             }
         }

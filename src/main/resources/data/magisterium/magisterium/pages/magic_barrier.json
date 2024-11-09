@@ -1,0 +1,66 @@
+{
+  "elements": [
+    {
+      "type": "magisterium:fold",
+      "left": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.magic_barrier.heading"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.magic_barrier.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.spell.magisterium.magic_barrier.description"
+          }
+        }
+      ],
+      "right": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.spell.magisterium.magic_barrier.heading"
+          }
+        },
+        {
+          "type": "magisterium:inventory",
+          "slots": [
+            {
+              "x": 24,
+              "y": 0,
+              "background": "magisterium:item/placeholder/nether_wart",
+              "ingredient": "minecraft:nether_wart"
+            },
+            {
+              "x": 42,
+              "y": 0,
+              "background": "magisterium:item/placeholder/magma_cream",
+              "ingredient": "minecraft:magma_cream"
+            },
+            {
+              "x": 60,
+              "y": 0,
+              "background": "magisterium:item/placeholder/bottle",
+              "ingredient": "minecraft:experience_bottle"
+            }
+          ]
+        },
+        {
+          "type": "magisterium:utterance",
+          "id": "magisterium:magic_barrier",
+          "text": {
+            "translate": "magisterium.spell.magisterium.magic_barrier.utterance"
+          },
+          "duration": 10
+        }
+      ]
+    }
+  ]
+}

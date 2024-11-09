@@ -2,8 +2,8 @@ package io.github.reoseah.magisterium.data.effect;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
+import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.Blocks;
@@ -15,13 +15,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class IllusoryWallEffect extends SpellEffect {
     public static final MapCodec<IllusoryWallEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
@@ -68,7 +61,7 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        BlockPos startPos = findClosestGlyph(playerPos, world, this.glyphSearchRadius);
+        BlockPos startPos = GlyphUtil.findClosestGlyph(playerPos, world, this.glyphSearchRadius);
 
         if (startPos == null) {
             player.sendMessage(Text.translatable("magisterium.no_glyphs_found"), true);
@@ -76,58 +69,21 @@ public class IllusoryWallEffect extends SpellEffect {
             return;
         }
 
-        var glyphs = getGlyphLine(world, startPos, this.maxWidth);
-        var helper = new SpellWorldChangeTracker(player);
+        var glyphs = GlyphUtil.getGlyphLine(world, startPos, this.maxWidth);
+        var tracker = new SpellWorldChangeTracker(player);
         for (var glyph : glyphs) {
             for (int dy = 0; dy < this.maxHeight; dy++) {
                 var pos = glyph.up(dy);
                 if (dy == 0 || world.getBlockState(pos).isAir()) {
-                    IllusoryWallBlock.setBlock(helper, pos, illusionState);
-                }
-            }
-        }
-
-        helper.finishWorldChanges(true);
-    }
-
-    private static List<BlockPos> getGlyphLine(World world, BlockPos startPos, int maxWidth) {
-        var list = new ArrayList<BlockPos>();
-
-        var queue = new ArrayDeque<BlockPos>();
-        queue.add(startPos);
-
-        var visited = new HashSet<BlockPos>();
-
-        while (!queue.isEmpty() && list.size() < maxWidth) {
-            var pos = queue.poll();
-            if (visited.contains(pos)) {
-                continue;
-            }
-            visited.add(pos);
-
-            var state = world.getBlockState(pos);
-            if (state.isOf(GlyphBlock.INSTANCE)) {
-                list.add(pos.toImmutable());
-                for (var offset : BlockPos.iterate(-1, -1, -1, 1, 1, 1)) {
-                    var nextPos = pos.add(offset);
-                    if (visited.contains(nextPos)) {
-                        continue;
+                    if (tracker.trySetBlockState(pos, IllusoryWallBlock.INSTANCE.getDefaultState())) {
+                        if (player.getWorld().getBlockEntity(pos) instanceof IllusoryWallBlockEntity be) {
+                            be.setIllusoryState(illusionState);
+                        }
                     }
-                    queue.add(nextPos);
                 }
             }
         }
-        return list;
-    }
 
-    private static @Nullable BlockPos findClosestGlyph(BlockPos playerPos, World world, int maxRange) {
-        BlockPos startPos = null;
-        for (var pos : BlockPos.iterateOutwards(playerPos, maxRange, maxRange, maxRange)) {
-            if (world.getBlockState(pos).isOf(GlyphBlock.INSTANCE)) {
-                startPos = pos;
-                break;
-            }
-        }
-        return startPos;
+        tracker.finishWorldChanges(true);
     }
 }

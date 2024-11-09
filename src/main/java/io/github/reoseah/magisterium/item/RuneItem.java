@@ -17,7 +17,7 @@ public class RuneItem extends Item {
     public static final Item FIRE = new RuneItem(new Item.Settings().registryKey(FIRE_KEY).component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.fire_rune")).maxCount(1));
     public static final Item WIND = new RuneItem(new Item.Settings().registryKey(WIND_KEY).component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.wind_rune")).maxCount(1));
 
-    public RuneItem(net.minecraft.item.Item.Settings settings) {
+    public RuneItem(Settings settings) {
         super(settings);
     }
 }

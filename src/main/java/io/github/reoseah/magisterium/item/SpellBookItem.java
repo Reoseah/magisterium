@@ -2,7 +2,6 @@ package io.github.reoseah.magisterium.item;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -15,7 +14,6 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
@@ -34,33 +32,15 @@ public class SpellBookItem extends Item {
     public static final Identifier ID = Identifier.of("magisterium:spell_book");
     public static final RegistryKey<Item> KEY = RegistryKey.of(RegistryKeys.ITEM, ID);
     public static final Item INSTANCE = new SpellBookItem(new Item.Settings() //
-            .maxCount(1)//
-            .rarity(Rarity.RARE)//
+            .registryKey(KEY) //
+            .useItemPrefixedTranslationKey() //
+            .maxCount(1) //
+            .rarity(Rarity.RARE) //
             .component(CURRENT_PAGE, 0) //
-            .component(DataComponentTypes.ITEM_NAME, Text.translatable("item.magisterium.spell_book")) //
-            .registryKey(KEY)
             .modelId(Identifier.of("magisterium", "spell_book_in_hand")));
 
-    protected SpellBookItem(net.minecraft.item.Item.Settings settings) {
+    protected SpellBookItem(Settings settings) {
         super(settings);
-    }
-
-    public static ItemStack createTestBook() {
-        ItemStack book = new ItemStack(INSTANCE);
-
-        book.set(CONTENTS, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
-            list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
-            list.set(1, SpellPageItem.AWAKEN_THE_FLAME.getDefaultStack());
-            list.set(2, SpellPageItem.QUENCH_THE_FLAME.getDefaultStack());
-            list.set(3, SpellPageItem.GLYPHIC_IGNITION.getDefaultStack());
-            list.set(4, SpellPageItem.CONFLAGRATE.getDefaultStack());
-            list.set(5, SpellPageItem.COLD_SNAP.getDefaultStack());
-            list.set(6, SpellPageItem.ILLUSORY_WALL.getDefaultStack());
-            list.set(7, SpellPageItem.ARCANE_LIFT.getDefaultStack());
-            list.set(8, SpellPageItem.DISPEL_MAGIC.getDefaultStack());
-        }));
-
-        return book;
     }
 
     @Override

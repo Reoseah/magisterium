@@ -1,7 +1,6 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.data.effect.SpellWorldChangeTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -32,14 +31,6 @@ public class IllusoryWallBlock extends BlockWithEntity {
 
     protected IllusoryWallBlock(Settings settings) {
         super(settings);
-    }
-
-    public static void setBlock(SpellWorldChangeTracker ctx, BlockPos pos, BlockState illusoryState) {
-        if (ctx.trySetBlockState(pos, INSTANCE.getDefaultState())) {
-            if (ctx.player.getWorld().getBlockEntity(pos) instanceof IllusoryWallBlockEntity be) {
-                be.setIllusoryState(illusoryState);
-            }
-        }
     }
 
     @Override
