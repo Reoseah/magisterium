@@ -2,7 +2,6 @@ package io.github.reoseah.magisterium.data.effect;
 
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.item.RuneItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
