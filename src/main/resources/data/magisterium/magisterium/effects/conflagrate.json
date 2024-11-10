@@ -7,6 +7,10 @@
   "ramp_length": 4,
   "bonuses": [
     {
+      "ingredient": "magisterium:blaze_rune",
+      "range_increase": 4
+    },
+    {
       "ingredient": "minecraft:blaze_rod",
       "range_increase": 4
     },

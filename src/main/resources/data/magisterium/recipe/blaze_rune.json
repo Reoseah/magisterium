@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": "minecraft:blaze_rod",
+    "B": "minecraft:experience_bottle"
+  },
+  "pattern": [
+    " R ",
+    "RBR",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "magisterium:blaze_rune"
+  },
+  "show_notification": false
+}

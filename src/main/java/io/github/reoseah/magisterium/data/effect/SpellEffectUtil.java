@@ -1,6 +1,9 @@
 package io.github.reoseah.magisterium.data.effect;
 
 import io.github.reoseah.magisterium.block.GlyphBlock;
+import io.github.reoseah.magisterium.item.RuneItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
@@ -72,5 +75,18 @@ public class SpellEffectUtil {
         }
 
         return null;
+    }
+
+    public static boolean decrementOrDischargeItem(ItemStack stack) {
+        if (stack.contains(RuneItem.CHARGE)) {
+            var value = stack.get(RuneItem.CHARGE);
+            if (value == RuneItem.MAX_CHARGE) {
+                stack.set(RuneItem.CHARGE, 0);
+                return true;
+            }
+            return false;
+        }
+        stack.decrement(1);
+        return false;
     }
 }

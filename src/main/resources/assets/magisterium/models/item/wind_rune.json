@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "magisterium:item/wind_rune_charged"
+    "layer0": "magisterium:item/wind_rune"
   }
 }

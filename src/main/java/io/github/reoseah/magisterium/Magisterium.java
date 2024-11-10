@@ -82,11 +82,12 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:magic_barrier_page", SpellPageItem.MAGIC_BARRIER);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", SpellPageItem.DISPEL_MAGIC);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
-        Registry.register(Registries.ITEM, "magisterium:fire_rune", RuneItem.FIRE);
+        Registry.register(Registries.ITEM, "magisterium:blaze_rune", RuneItem.BLAZE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:charge", RuneItem.CHARGE);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
@@ -120,8 +121,15 @@ public class Magisterium implements ModInitializer {
                     entries.add(SpellPageItem.MAGIC_BARRIER);
                     entries.add(SpellPageItem.DISPEL_MAGIC);
                     entries.add(BookmarkItem.INSTANCE);
-//                    entries.add(RuneItem.FIRE);
-//                    entries.add(RuneItem.WIND);
+
+                    entries.add(RuneItem.BLAZE);
+                    var chargedBlazeRune = new ItemStack(RuneItem.BLAZE);
+                    chargedBlazeRune.set(RuneItem.CHARGE, RuneItem.MAX_CHARGE);
+                    entries.add(chargedBlazeRune);
+                    entries.add(RuneItem.WIND);
+                    var chargedWindRune = new ItemStack(RuneItem.WIND);
+                    chargedWindRune.set(RuneItem.CHARGE, RuneItem.MAX_CHARGE);
+                    entries.add(chargedWindRune);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);

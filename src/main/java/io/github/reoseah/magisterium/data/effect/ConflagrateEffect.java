@@ -4,9 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.ConnectingBlock;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,7 +14,6 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -64,10 +62,9 @@ public class ConflagrateEffect extends SpellEffect {
         for (int i = 0; i < inventory.size(); i++) {
             var stack = inventory.getStack(i);
             if (!stack.isEmpty()) {
-                for (var bonus : bonuses) {
-                    if (bonus.getLeft().test(stack)) {
+                for (var bonus : this.bonuses) {
+                    if (bonus.getLeft().test(stack) && SpellEffectUtil.decrementOrDischargeItem(stack)) {
                         bonusRange += bonus.getRight();
-                        stack.decrement(1);
                         break;
                     }
                 }
@@ -92,8 +89,8 @@ public class ConflagrateEffect extends SpellEffect {
                 if (world.random.nextFloat() < chance) {
                     for (var direction : Direction.values()) {
                         var neighbor = pos.offset(direction);
-                        if (world.isAir(neighbor)) {
-                            helper.trySetBlockState(neighbor, getFireStateForPosition(world, neighbor));
+                        if (world.isAir(neighbor) && AbstractFireBlock.canPlaceAt(world, neighbor, direction.getOpposite())) {
+                            helper.trySetBlockState(neighbor, AbstractFireBlock.getState(world, neighbor));
                         }
                     }
                 }
@@ -117,26 +114,4 @@ public class ConflagrateEffect extends SpellEffect {
         }
     }
 
-    private static BlockState getFireStateForPosition(World world, BlockPos pos) {
-        var below = pos.down();
-        if (world.getBlockState(below).isSideSolidFullSquare(world, below, Direction.UP)) {
-            return Blocks.FIRE.getDefaultState();
-        } else {
-            var fireState = Blocks.FIRE.getDefaultState();
-            for (var direction : Direction.values()) {
-                if (direction == Direction.DOWN) {
-                    continue;
-                }
-                var side = pos.offset(direction);
-                var entry = FlammableBlockRegistry.getInstance(Blocks.FIRE).get(world.getBlockState(side).getBlock());
-                if (entry != null && entry.getBurnChance() > 0) {
-                    var state = world.getBlockState(side);
-                    if (state.isSideSolidFullSquare(world, side, direction.getOpposite())) {
-                        fireState = fireState.with(ConnectingBlock.FACING_PROPERTIES.get(direction), true);
-                    }
-                }
-            }
-            return fireState;
-        }
-    }
 }

@@ -68,9 +68,8 @@ public class ColdSnapEffect extends SpellEffect {
             var stack = inventory.getStack(i);
             if (!stack.isEmpty()) {
                 for (var bonus : this.bonuses) {
-                    if (bonus.getLeft().test(stack)) {
+                    if (bonus.getLeft().test(stack) && SpellEffectUtil.decrementOrDischargeItem(stack)) {
                         bonusRange += bonus.getRight();
-                        stack.decrement(1);
                         break;
                     }
                 }
