@@ -12,21 +12,20 @@ public abstract class SimpleBlock implements PageElement {
         if (element instanceof SimpleBlock simpleBlock) {
             return DataResult.success(simpleBlock);
         }
-        return DataResult.error(() -> "Not a SimpleBlock: " + element);
+        return DataResult.error(() -> "Not a simple page element: " + element);
     }, DataResult::success);
 
     @Override
     @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
-        int elementHeight = this.getHeight(properties.pageWidth, textRenderer);
+        int elementHeight = this.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
 
         int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getTopMargin());
         if (elementY + elementHeight > builder.getMaxY() && builder.isWrapAllowed() && !builder.isNewPage()) {
             builder.advancePage();
             elementY = builder.getCurrentY();
         }
-        int elementX = builder.getCurrentX();
-        Drawable renderer = this.createWidget(elementX, elementY, properties, builder.getMaxY() - elementY, textRenderer);
+        var renderer = this.createWidget(builder.getCurrentX(), elementY, properties, builder.getMaxY() - elementY, textRenderer);
         builder.addWidget(renderer);
         builder.setCurrentY(elementY + elementHeight);
     }
@@ -43,7 +42,7 @@ public abstract class SimpleBlock implements PageElement {
      * @return how many pixels this element wants to take on a page
      */
     @Environment(EnvType.CLIENT)
-    protected abstract int getHeight(int width, TextRenderer textRenderer);
+    protected abstract int getHeight(int width, int pageHeight, TextRenderer textRenderer);
 
     /**
      * Return a renderer for this element.

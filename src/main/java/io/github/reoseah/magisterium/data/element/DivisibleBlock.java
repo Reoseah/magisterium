@@ -10,7 +10,7 @@ public abstract class DivisibleBlock extends SimpleBlock {
     @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getTopMargin());
-        int elementHeight = this.getHeight(properties.pageWidth, textRenderer);
+        int elementHeight = this.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
 
         boolean canDivide = elementY + elementHeight > builder.getMaxY()
                 && builder.isWrapAllowed()
@@ -36,7 +36,7 @@ public abstract class DivisibleBlock extends SimpleBlock {
     protected abstract boolean canDivide(int height, int maxHeight, TextRenderer textRenderer);
 
     @Environment(EnvType.CLIENT)
-    protected abstract WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextHeight, TextRenderer textRenderer);
+    protected abstract WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextMaxHeight, TextRenderer textRenderer);
 
     @Environment(EnvType.CLIENT)
     protected record WidgetPair(Drawable current, Drawable next, int nextHeight) {

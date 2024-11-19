@@ -37,7 +37,7 @@ public class RuneItem extends Item {
     public static final int MAX_CHARGE = 60;
     public static final ComponentType<Integer> CHARGE = ComponentType.<Integer>builder().codec(Codecs.NON_NEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT).build();
 
-    public static final Text CHARGED_TOOLTIP = Text.translatable("item.magisterium.runes.charged").formatted(Formatting.GRAY);
+    public static final Text CHARGED_TOOLTIP = Text.translatable("magisterium.runes.charged").formatted(Formatting.GRAY);
 
     public static final Item BLAZE = create("blaze_rune");
     public static final Item WIND = create("wind_rune");

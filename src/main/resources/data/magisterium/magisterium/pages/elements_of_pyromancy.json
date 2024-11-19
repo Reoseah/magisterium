@@ -1,0 +1,28 @@
+{
+  "elements": [
+    {
+      "type": "magisterium:page_break"
+    },
+    {
+      "type": "magisterium:title_page",
+      "top": {
+        "type": "magisterium:heading",
+        "text": {
+          "translate": "magisterium.page.magisterium.elements_of_pyromancy.header"
+        }
+      },
+      "center": {
+        "type": "magisterium:heading",
+        "text": {
+          "translate": "magisterium.page.magisterium.elements_of_pyromancy.title"
+        }
+      },
+      "bottom": {
+        "type": "magisterium:heading",
+        "text": {
+          "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer"
+        }
+      }
+    }
+  ]
+}

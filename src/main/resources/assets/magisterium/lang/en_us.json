@@ -8,10 +8,12 @@
   "item.magisterium.spell_book.empty": "Empty",
   "item.magisterium.spell_book.pages": "%s Entries",
   "item.magisterium.spell_page": "Spell Page",
+  "item.magisterium.stack_of_pages": "Stack of Pages",
   "item.magisterium.bookmark": "Silk Bookmark",
   "item.magisterium.blaze_rune": "Blaze Rune",
   "item.magisterium.wind_rune": "Wind Rune",
   "item.magisterium.blaze_blade": "Blaze Blade",
+  "magisterium.runes.charged": "Charged",
   "tag.item.magisterium.spell_pages": "Spell Pages",
   "tag.item.magisterium.spell_book_components": "Spell Book Components",
   "tag.item.magisterium.conflagrate_ingredients": "Conflagrate Ingredients",
@@ -75,5 +77,8 @@
   "magisterium.page.magisterium.magic_barrier.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: a line of arcane glyphs on the ground, nether wart, magma cream and a bottle of liquid magic",
   "magisterium.page.magisterium.magic_barrier.description": "Call into existence an impenetrable wall of arcane energy, solid even to the creator.",
   "magisterium.page.magisterium.magic_barrier.spell": "Pᴀʀɪᴇs ᴀʀᴄᴀɴᴀ, sᴜʀɢᴇ ᴇᴛ ᴛᴇɢɪ, ᴛᴇ ꜰɪʀᴍɪᴛᴇʀ ᴇʀɪɢᴇ!\n\nNᴜʟʟᴜs ᴛʀᴀɴsᴇᴀᴛ, ɴᴜʟʟᴜs ꜰʀᴀɴɢᴇʀᴇ ᴀᴜᴅᴇᴀᴛ.\n\nOᴍɴɪs ᴠɪʀᴇs ᴀʀᴄᴇ, ɪɴᴠɪᴄᴛᴀ ᴘᴇʀᴍᴀɴᴇ!\n\n",
-  "item.magisterium.runes.charged": "Charged"
+  "magisterium.page.magisterium.elements_of_pyromancy": "Elements of Pyromancy",
+  "magisterium.page.magisterium.elements_of_pyromancy.header": "ꜰᴏʀ ᴛʜᴇ ᴀᴅᴇᴘᴛ ᴀɴᴅ ᴀsᴘɪʀɪɴɢ",
+  "magisterium.page.magisterium.elements_of_pyromancy.title": "𝗘𝗟𝗘𝗠𝗘𝗡𝗧𝗦\n§lᴏꜰ§r\n𝗣𝗬𝗥𝗢𝗠𝗔𝗡𝗖𝗬\n\nᴄᴏᴍᴘʀᴇʜᴇɴsɪᴠᴇ ɢᴜɪᴅᴇ ᴛᴏ ᴛʜᴇ ᴍᴀɴɪᴘᴜʟᴀᴛɪᴏɴ, ᴄᴏɴᴛʀᴏʟ, ᴀɴᴅ ᴍᴀsᴛᴇʀʏ ᴏꜰ ꜰɪʀᴇ",
+  "magisterium.page.magisterium.elements_of_pyromancy.footer": "ʙʏ Rᴏᴡᴇɴᴀ\nS. Hᴏᴛʜᴇᴀʀᴛʜ"
 }

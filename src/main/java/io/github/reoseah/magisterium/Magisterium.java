@@ -78,6 +78,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:arcane_lift_page", PageItem.ARCANE_LIFT);
         Registry.register(Registries.ITEM, "magisterium:magic_barrier_page", PageItem.MAGIC_BARRIER);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", PageItem.DISPEL_MAGIC);
+        Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy_pages", PageItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:blaze_rune", RuneItem.BLAZE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
@@ -119,6 +120,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(PageItem.ARCANE_LIFT);
                     entries.add(PageItem.MAGIC_BARRIER);
                     entries.add(PageItem.DISPEL_MAGIC);
+                    entries.add(PageItem.ELEMENTS_OF_PYROMANCY);
                     entries.add(BookmarkItem.INSTANCE);
 
                     entries.add(RuneItem.BLAZE);
@@ -152,14 +154,15 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
         Registry.register(Registries.SOUND_EVENT, "magisterium:magic_hum", MagisteriumSounds.MAGIC_HUM);
 
+        Registry.register(PageElement.REGISTRY, "magisterium:empty", EmptyPageElement.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:heading", Heading.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:paragraph", Paragraph.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:page_break", PageBreak.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:inventory", PageInventory.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:spell", Spell.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:fold", Fold.CODEC);
-        Registry.register(PageElement.REGISTRY, "magisterium:bookmark", BookmarkElement.CODEC);
-        Registry.register(PageElement.REGISTRY, "magisterium:vertically_centered", VerticallyCenteredElement.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:bookmark", BookmarkPage.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:title_page", TitlePage.CODEC);
 
         Registry.register(SpellEffect.REGISTRY, "magisterium:empty", EmptySpellEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:awaken_the_flame", AwakenFlameEffect.CODEC);

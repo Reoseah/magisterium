@@ -37,7 +37,7 @@ public class PageInventory extends SimpleBlock {
     }
 
     @Override
-    protected int getHeight(int width, TextRenderer textRenderer) {
+    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         return this.height;
     }
 

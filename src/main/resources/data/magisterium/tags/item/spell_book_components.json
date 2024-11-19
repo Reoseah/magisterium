@@ -1,6 +1,7 @@
 {
   "values": [
-    "magisterium:bookmark",
-    "#magisterium:spell_pages"
+    "#magisterium:spell_pages",
+    "magisterium:elements_of_pyromancy_pages",
+    "magisterium:bookmark"
   ]
 }

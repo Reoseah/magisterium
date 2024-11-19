@@ -27,7 +27,7 @@ public class Paragraph extends DivisibleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getHeight(int width, TextRenderer textRenderer) {
+    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         return textRenderer.getWrappedLinesHeight(this.text, width);
     }
 
@@ -50,21 +50,24 @@ public class Paragraph extends DivisibleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextHeight, TextRenderer textRenderer) {
+    protected WidgetPair createWidgetPair(int x, int y, int width, int maxHeight, int nextX, int nextY, int nextMaxHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, width);
         int lineCountOnCurrentPage = maxHeight / textRenderer.fontHeight;
 
         var linesOnCurrentPage = lines.subList(0, lineCountOnCurrentPage);
         var linesOnNextPage = lines.subList(lineCountOnCurrentPage, lines.size());
 
-        return new WidgetPair((ctx, mouseX, mouseY, delta) -> {
+        Drawable current = (ctx, mouseX, mouseY, delta) -> {
             for (int i = 0; i < linesOnCurrentPage.size(); i++) {
                 ctx.drawText(textRenderer, linesOnCurrentPage.get(i), x, y + i * textRenderer.fontHeight, 0x000000, false);
             }
-        }, (ctx, mouseX, mouseY, delta) -> {
+        };
+        Drawable next = (ctx, mouseX, mouseY, delta) -> {
             for (int i = 0; i < linesOnNextPage.size(); i++) {
                 ctx.drawText(textRenderer, linesOnNextPage.get(i), nextX, nextY + i * textRenderer.fontHeight, 0x000000, false);
             }
-        }, linesOnNextPage.size() * textRenderer.fontHeight);
+        };
+        var nextHeight = linesOnNextPage.size() * textRenderer.fontHeight;
+        return new WidgetPair(current, next, nextHeight);
     }
 }

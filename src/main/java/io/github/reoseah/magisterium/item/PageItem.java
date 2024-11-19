@@ -19,24 +19,38 @@ public class PageItem extends Item {
             .build();
 
     // TODO: on 1.21.4, have just single item and change texture through the new item model overrides?
-    public static final Item AWAKEN_THE_FLAME = create("awaken_the_flame");
-    public static final Item QUENCH_THE_FLAME = create("quench_the_flame");
-    public static final Item GLYPHIC_IGNITION = create("glyphic_ignition");
-    public static final Item CONFLAGRATE = create("conflagrate");
-    public static final Item ILLUSORY_WALL = create("illusory_wall");
-    public static final Item COLD_SNAP = create("cold_snap");
-    public static final Item ARCANE_LIFT = create("arcane_lift");
-    public static final Item MAGIC_BARRIER = create("magic_barrier");
-    public static final Item DISPEL_MAGIC = create("dispel_magic");
+    public static final Item AWAKEN_THE_FLAME = createSpellPage("awaken_the_flame");
+    public static final Item QUENCH_THE_FLAME = createSpellPage("quench_the_flame");
+    public static final Item GLYPHIC_IGNITION = createSpellPage("glyphic_ignition");
+    public static final Item CONFLAGRATE = createSpellPage("conflagrate");
+    public static final Item ILLUSORY_WALL = createSpellPage("illusory_wall");
+    public static final Item COLD_SNAP = createSpellPage("cold_snap");
+    public static final Item ARCANE_LIFT = createSpellPage("arcane_lift");
+    public static final Item MAGIC_BARRIER = createSpellPage("magic_barrier");
+    public static final Item DISPEL_MAGIC = createSpellPage("dispel_magic");
 
-    private static Item create(String spell) {
-        var id = Identifier.of("magisterium", spell + "_page");
-        var pageId = Identifier.of("magisterium", spell);
+    public static final Item ELEMENTS_OF_PYROMANCY = createPageStack("elements_of_pyromancy");
+
+    private static Item createSpellPage(String name) {
+        var id = Identifier.of("magisterium", name + "_page");
+        var pageId = Identifier.of("magisterium", name);
         var registryKey = RegistryKey.of(RegistryKeys.ITEM, id);
         var settings = new Settings() //
                 .registryKey(registryKey) //
                 .maxCount(16) //
                 .translationKey("item.magisterium.spell_page") //
+                .component(PAGE_ID, pageId);
+        return new PageItem(settings);
+    }
+
+    private static Item createPageStack(String name) {
+        var id = Identifier.of("magisterium", name + "_pages");
+        var pageId = Identifier.of("magisterium", name);
+        var registryKey = RegistryKey.of(RegistryKeys.ITEM, id);
+        var settings = new Settings() //
+                .registryKey(registryKey) //
+                .maxCount(1) //
+                .translationKey("item.magisterium.stack_of_pages") //
                 .component(PAGE_ID, pageId);
         return new PageItem(settings);
     }

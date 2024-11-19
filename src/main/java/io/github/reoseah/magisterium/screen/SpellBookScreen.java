@@ -131,7 +131,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
                 var name = stack.get(DataComponentTypes.CUSTOM_NAME);
 
-                new BookmarkElement(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
+                new BookmarkPage(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
                 layoutBuilder.setCurrentY(layoutBuilder.getCurrentY() + 20);
                 new Heading(Text.literal(RomanNumbers.toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(layoutBuilder, this.properties, this.textRenderer);
                 new Heading(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);

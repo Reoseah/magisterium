@@ -49,7 +49,7 @@ public class Spell extends SimpleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getHeight(int width, TextRenderer textRenderer) {
+    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, width - 12);
         var linesAsString = lines.stream().map(t -> {
             StringBuilder builder = new StringBuilder();

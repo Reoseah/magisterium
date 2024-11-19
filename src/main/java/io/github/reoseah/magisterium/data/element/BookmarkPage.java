@@ -9,18 +9,14 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
 
-public class BookmarkElement implements PageElement, Bookmark {
-    public static final MapCodec<BookmarkElement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
+public class BookmarkPage implements PageElement, Bookmark {
+    public static final MapCodec<BookmarkPage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.STRINGIFIED_CODEC.fieldOf("text").forGetter(bookmark -> bookmark.text) //
-    ).apply(instance, BookmarkElement::new));
+    ).apply(instance, BookmarkPage::new));
 
     public final Text text;
 
-    public BookmarkElement(String translationKey) {
-        this(Text.translatable(translationKey));
-    }
-
-    public BookmarkElement(Text text) {
+    public BookmarkPage(Text text) {
         this.text = text;
     }
 

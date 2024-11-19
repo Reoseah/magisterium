@@ -39,7 +39,7 @@ public class SpellBookItem extends Item {
             .component(CURRENT_PAGE, 0) //
             .modelId(Identifier.of("magisterium", "spell_book_in_hand")));
 
-    protected SpellBookItem(Settings settings) {
+    public SpellBookItem(Settings settings) {
         super(settings);
     }
 
