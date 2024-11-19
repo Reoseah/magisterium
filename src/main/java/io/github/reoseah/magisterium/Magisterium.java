@@ -7,10 +7,7 @@ import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
-import io.github.reoseah.magisterium.item.BookmarkItem;
-import io.github.reoseah.magisterium.item.RuneItem;
-import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.item.SpellPageItem;
+import io.github.reoseah.magisterium.item.*;
 import io.github.reoseah.magisterium.network.*;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
@@ -84,10 +81,12 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:blaze_rune", RuneItem.BLAZE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
+        Registry.register(Registries.ITEM, "magisterium:blaze_blade", BlazeBladeItem.INSTANCE);
 
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:current_page", SpellBookItem.CURRENT_PAGE);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:contents", SpellBookItem.CONTENTS);
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:charge", RuneItem.CHARGE);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:last_tick", BlazeBladeItem.LAST_TICK);
 
         var group = FabricItemGroup.builder() //
                 .icon(SpellBookItem.INSTANCE::getDefaultStack) //
@@ -130,6 +129,8 @@ public class Magisterium implements ModInitializer {
                     var chargedWindRune = new ItemStack(RuneItem.WIND);
                     chargedWindRune.set(RuneItem.CHARGE, RuneItem.MAX_CHARGE);
                     entries.add(chargedWindRune);
+
+                    entries.add(BlazeBladeItem.INSTANCE);
                 }) //
                 .build();
         Registry.register(Registries.ITEM_GROUP, "magisterium", group);

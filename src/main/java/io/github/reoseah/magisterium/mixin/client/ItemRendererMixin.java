@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.mixin.client;
 
+import io.github.reoseah.magisterium.item.BlazeBladeItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -58,6 +59,10 @@ public abstract class ItemRendererMixin {
         if (useInventoryModel && stack.isOf(SpellBookItem.INSTANCE)) {
             model = this.bakedModelManager.getModel(SPELL_BOOK);
             this.renderItem(stack, transformationMode, leftHanded, matrices, vertexConsumers, light, overlay, model, useInventoryModel, -0.5F);
+            info.cancel();
+        }
+        if (stack.isOf(BlazeBladeItem.INSTANCE)) {
+            this.renderItem(stack, transformationMode, leftHanded, matrices, vertexConsumers, 0xFF, overlay, model, useInventoryModel, -0.5F);
             info.cancel();
         }
     }
