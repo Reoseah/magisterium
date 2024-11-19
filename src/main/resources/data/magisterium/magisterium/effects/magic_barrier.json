@@ -1,6 +1,5 @@
 {
   "type": "magisterium:magic_barrier",
-  "utterance": "magisterium:magic_barrier",
   "duration": 10,
   "glyph_search_radius": 5,
   "max_width": 8,

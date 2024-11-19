@@ -16,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 
 public class QuenchFlameEffect extends SpellEffect {
     public static final MapCodec<QuenchFlameEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codec.INT.fieldOf("range").forGetter(effect -> effect.range), //
             TagKey.unprefixedCodec(RegistryKeys.BLOCK).fieldOf("tag").forGetter(effect -> effect.tag) //
@@ -25,8 +24,8 @@ public class QuenchFlameEffect extends SpellEffect {
     public final int range;
     public final TagKey<Block> tag;
 
-    public QuenchFlameEffect(Identifier utterance, int duration, int range, TagKey<Block> tag) {
-        super(utterance, duration);
+    public QuenchFlameEffect(int duration, int range, TagKey<Block> tag) {
+        super(duration);
         this.range = range;
         this.tag = tag;
     }

@@ -6,20 +6,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ExecuteCommandEffect extends SpellEffect {
     public static final MapCodec<ExecuteCommandEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance),
             Codec.INT.fieldOf("duration").forGetter(effect -> effect.duration),
             Codec.STRING.fieldOf("command").forGetter(effect -> effect.command)
     ).apply(instance, ExecuteCommandEffect::new));
 
     public final String command;
 
-    public ExecuteCommandEffect(Identifier utterance, int duration, String command) {
-        super(utterance, duration);
+    public ExecuteCommandEffect(int duration, String command) {
+        super(duration);
         this.command = command;
     }
 

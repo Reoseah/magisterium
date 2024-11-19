@@ -16,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 // TODO make a more general set block property effect
 public class AwakenFlameEffect extends SpellEffect {
     public static final MapCodec<AwakenFlameEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codec.INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codec.INT.fieldOf("range").forGetter(effect -> effect.range), //
             TagKey.unprefixedCodec(RegistryKeys.BLOCK).fieldOf("tag").forGetter(effect -> effect.tag) //
@@ -25,8 +24,8 @@ public class AwakenFlameEffect extends SpellEffect {
     public final int range;
     public final TagKey<Block> tag;
 
-    public AwakenFlameEffect(Identifier utterance, int duration, int range, TagKey<Block> tag) {
-        super(utterance, duration);
+    public AwakenFlameEffect(int duration, int range, TagKey<Block> tag) {
+        super(duration);
         this.range = range;
         this.tag = tag;
     }

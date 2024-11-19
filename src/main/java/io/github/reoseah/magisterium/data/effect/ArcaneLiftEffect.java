@@ -12,15 +12,14 @@ import net.minecraft.util.dynamic.Codecs;
 
 public class ArcaneLiftEffect extends SpellEffect {
     public static final MapCodec<ArcaneLiftEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range) //
     ).apply(instance, ArcaneLiftEffect::new));
 
     public final int range;
 
-    public ArcaneLiftEffect(Identifier utterance, int duration, int range) {
-        super(utterance, duration);
+    public ArcaneLiftEffect(int duration, int range) {
+        super(duration);
         this.range = range;
     }
 

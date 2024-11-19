@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 
 public class EmptySpellEffect extends SpellEffect {
     public static final EmptySpellEffect INSTANCE = new EmptySpellEffect();
@@ -12,7 +11,7 @@ public class EmptySpellEffect extends SpellEffect {
     public static final MapCodec<EmptySpellEffect> CODEC = MapCodec.unit(INSTANCE);
 
     public EmptySpellEffect() {
-        super(Identifier.of("magisterium:empty"), 0);
+        super(0);
     }
 
     @Override

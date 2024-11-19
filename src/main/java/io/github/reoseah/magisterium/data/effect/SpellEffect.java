@@ -16,11 +16,9 @@ public abstract class SpellEffect {
     public static final Registry<MapCodec<? extends SpellEffect>> REGISTRY = new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.experimental());
     public static final Codec<SpellEffect> CODEC = REGISTRY.getCodec().dispatch("type", SpellEffect::getCodec, codec -> codec);
 
-    public final Identifier utterance;
     public final int duration;
 
-    public SpellEffect(Identifier utterance, int duration) {
-        this.utterance = utterance;
+    public SpellEffect(int duration) {
         this.duration = duration;
     }
 

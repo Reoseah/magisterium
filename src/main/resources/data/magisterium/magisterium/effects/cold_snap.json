@@ -1,6 +1,5 @@
 {
   "type": "magisterium:cold_snap",
-  "utterance": "magisterium:cold_snap",
   "duration": 10,
   "range": 7,
   "ramp_length": 4,

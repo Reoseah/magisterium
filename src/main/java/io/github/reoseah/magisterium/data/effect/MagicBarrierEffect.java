@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MagicBarrierEffect extends SpellEffect {
     public static final MapCodec<MagicBarrierEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codecs.POSITIVE_INT.fieldOf("glyph_search_radius").forGetter(effect -> effect.glyphSearchRadius), //
             Codecs.POSITIVE_INT.fieldOf("max_width").forGetter(effect -> effect.maxWidth), //
@@ -32,8 +31,8 @@ public class MagicBarrierEffect extends SpellEffect {
     public final int maxHeight;
     public final List<Ingredient> ingredients;
 
-    public MagicBarrierEffect(Identifier utterance, int duration, int glyphSearchRadius, int maxWidth, int maxHeight, List<Ingredient> ingredients) {
-        super(utterance, duration);
+    public MagicBarrierEffect(int duration, int glyphSearchRadius, int maxWidth, int maxHeight, List<Ingredient> ingredients) {
+        super(duration);
         this.glyphSearchRadius = glyphSearchRadius;
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;

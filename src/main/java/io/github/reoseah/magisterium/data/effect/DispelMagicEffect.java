@@ -8,21 +8,19 @@ import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 
 public class DispelMagicEffect extends SpellEffect {
     public static final MapCodec<DispelMagicEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range) //
     ).apply(instance, DispelMagicEffect::new));
 
     public final int range;
 
-    public DispelMagicEffect(Identifier utterance, int duration, int range) {
-        super(utterance, duration);
+    public DispelMagicEffect(int duration, int range) {
+        super(duration);
         this.range = range;
     }
 

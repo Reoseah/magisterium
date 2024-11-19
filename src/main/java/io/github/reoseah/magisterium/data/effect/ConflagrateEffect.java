@@ -9,7 +9,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +23,6 @@ public class ConflagrateEffect extends SpellEffect {
     ).apply(bonus, Pair::new));
 
     public static final MapCodec<ConflagrateEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codecs.POSITIVE_INT.fieldOf("offset").forGetter(effect -> effect.offset), //
             Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range), //
@@ -37,14 +35,13 @@ public class ConflagrateEffect extends SpellEffect {
     public final int rampLength;
     public final List<Pair<Ingredient, Integer>> bonuses;
 
-    public ConflagrateEffect(Identifier utterance, //
-                             int duration, //
+    public ConflagrateEffect(int duration, //
                              int offset, //
                              int range, //
                              int rampLength, //
                              List<Pair<Ingredient, Integer>> bonuses //
     ) {
-        super(utterance, duration);
+        super(duration);
         this.offset = offset;
         this.range = range;
         this.rampLength = rampLength;

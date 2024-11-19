@@ -29,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class SpellBookScreenHandler extends ScreenHandler {
     public static final ScreenHandlerType<SpellBookScreenHandler> TYPE = new ScreenHandlerType<>(SpellBookScreenHandler::new, FeatureFlags.DEFAULT_ENABLED_FEATURES);
 
@@ -77,10 +79,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     public void startUtterance(Identifier id, ServerPlayerEntity player) {
-        this.spellEffect = SpellEffectLoader.getInstance().effects.values() //
+        this.spellEffect = SpellEffectLoader.getInstance().effects.entrySet() //
                 .stream() //
-                .filter(effect -> effect.utterance.equals(id)) //
+                .filter(entry -> entry.getKey().equals(id)) //
                 .findFirst() //
+                .map(Map.Entry::getValue) //
                 .orElse(EmptySpellEffect.INSTANCE);
 
         if (this.spellEffect != EmptySpellEffect.INSTANCE) {

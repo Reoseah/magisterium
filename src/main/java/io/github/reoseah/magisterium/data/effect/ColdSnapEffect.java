@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class ColdSnapEffect extends SpellEffect {
     public static final MapCodec<ColdSnapEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            Identifier.CODEC.fieldOf("utterance").forGetter(effect -> effect.utterance), //
             Codecs.POSITIVE_INT.fieldOf("duration").forGetter(effect -> effect.duration), //
             Codecs.POSITIVE_INT.fieldOf("range").forGetter(effect -> effect.range), //
             Codecs.POSITIVE_INT.fieldOf("ramp_length").forGetter(effect -> effect.rampLength), //
@@ -49,8 +48,8 @@ public class ColdSnapEffect extends SpellEffect {
         FROZEN_STATES = map.build();
     }
 
-    public ColdSnapEffect(Identifier utterance, int duration, int range, int rampLength, List<Pair<Ingredient, Integer>> bonuses) {
-        super(utterance, duration);
+    public ColdSnapEffect(int duration, int range, int rampLength, List<Pair<Ingredient, Integer>> bonuses) {
+        super(duration);
         this.range = range;
         this.rampLength = rampLength;
         this.bonuses = bonuses;
