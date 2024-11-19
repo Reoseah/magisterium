@@ -6,19 +6,19 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.magic_barrier.heading"
+            "translate": "magisterium.page.magisterium.magic_barrier.heading"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.magic_barrier.components"
+            "translate": "magisterium.page.magisterium.magic_barrier.components"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.magic_barrier.description"
+            "translate": "magisterium.page.magisterium.magic_barrier.description"
           }
         }
       ],
@@ -26,7 +26,7 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.magic_barrier.heading"
+            "translate": "magisterium.page.magisterium.magic_barrier.heading"
           }
         },
         {
@@ -56,7 +56,7 @@
           "type": "magisterium:utterance",
           "id": "magisterium:magic_barrier",
           "text": {
-            "translate": "magisterium.spell.magisterium.magic_barrier.utterance"
+            "translate": "magisterium.page.magisterium.magic_barrier.utterance"
           },
           "duration": 10
         }

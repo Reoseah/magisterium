@@ -4,7 +4,7 @@ import io.github.reoseah.magisterium.MagisteriumClient;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.item.SpellPageItem;
+import io.github.reoseah.magisterium.item.PageItem;
 import io.github.reoseah.magisterium.network.SpellBookScreenStatePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -108,8 +108,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
         var layoutBuilder = new BookLayout.Builder(this.properties);
         for (ItemStack stack : inventory) {
-            if (stack.contains(SpellPageItem.PAGE_ID)) {
-                var id = stack.get(SpellPageItem.PAGE_ID);
+            if (stack.contains(PageItem.PAGE_ID)) {
+                var id = stack.get(PageItem.PAGE_ID);
                 if (id == null) {
                     LOGGER.warn("Spell id not found in stack {}", stack);
                     continue;

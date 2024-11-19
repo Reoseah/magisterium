@@ -6,25 +6,25 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+            "translate": "magisterium.page.magisterium.cold_snap.heading"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.components"
+            "translate": "magisterium.page.magisterium.cold_snap.components"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.description.0"
+            "translate": "magisterium.page.magisterium.cold_snap.description.0"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.description.1"
+            "translate": "magisterium.page.magisterium.cold_snap.description.1"
           }
         }
       ],
@@ -32,7 +32,7 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.heading"
+            "translate": "magisterium.page.magisterium.cold_snap.heading"
           }
         },
         {
@@ -63,7 +63,7 @@
           "id": "magisterium:cold_snap",
           "duration": 10,
           "text": {
-            "translate": "magisterium.spell.magisterium.cold_snap.utterance"
+            "translate": "magisterium.page.magisterium.cold_snap.utterance"
           }
         }
       ]

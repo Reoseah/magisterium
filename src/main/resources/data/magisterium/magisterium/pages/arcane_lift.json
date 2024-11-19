@@ -6,19 +6,19 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.arcane_lift.heading"
+            "translate": "magisterium.page.magisterium.arcane_lift.heading"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.arcane_lift.components"
+            "translate": "magisterium.page.magisterium.arcane_lift.components"
           }
         },
         {
           "type": "magisterium:paragraph",
           "text": {
-            "translate": "magisterium.spell.magisterium.arcane_lift.description"
+            "translate": "magisterium.page.magisterium.arcane_lift.description"
           }
         }
       ],
@@ -26,7 +26,7 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.spell.magisterium.arcane_lift.heading"
+            "translate": "magisterium.page.magisterium.arcane_lift.heading"
           }
         },
         {
@@ -44,7 +44,7 @@
           "type": "magisterium:utterance",
           "id": "magisterium:arcane_lift",
           "text": {
-            "translate": "magisterium.spell.magisterium.arcane_lift.utterance"
+            "translate": "magisterium.page.magisterium.arcane_lift.utterance"
           },
           "duration": 8
         }

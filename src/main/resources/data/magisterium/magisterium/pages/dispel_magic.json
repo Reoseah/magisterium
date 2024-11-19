@@ -3,26 +3,26 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.spell.magisterium.dispel_magic.heading"
+        "translate": "magisterium.page.magisterium.dispel_magic.heading"
       }
     },
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.dispel_magic.description.0"
+        "translate": "magisterium.page.magisterium.dispel_magic.description.0"
       }
     },
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.dispel_magic.description.1"
+        "translate": "magisterium.page.magisterium.dispel_magic.description.1"
       }
     },
     {
       "type": "magisterium:utterance",
       "id": "magisterium:dispel_magic",
       "text": {
-        "translate": "magisterium.spell.magisterium.dispel_magic.utterance"
+        "translate": "magisterium.page.magisterium.dispel_magic.utterance"
       },
       "duration": 4
     },

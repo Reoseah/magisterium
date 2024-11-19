@@ -12,12 +12,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class SpellPageItem extends Item {
+public class PageItem extends Item {
     public static final ComponentType<Identifier> PAGE_ID = ComponentType.<Identifier>builder() //
             .codec(Identifier.CODEC) //
             .packetCodec(Identifier.PACKET_CODEC) //
             .build();
 
+    // TODO: on 1.21.4, have just single item and change texture through the new item model overrides?
     public static final Item AWAKEN_THE_FLAME = create("awaken_the_flame");
     public static final Item QUENCH_THE_FLAME = create("quench_the_flame");
     public static final Item GLYPHIC_IGNITION = create("glyphic_ignition");
@@ -37,10 +38,10 @@ public class SpellPageItem extends Item {
                 .maxCount(16) //
                 .translationKey("item.magisterium.spell_page") //
                 .component(PAGE_ID, pageId);
-        return new SpellPageItem(settings);
+        return new PageItem(settings);
     }
 
-    protected SpellPageItem(Settings settings) {
+    protected PageItem(Settings settings) {
         super(settings);
     }
 
@@ -50,7 +51,7 @@ public class SpellPageItem extends Item {
 
         var spell = stack.get(PAGE_ID);
         if (spell != null) {
-            tooltip.add(Text.translatable("magisterium.spell." + spell.getNamespace() + "." + spell.getPath()).formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable("magisterium.page." + spell.getNamespace() + "." + spell.getPath()).formatted(Formatting.GRAY));
         }
     }
 }

@@ -3,20 +3,20 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.spell.magisterium.quench_the_flame.heading"
+        "translate": "magisterium.page.magisterium.quench_the_flame.heading"
       }
     },
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.quench_the_flame.description"
+        "translate": "magisterium.page.magisterium.quench_the_flame.description"
       }
     },
     {
       "type": "magisterium:utterance",
       "id": "magisterium:quench_the_flame",
       "text": {
-        "translate": "magisterium.spell.magisterium.quench_the_flame.utterance"
+        "translate": "magisterium.page.magisterium.quench_the_flame.utterance"
       },
       "duration": 4
     },

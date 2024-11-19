@@ -3,26 +3,26 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.spell.magisterium.glyphic_ignition.heading"
+        "translate": "magisterium.page.magisterium.glyphic_ignition.heading"
       }
     },
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.glyphic_ignition.components"
+        "translate": "magisterium.page.magisterium.glyphic_ignition.components"
       }
     },
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.spell.magisterium.glyphic_ignition.description"
+        "translate": "magisterium.page.magisterium.glyphic_ignition.description"
       }
     },
     {
       "type": "magisterium:utterance",
       "id": "magisterium:glyphic_ignition",
       "text": {
-        "translate": "magisterium.spell.magisterium.glyphic_ignition.utterance"
+        "translate": "magisterium.page.magisterium.glyphic_ignition.utterance"
       },
       "duration": 3
     },
