@@ -19,12 +19,12 @@
       }
     },
     {
-      "type": "magisterium:utterance",
-      "id": "magisterium:dispel_magic",
+      "type": "magisterium:spell",
+      "effect": "magisterium:dispel_magic",
+      "duration": 4,
       "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.utterance"
-      },
-      "duration": 4
+        "translate": "magisterium.page.magisterium.dispel_magic.spell"
+      }
     },
     {
       "type": "magisterium:page_break"

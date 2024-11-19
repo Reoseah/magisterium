@@ -152,14 +152,14 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.SOUND_EVENT, "magisterium:chant", MagisteriumSounds.CHANT);
         Registry.register(Registries.SOUND_EVENT, "magisterium:magic_hum", MagisteriumSounds.MAGIC_HUM);
 
-        Registry.register(BookElement.REGISTRY, "magisterium:heading", Heading.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:paragraph", Paragraph.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:page_break", PageBreak.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:inventory", BookInventory.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:utterance", Utterance.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:fold", Fold.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:bookmark", BookmarkElement.CODEC);
-        Registry.register(BookElement.REGISTRY, "magisterium:vertically_centered", VerticallyCenteredElement.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:heading", Heading.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:paragraph", Paragraph.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:page_break", PageBreak.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:inventory", PageInventory.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:spell", Spell.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:fold", Fold.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:bookmark", BookmarkElement.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:vertically_centered", VerticallyCenteredElement.CODEC);
 
         Registry.register(SpellEffect.REGISTRY, "magisterium:empty", EmptySpellEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:awaken_the_flame", AwakenFlameEffect.CODEC);

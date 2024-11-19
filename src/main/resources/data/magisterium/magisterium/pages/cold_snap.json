@@ -59,11 +59,11 @@
           ]
         },
         {
-          "type": "magisterium:utterance",
-          "id": "magisterium:cold_snap",
+          "type": "magisterium:spell",
+          "effect": "magisterium:cold_snap",
           "duration": 10,
           "text": {
-            "translate": "magisterium.page.magisterium.cold_snap.utterance"
+            "translate": "magisterium.page.magisterium.cold_snap.spell"
           }
         }
       ]

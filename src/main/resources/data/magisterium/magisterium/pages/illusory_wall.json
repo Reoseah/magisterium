@@ -40,12 +40,12 @@
           ]
         },
         {
-          "type": "magisterium:utterance",
-          "id": "magisterium:illusory_wall",
+          "type": "magisterium:spell",
+          "effect": "magisterium:illusory_wall",
+          "duration": 8,
           "text": {
-            "translate": "magisterium.page.magisterium.illusory_wall.utterance"
-          },
-          "duration": 8
+            "translate": "magisterium.page.magisterium.illusory_wall.spell"
+          }
         }
       ]
     }

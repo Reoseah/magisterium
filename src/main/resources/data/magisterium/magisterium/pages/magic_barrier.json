@@ -53,10 +53,10 @@
           ]
         },
         {
-          "type": "magisterium:utterance",
-          "id": "magisterium:magic_barrier",
+          "type": "magisterium:spell",
+          "effect": "magisterium:magic_barrier",
           "text": {
-            "translate": "magisterium.page.magisterium.magic_barrier.utterance"
+            "translate": "magisterium.page.magisterium.magic_barrier.spell"
           },
           "duration": 10
         }

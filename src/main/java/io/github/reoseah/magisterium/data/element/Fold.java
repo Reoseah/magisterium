@@ -8,7 +8,7 @@ import net.minecraft.client.font.TextRenderer;
 
 import java.util.List;
 
-public class Fold implements BookElement {
+public class Fold implements PageElement {
     public static final MapCodec<Fold> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             SimpleBlock.CODEC.listOf().fieldOf("left").forGetter(fold -> fold.left), //
             SimpleBlock.CODEC.listOf().fieldOf("right").forGetter(fold -> fold.right) //
@@ -22,7 +22,7 @@ public class Fold implements BookElement {
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

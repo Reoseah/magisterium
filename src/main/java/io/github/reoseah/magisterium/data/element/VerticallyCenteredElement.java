@@ -19,7 +19,7 @@ public class VerticallyCenteredElement extends SimpleBlock {
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

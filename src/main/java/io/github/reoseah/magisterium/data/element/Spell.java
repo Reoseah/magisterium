@@ -25,25 +25,25 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 // TODO: have the utterance text shortly highlight to indicate finishing
-public class Utterance extends SimpleBlock {
-    public static final MapCodec<Utterance> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            TextCodecs.CODEC.fieldOf("text").forGetter(utterance -> utterance.text), //
-            Identifier.CODEC.fieldOf("id").forGetter(utterance -> utterance.id), //
-            Codec.FLOAT.fieldOf("duration").forGetter(utterance -> utterance.duration) //
-    ).apply(instance, Utterance::new));
+public class Spell extends SimpleBlock {
+    public static final MapCodec<Spell> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
+            TextCodecs.CODEC.fieldOf("text").forGetter(spell -> spell.text), //
+            Identifier.CODEC.fieldOf("effect").forGetter(spell -> spell.effect), //
+            Codec.FLOAT.fieldOf("duration").forGetter(spell -> spell.duration) //
+    ).apply(instance, Spell::new));
 
     protected final Text text;
-    protected final Identifier id;
+    protected final Identifier effect;
     protected final float duration;
 
-    public Utterance(Text text, Identifier id, float duration) {
+    public Spell(Text text, Identifier effect, float duration) {
         this.text = text;
-        this.id = id;
+        this.effect = effect;
         this.duration = duration;
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 
@@ -145,7 +145,7 @@ public class Utterance extends SimpleBlock {
             }
 
             float readTime = this.mouseDown ? (System.currentTimeMillis() - this.mouseDownTime) / 1000F : 0;
-            float ratio = (readTime / Utterance.this.duration);
+            float ratio = (readTime / Spell.this.duration);
 
             if (ratio > 1) {
                 if (this.handler.isUttering.get() == 0) {
@@ -173,7 +173,7 @@ public class Utterance extends SimpleBlock {
                 this.mouseDown = true;
                 this.mouseDownTime = System.currentTimeMillis();
 
-                ClientPlayNetworking.send(new StartUtterancePayload(id));
+                ClientPlayNetworking.send(new StartUtterancePayload(effect));
                 return true;
             }
             return false;

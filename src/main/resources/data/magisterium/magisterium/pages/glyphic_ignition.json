@@ -19,12 +19,12 @@
       }
     },
     {
-      "type": "magisterium:utterance",
-      "id": "magisterium:glyphic_ignition",
+      "type": "magisterium:spell",
+      "effect": "magisterium:glyphic_ignition",
+      "duration": 3,
       "text": {
-        "translate": "magisterium.page.magisterium.glyphic_ignition.utterance"
-      },
-      "duration": 3
+        "translate": "magisterium.page.magisterium.glyphic_ignition.spell"
+      }
     },
     {
       "type": "magisterium:page_break"

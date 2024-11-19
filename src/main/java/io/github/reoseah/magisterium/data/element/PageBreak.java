@@ -5,12 +5,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 
-public class PageBreak implements BookElement {
+public class PageBreak implements PageElement {
     public static final PageBreak INSTANCE = new PageBreak();
     public static final MapCodec<PageBreak> CODEC = MapCodec.unit(INSTANCE);
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

@@ -11,12 +11,12 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
 
-public interface BookElement {
-    RegistryKey<Registry<MapCodec<? extends BookElement>>> REGISTRY_KEY = RegistryKey.ofRegistry(Identifier.of("magisterium", "book_elements"));
-    Registry<MapCodec<? extends BookElement>> REGISTRY = new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.experimental());
-    Codec<BookElement> CODEC = REGISTRY.getCodec().dispatch("type", BookElement::getCodec, codec -> codec);
+public interface PageElement {
+    RegistryKey<Registry<MapCodec<? extends PageElement>>> REGISTRY_KEY = RegistryKey.ofRegistry(Identifier.of("magisterium", "page_element"));
+    Registry<MapCodec<? extends PageElement>> REGISTRY = new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.experimental());
+    Codec<PageElement> CODEC = REGISTRY.getCodec().dispatch("type", PageElement::getCodec, codec -> codec);
 
-    MapCodec<? extends BookElement> getCodec();
+    MapCodec<? extends PageElement> getCodec();
 
     @Environment(EnvType.CLIENT)
     void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer);

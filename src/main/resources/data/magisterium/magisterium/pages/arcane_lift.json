@@ -41,12 +41,12 @@
           ]
         },
         {
-          "type": "magisterium:utterance",
-          "id": "magisterium:arcane_lift",
+          "type": "magisterium:spell",
+          "effect": "magisterium:arcane_lift",
+          "duration": 8,
           "text": {
-            "translate": "magisterium.page.magisterium.arcane_lift.utterance"
-          },
-          "duration": 8
+            "translate": "magisterium.page.magisterium.arcane_lift.spell"
+          }
         }
       ]
     }

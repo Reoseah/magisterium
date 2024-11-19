@@ -14,25 +14,25 @@ import net.minecraft.util.dynamic.Codecs;
 import java.util.List;
 import java.util.Optional;
 
-public class BookInventory extends SimpleBlock {
-    public static final MapCodec<BookInventory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
+public class PageInventory extends SimpleBlock {
+    public static final MapCodec<PageInventory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             Codecs.POSITIVE_INT.optionalFieldOf("height", 0).forGetter(inventory -> inventory.height), //
             SlotProperties.CODEC.codec().listOf().fieldOf("slots").forGetter(inventory -> inventory.slots), //
             Background.CODEC.codec().optionalFieldOf("background").forGetter(inventory -> inventory.background) //
-    ).apply(instance, BookInventory::new));
+    ).apply(instance, PageInventory::new));
 
     public final int height;
     public final List<SlotProperties> slots;
     public final Optional<Background> background;
 
-    public BookInventory(int height, List<SlotProperties> slots, Optional<BookInventory.Background> background) {
+    public PageInventory(int height, List<SlotProperties> slots, Optional<PageInventory.Background> background) {
         this.height = height != 0 ? height : slots.stream().mapToInt(slot -> slot.output ? slot.y + 18 + 4 : slot.y + 18).max().orElse(0) + 1;
         this.background = background;
         this.slots = slots;
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

@@ -59,11 +59,11 @@
           ]
         },
         {
-          "type": "magisterium:utterance",
-          "id": "magisterium:conflagrate",
+          "type": "magisterium:spell",
+          "effect": "magisterium:conflagrate",
           "duration": 10,
           "text": {
-            "translate": "magisterium.page.magisterium.conflagrate.utterance"
+            "translate": "magisterium.page.magisterium.conflagrate.spell"
           }
         }
       ]

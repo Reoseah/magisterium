@@ -9,7 +9,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
 
-public class BookmarkElement implements BookElement, Bookmark {
+public class BookmarkElement implements PageElement, Bookmark {
     public static final MapCodec<BookmarkElement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.STRINGIFIED_CODEC.fieldOf("text").forGetter(bookmark -> bookmark.text) //
     ).apply(instance, BookmarkElement::new));
@@ -25,7 +25,7 @@ public class BookmarkElement implements BookElement, Bookmark {
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

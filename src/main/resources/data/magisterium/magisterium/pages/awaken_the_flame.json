@@ -13,12 +13,12 @@
       }
     },
     {
-      "type": "magisterium:utterance",
-      "id": "magisterium:awaken_the_flame",
+      "type": "magisterium:spell",
+      "effect": "magisterium:awaken_the_flame",
+      "duration": 4,
       "text": {
-        "translate": "magisterium.page.magisterium.awaken_the_flame.utterance"
-      },
-      "duration": 4
+        "translate": "magisterium.page.magisterium.awaken_the_flame.spell"
+      }
     },
     {
       "type": "magisterium:page_break"

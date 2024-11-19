@@ -21,7 +21,7 @@ public class Paragraph extends DivisibleBlock {
     }
 
     @Override
-    public MapCodec<? extends BookElement> getCodec() {
+    public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
     }
 

@@ -7,8 +7,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
-public abstract class SimpleBlock implements BookElement {
-    public static final Codec<SimpleBlock> CODEC = BookElement.CODEC.flatXmap(element -> {
+public abstract class SimpleBlock implements PageElement {
+    public static final Codec<SimpleBlock> CODEC = PageElement.CODEC.flatXmap(element -> {
         if (element instanceof SimpleBlock simpleBlock) {
             return DataResult.success(simpleBlock);
         }
