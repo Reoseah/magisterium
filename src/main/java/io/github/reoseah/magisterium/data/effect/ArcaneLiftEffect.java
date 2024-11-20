@@ -7,7 +7,6 @@ import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 
 public class ArcaneLiftEffect extends SpellEffect {

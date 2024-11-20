@@ -1,0 +1,6 @@
+{
+  "support_insertion": true,
+  "appearance": {
+    "texture": "magisterium:textures/gui/spell_book.png"
+  }
+}

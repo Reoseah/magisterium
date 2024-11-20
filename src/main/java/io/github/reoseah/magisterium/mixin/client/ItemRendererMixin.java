@@ -56,7 +56,7 @@ public abstract class ItemRendererMixin {
             boolean useInventoryModel,
             CallbackInfo info
     ) {
-        if (useInventoryModel && stack.isOf(SpellBookItem.INSTANCE)) {
+        if (useInventoryModel && stack.isOf(SpellBookItem.SPELL_BOOK)) {
             model = this.bakedModelManager.getModel(SPELL_BOOK);
             this.renderItem(stack, transformationMode, leftHanded, matrices, vertexConsumers, light, overlay, model, useInventoryModel, -0.5F);
             info.cancel();

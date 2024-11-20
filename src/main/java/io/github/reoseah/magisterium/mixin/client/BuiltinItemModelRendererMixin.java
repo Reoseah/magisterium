@@ -36,7 +36,7 @@ public class BuiltinItemModelRendererMixin {
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
         Item item = stack.getItem();
-        if (item == SpellBookItem.INSTANCE) {
+        if (item == SpellBookItem.SPELL_BOOK) {
             matrices.push();
             matrices.scale(1, -1, -1);
             VertexConsumer vertexConsumer = ItemRenderer.getItemGlintConsumer(vertexConsumers, this.bookModel.getLayer(TEXTURE), true, stack.hasGlint());

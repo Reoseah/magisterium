@@ -14,30 +14,51 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class SpellBookItem extends Item {
-    public static final ComponentType<Integer> CURRENT_PAGE = ComponentType.<Integer>builder() //
-            .codec(Codecs.NON_NEGATIVE_INT) //
-            .packetCodec(PacketCodecs.VAR_INT) //
+    public static final ComponentType<Identifier> BOOK_PROPERTIES = ComponentType.<Identifier>builder() //
+            .codec(Identifier.CODEC) //
+            .packetCodec(Identifier.PACKET_CODEC) //
             .build();
     public static final ComponentType<List<ItemStack>> CONTENTS = ComponentType.<List<ItemStack>>builder() //
             .codec(ItemStack.OPTIONAL_CODEC.listOf()) //
             .packetCodec(ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList())) //
             .build();
+    public static final ComponentType<Integer> CURRENT_PAGE = ComponentType.<Integer>builder() //
+            .codec(Codecs.NON_NEGATIVE_INT) //
+            .packetCodec(PacketCodecs.VAR_INT) //
+            .build();
 
-    public static final Identifier ID = Identifier.of("magisterium:spell_book");
-    public static final RegistryKey<Item> KEY = RegistryKey.of(RegistryKeys.ITEM, ID);
-    public static final Item INSTANCE = new SpellBookItem(new Item.Settings() //
-            .registryKey(KEY) //
-            .useItemPrefixedTranslationKey() //
-            .maxCount(1) //
-            .rarity(Rarity.RARE) //
-            .component(CURRENT_PAGE, 0) //
-            .modelId(Identifier.of("magisterium", "spell_book_in_hand")));
+    public static final Item SPELL_BOOK = create("spell_book", settings -> new SpellBookItem(settings.rarity(Rarity.UNCOMMON).modelId(Identifier.of("magisterium", "spell_book_in_hand"))));
+    public static final Item ELEMENTS_OF_PYROMANCY = create("elements_of_pyromancy", settings -> {
+        var pages = DefaultedList.ofSize(18, ItemStack.EMPTY);
+        pages.set(0, PageItem.ELEMENTS_OF_PYROMANCY.getDefaultStack());
+        pages.set(1, PageItem.AWAKEN_THE_FLAME.getDefaultStack());
+        pages.set(2, PageItem.QUENCH_THE_FLAME.getDefaultStack());
+        pages.set(3, PageItem.GLYPHIC_IGNITION.getDefaultStack());
+        pages.set(4, PageItem.CONFLAGRATE.getDefaultStack());
+
+        return new SpellBookItem(settings.component(CONTENTS, pages));
+    });
+
+    public static Item create(String name, Function<Settings, Item> constructor) {
+        var id = Identifier.of("magisterium", name);
+        var registryKey = RegistryKey.of(RegistryKeys.ITEM, id);
+        var settings = new Item.Settings() //
+                .registryKey(registryKey) //
+                .useItemPrefixedTranslationKey() //
+                .maxCount(1) //
+                .component(BOOK_PROPERTIES, id) //
+                .component(CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY)) //
+                .component(CURRENT_PAGE, 0);
+        return constructor.apply(settings);
+    }
 
     public SpellBookItem(Settings settings) {
         super(settings);
@@ -60,7 +81,7 @@ public class SpellBookItem extends Item {
 
                 @Override
                 public Text getDisplayName() {
-                    return Text.translatable("container.magisterium.spell_book");
+                    return book.getName();
                 }
             });
         }

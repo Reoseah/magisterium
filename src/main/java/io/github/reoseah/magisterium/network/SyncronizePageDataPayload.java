@@ -9,9 +9,9 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public record SpellPageDataPayload(Map<Identifier, SpellPage> pages) implements CustomPayload {
-    public static final CustomPayload.Id<SpellPageDataPayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:spell_page_data"));
-    public static final PacketCodec<RegistryByteBuf, SpellPageDataPayload> CODEC = CustomPayload.codecOf(SpellPageDataPayload::write, SpellPageDataPayload::read);
+public record SyncronizePageDataPayload(Map<Identifier, SpellPage> pages) implements CustomPayload {
+    public static final CustomPayload.Id<SyncronizePageDataPayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:spell_page_data"));
+    public static final PacketCodec<RegistryByteBuf, SyncronizePageDataPayload> CODEC = CustomPayload.codecOf(SyncronizePageDataPayload::write, SyncronizePageDataPayload::read);
 
     @Override
     public CustomPayload.Id<? extends CustomPayload> getId() {
@@ -26,15 +26,14 @@ public record SpellPageDataPayload(Map<Identifier, SpellPage> pages) implements 
         }
     }
 
-    public static SpellPageDataPayload read(RegistryByteBuf buf) {
+    public static SyncronizePageDataPayload read(RegistryByteBuf buf) {
         int size = buf.readVarInt();
         var pages = new HashMap<Identifier, SpellPage>(size);
         for (int i = 0; i < size; i++) {
-            Identifier id = buf.readIdentifier();
-            SpellPage page = SpellPage.PACKET_CODEC.decode(buf);
+            var id = buf.readIdentifier();
+            var page = SpellPage.PACKET_CODEC.decode(buf);
             pages.put(id, page);
         }
-        return new SpellPageDataPayload(pages);
+        return new SyncronizePageDataPayload(pages);
     }
-
 }

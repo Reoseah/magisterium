@@ -41,7 +41,7 @@ public class LecternBlockMixin extends Block {
     private static void setHasBook(Entity user, World world, BlockPos pos, BlockState state, boolean hasBook, CallbackInfo ci) {
         if (world.getBlockEntity(pos) instanceof LecternBlockEntity be) {
             world.setBlockState(pos, world.getBlockState(pos) //
-                    .with(HOLDS_SPELL_BOOK, be.getBook().isOf(SpellBookItem.INSTANCE)));
+                    .with(HOLDS_SPELL_BOOK, be.getBook().isOf(SpellBookItem.SPELL_BOOK)));
         }
     }
 }

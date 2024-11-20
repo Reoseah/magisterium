@@ -23,6 +23,69 @@
           "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer"
         }
       }
+    },
+    {
+      "type": "magisterium:page_break"
+    },
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.0"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.1"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.2"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.3"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.4"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.5"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.6"
+      }
+    },
+    {
+      "type": "magisterium:page_break"
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.wip"
+      }
+    },
+    {
+      "type": "magisterium:page_break"
     }
   ]
 }

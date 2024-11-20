@@ -2,6 +2,7 @@ package io.github.reoseah.magisterium.screen;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.item.MagisteriumItemTags;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,7 +43,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
 
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(SpellBookItem.INSTANCE);
+                return stack.contains(SpellBookItem.BOOK_PROPERTIES);
             }
         });
 
@@ -56,7 +57,17 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
 
                     @Override
                     public boolean canInsert(ItemStack stack) {
-                        return bookInventory.getStack(0).contains(SpellBookItem.CONTENTS) //
+                        var book = bookInventory.getStack(0);
+                        var bookId = book.get(SpellBookItem.BOOK_PROPERTIES);
+                        if (bookId == null) {
+                            return false;
+                        }
+                        var bookProperties = BookLoader.getInstance().books.get(bookId);
+                        if (bookProperties == null) {
+                            return false;
+                        }
+                        return book.contains(SpellBookItem.BOOK_PROPERTIES) //
+                                && bookProperties.supportInsertion //
                                 && stack.isIn(MagisteriumItemTags.SPELL_BOOK_COMPONENTS);
                     }
                 });
@@ -93,7 +104,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
             }
             slot.onQuickTransfer(stack, previous);
         } else {
-            if (stack.isOf(SpellBookItem.INSTANCE)) {
+            if (stack.contains(SpellBookItem.CONTENTS)) {
                 if (!this.insertItem(stack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -150,7 +161,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
                 var book = sender.getStack(0);
                 if (book != this.book) {
                     this.clearWithoutNotifyingListeners();
-                    if (book.isOf(SpellBookItem.INSTANCE)) {
+                    if (book.contains(SpellBookItem.BOOK_PROPERTIES)) {
                         var bookPages = book.get(SpellBookItem.CONTENTS);
                         if (bookPages != null) {
                             for (int i = 0; i < bookPages.size(); i++) {
@@ -163,7 +174,7 @@ public class ArcaneTableScreenHandler extends ScreenHandler {
             });
             this.addListener(sender -> {
                 var book = this.bookInventory.getStack(0);
-                if (book.isOf(SpellBookItem.INSTANCE)) {
+                if (book.contains(SpellBookItem.BOOK_PROPERTIES)) {
                     book.set(SpellBookItem.CURRENT_PAGE, 0);
                     book.set(SpellBookItem.CONTENTS, new ArrayList<>(this.getHeldStacks()));
                 }

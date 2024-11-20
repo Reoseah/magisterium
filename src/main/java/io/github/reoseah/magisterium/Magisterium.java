@@ -3,6 +3,7 @@ package io.github.reoseah.magisterium;
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
 import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
+import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.effect.*;
@@ -68,7 +69,8 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
-        Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.INSTANCE);
+        Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
+        Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:awaken_the_flame_page", PageItem.AWAKEN_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", PageItem.QUENCH_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", PageItem.GLYPHIC_IGNITION);
@@ -90,13 +92,13 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.DATA_COMPONENT_TYPE, "magisterium:last_tick", BlazeBladeItem.LAST_TICK);
 
         var group = FabricItemGroup.builder() //
-                .icon(SpellBookItem.INSTANCE::getDefaultStack) //
+                .icon(SpellBookItem.SPELL_BOOK::getDefaultStack) //
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
-                    entries.add(SpellBookItem.INSTANCE);
+                    entries.add(SpellBookItem.SPELL_BOOK);
 
-                    var filledBook = new ItemStack(SpellBookItem.INSTANCE);
+                    var filledBook = new ItemStack(SpellBookItem.SPELL_BOOK);
                     filledBook.set(SpellBookItem.CONTENTS, Util.make(DefaultedList.ofSize(18, ItemStack.EMPTY), list -> {
                         list.set(0, BookmarkItem.INSTANCE.getDefaultStack());
                         list.set(1, PageItem.AWAKEN_THE_FLAME.getDefaultStack());
@@ -110,6 +112,8 @@ public class Magisterium implements ModInitializer {
                         list.set(9, PageItem.DISPEL_MAGIC.getDefaultStack());
                     }));
                     entries.add(filledBook);
+
+                    entries.add(SpellBookItem.ELEMENTS_OF_PYROMANCY);
 
                     entries.add(PageItem.AWAKEN_THE_FLAME);
                     entries.add(PageItem.QUENCH_THE_FLAME);
@@ -178,11 +182,13 @@ public class Magisterium implements ModInitializer {
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellEffectLoader.ID, SpellEffectLoader::new);
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(BookLoader.ID, BookLoader::new);
 
         UseBlockCallback.EVENT.register(Magisterium::interact);
         LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
 
-        PayloadTypeRegistry.playS2C().register(SpellPageDataPayload.ID, SpellPageDataPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SyncronizePageDataPayload.ID, SyncronizePageDataPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SyncronizeBookDataPayload.ID, SyncronizeBookDataPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(SpellBookScreenStatePayload.ID, SpellBookScreenStatePayload.CODEC);
@@ -197,8 +203,12 @@ public class Magisterium implements ModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var pages = SpellPageLoader.getInstance().pages;
-            var payload = new SpellPageDataPayload(pages);
-            sender.sendPacket(payload);
+            var pagePayload = new SyncronizePageDataPayload(pages);
+            sender.sendPacket(pagePayload);
+
+            var books = BookLoader.getInstance().books;
+            var booksPayload = new SyncronizeBookDataPayload(books);
+            sender.sendPacket(booksPayload);
         });
     }
 
@@ -214,12 +224,12 @@ public class Magisterium implements ModInitializer {
 
         if (state.getBlock() instanceof LecternBlock && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
-            if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
+            if (book.isEmpty() && stack.isOf(SpellBookItem.SPELL_BOOK)) {
                 if (WorldUtil.canModifyWorld(world, pos, player)) {
                     return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.PASS;
                 }
                 return ActionResult.PASS;
-            } else if (book.isOf(SpellBookItem.INSTANCE)) {
+            } else if (book.isOf(SpellBookItem.SPELL_BOOK)) {
                 if (player.isSneaking() && WorldUtil.canModifyWorld(world, pos, player)) {
                     lectern.setBook(ItemStack.EMPTY);
                     LecternBlock.setHasBook(player, world, pos, state, false);

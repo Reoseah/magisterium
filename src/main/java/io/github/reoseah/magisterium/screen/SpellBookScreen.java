@@ -3,8 +3,8 @@ package io.github.reoseah.magisterium.screen;
 import io.github.reoseah.magisterium.MagisteriumClient;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
-import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.item.PageItem;
+import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.network.SpellBookScreenStatePayload;
 import io.github.reoseah.magisterium.network.UseBookmarkPayload;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -23,7 +23,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static final Identifier TEXTURE = Identifier.of("magisterium:textures/gui/spell_book.png");
+//    public static final Identifier TEXTURE = Identifier.of("magisterium:textures/gui/spell_book.png");
 
     public static final MutableText UNTITLED_SECTION = Text.translatable("container.magisterium.spell_book.untitled_section");
     public static final MutableText UNTITLED_SECTION_DESCRIPTION = Text.translatable("container.magisterium.spell_book.untitled_section.description").formatted(Formatting.ITALIC).styled(style -> style.withColor(0xc4b090));
@@ -61,8 +60,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     private static final int RESULT_SLOT_U = 176;
     private static final int RESULT_SLOT_V = 224;
 
-    private final BookProperties properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
-
+    private BookProperties properties;
     private BookLayout layout = BookLayout.EMPTY;
     private int page;
 
@@ -74,6 +72,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
     public SpellBookScreen(SpellBookScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+//        this.properties = new BookProperties(TEXTURE, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
+
         this.backgroundWidth = 256;
         this.backgroundHeight = 180;
         this.playerInventoryTitleX = Integer.MIN_VALUE;
@@ -104,7 +104,22 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
     }
 
     private void buildPages() {
-        var inventory = this.handler.getSpellBook().getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
+        var book = this.handler.getSpellBook();
+
+        var bookId = book.get(SpellBookItem.BOOK_PROPERTIES);
+        if (bookId == null) {
+            LOGGER.warn("Spell book stack is missing book data component: {}", book);
+            return;
+        }
+        var bookData = MagisteriumClient.books.get(bookId);
+        if (bookData == null) {
+            LOGGER.warn("Spell book data for id {} not found", bookId);
+            return;
+        }
+        var texture = bookData.appearance.texture;
+        this.properties = new BookProperties(texture, PAGE_WIDTH, PAGE_HEIGHT, TOP_OFFSET, LEFT_PAGE_OFFSET, RIGHT_PAGE_OFFSET, BOOKMARK_OFFSET, BOOKMARK_HEIGHT, FULL_BOOKMARK_WIDTH, FULL_BOOKMARK_U, FULL_BOOKMARK_V, HIDDEN_BOOKMARK_WIDTH, HIDDEN_BOOKMARK_U, HIDDEN_BOOKMARK_V, SLOT_U, SLOT_V, RESULT_SLOT_U, RESULT_SLOT_V);
+
+        var inventory = book.getOrDefault(SpellBookItem.CONTENTS, DefaultedList.ofSize(18, ItemStack.EMPTY));
 
         var layoutBuilder = new BookLayout.Builder(this.properties);
         for (ItemStack stack : inventory) {

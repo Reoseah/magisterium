@@ -10,7 +10,7 @@ import net.minecraft.util.profiler.Profiler;
 import java.util.Map;
 
 public class SpellPageLoader extends JsonDataLoader<SpellPage> implements IdentifiableResourceReloadListener {
-    public static final Identifier ID = Identifier.of("magisterium", "spell_pages");
+    public static final Identifier ID = Identifier.of("magisterium", "page");
 
     private static SpellPageLoader instance;
 

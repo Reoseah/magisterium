@@ -12,7 +12,7 @@ public record UseBookmarkPayload(int page) implements CustomPayload {
     public static final PacketCodec<PacketByteBuf, UseBookmarkPayload> CODEC = CustomPayload.codecOf(UseBookmarkPayload::write, UseBookmarkPayload::new);
 
     public UseBookmarkPayload(PacketByteBuf buf) {
-        this(buf.readVarInt());
+        this(Math.max(0, buf.readVarInt()));
     }
 
     @Override
