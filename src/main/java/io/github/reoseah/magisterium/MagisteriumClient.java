@@ -1,8 +1,8 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.*;
+import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.SpellPage;
-import io.github.reoseah.magisterium.data.book.BookData;
 import io.github.reoseah.magisterium.network.SpellParticlePayload;
 import io.github.reoseah.magisterium.network.SyncronizeBookDataPayload;
 import io.github.reoseah.magisterium.network.SyncronizePageDataPayload;
@@ -26,7 +26,6 @@ import net.minecraft.util.Identifier;
 import java.util.Map;
 
 public class MagisteriumClient implements ClientModInitializer {
-    public static Map<Identifier, BookData> books;
     public static Map<Identifier, SpellPage> pages;
 
     @Override
@@ -49,12 +48,15 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_SPARK, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_ENERGY, GlyphParticle.Factory::new);
 
-        ClientPlayNetworking.registerGlobalReceiver(SyncronizeBookDataPayload.ID, (payload, context) -> books = payload.books());
+        ClientPlayNetworking.registerGlobalReceiver(SyncronizeBookDataPayload.ID, (payload, context) -> {
+            var books = payload.books();
+            BookLoader.setClientSide(books);
+        });
         ClientPlayNetworking.registerGlobalReceiver(SyncronizePageDataPayload.ID, (payload, context) -> pages = payload.pages());
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, MagisteriumClient::spawnSpellParticles);
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            books = null;
+            BookLoader.disconnectClientSide();
             pages = null;
         });
     }

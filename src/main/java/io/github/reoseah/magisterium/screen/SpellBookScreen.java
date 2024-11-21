@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumClient;
+import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.PageItem;
@@ -111,7 +112,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             LOGGER.warn("Spell book stack is missing book data component: {}", book);
             return;
         }
-        var bookData = MagisteriumClient.books.get(bookId);
+        var bookData = BookLoader.getInstance().books.get(bookId);
         if (bookData == null) {
             LOGGER.warn("Spell book data for id {} not found", bookId);
             return;
@@ -138,8 +139,8 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
                     element.visit(layoutBuilder, this.properties, this.textRenderer);
                 }
             } else if (stack.isOf(BookmarkItem.INSTANCE)) {
-                int currentChapter = layoutBuilder.getCurrentBookmark() + 1;
-                if (currentChapter > 7) {
+                int section = layoutBuilder.getCurrentBookmark() + 1;
+                if (section > 7) {
                     // more bookmarks won't fit into the book with the current slots
                     continue;
                 }
@@ -148,7 +149,7 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
 
                 new BookmarkPage(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
                 layoutBuilder.setCurrentY(layoutBuilder.getCurrentY() + 20);
-                new Heading(Text.literal(RomanNumbers.toRoman(currentChapter)).formatted(Formatting.BOLD)).visit(layoutBuilder, this.properties, this.textRenderer);
+                new Heading(Text.literal(RomanNumbers.toRoman(section)).formatted(Formatting.BOLD)).visit(layoutBuilder, this.properties, this.textRenderer);
                 new Heading(name != null ? name : UNTITLED_SECTION).visit(layoutBuilder, this.properties, this.textRenderer);
 
                 if (name == null) {

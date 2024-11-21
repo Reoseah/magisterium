@@ -22,8 +22,22 @@ public class BookLoader extends JsonDataLoader<BookData> implements Identifiable
         instance = this;
     }
 
+    public BookLoader() {
+        super(BookData.CODEC.codec(), "magisterium/books");
+        instance = this;
+    }
+
     public static BookLoader getInstance() {
         return instance;
+    }
+
+    public static void setClientSide(Map<Identifier, BookData> books) {
+        instance = new BookLoader();
+        instance.books = books;
+    }
+
+    public static void disconnectClientSide() {
+        instance = null;
     }
 
     @Override

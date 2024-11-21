@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.item;
 
+import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.component.ComponentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -91,12 +92,16 @@ public class SpellBookItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        var pages = stack.get(CONTENTS);
-        if (pages != null && !pages.isEmpty()) {
-            var nonEmptyCount = pages.stream().filter(page -> !page.isEmpty()).count();
-            tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));
-        } else {
-            tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
+        var bookId = stack.get(BOOK_PROPERTIES);
+        var bookData = BookLoader.getInstance().books.get(bookId);
+        if (bookData != null && bookData.supportInsertion) {
+            var pages = stack.get(CONTENTS);
+            if (pages != null && !pages.isEmpty()) {
+                var nonEmptyCount = pages.stream().filter(page -> !page.isEmpty()).count();
+                tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));
+            } else {
+                tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
+            }
         }
     }
 }
