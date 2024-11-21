@@ -8,6 +8,7 @@
   "item.magisterium.spell_book.empty": "Empty",
   "item.magisterium.spell_book.pages": "%s Entries",
   "item.magisterium.elements_of_pyromancy": "Elements of Pyromancy",
+  "item.magisterium.lesser_arcanum": "Lesser Arcanum",
   "item.magisterium.spell_page": "Spell Page",
   "item.magisterium.stack_of_pages": "Stack of Pages",
   "item.magisterium.bookmark": "Silk Bookmark",
@@ -105,7 +106,12 @@
   "magisterium.page.magisterium.elements_of_pyromancy.arcane_glyphs.2": "The shape outlined with the glyphs shall dictate the shape or the area of the spell, thus allowing a higher degree of flexibility.",
   "magisterium.page.magisterium.elements_of_pyromancy.afterword": "afterword",
   "magisterium.page.magisterium.elements_of_pyromancy.afterword.0": "This concludes the basic introduction to the art of pyromancy.",
-  "magisterium.page.magisterium.elements_of_pyromancy.afterword.1": "May the flames guide you, and may you never lose sight of the path you walk.",
+  "magisterium.page.magisterium.elements_of_pyromancy.afterword.1": "With this, you should be able to proceed to the second chapter, where you will find a selection of spells to practice and master.",
   "magisterium.page.magisterium.elements_of_pyromancy.afterword.2": "Remember, fire serves none but those who command it with tempered resolve. For fire, when untempered, consumes even its master.",
+  "magisterium.page.magisterium.lesser_arcanum": "Lesser Arcanum",
+  "magisterium.page.magisterium.lesser_arcanum.header.0": "𝗟𝗘𝗦𝗦𝗘𝗥 𝗔𝗥𝗖𝗔𝗡𝗨𝗠",
+  "magisterium.page.magisterium.lesser_arcanum.header.1": "On the Fundamentals of Magic Beyond Elemental Bounds",
+  "magisterium.page.magisterium.lesser_arcanum.footer.0": "Reginald Soren Highmoor",
+  "magisterium.page.magisterium.lesser_arcanum.footer.1": "Arcanist of the Sapphire Sigil",
   "magisterium.wip": "Work in progress..."
 }

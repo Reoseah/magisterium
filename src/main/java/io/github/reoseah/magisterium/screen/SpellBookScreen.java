@@ -110,11 +110,13 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
         var bookId = book.get(SpellBookItem.BOOK_PROPERTIES);
         if (bookId == null) {
             LOGGER.warn("Spell book stack is missing book data component: {}", book);
+            this.client.player.closeHandledScreen();
             return;
         }
         var bookData = BookLoader.getInstance().books.get(bookId);
         if (bookData == null) {
             LOGGER.warn("Spell book data for id {} not found", bookId);
+            this.client.player.closeHandledScreen();
             return;
         }
         var texture = bookData.appearance.texture;

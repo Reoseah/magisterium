@@ -71,6 +71,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
+        Registry.register(Registries.ITEM, "magisterium:lesser_arcanum", SpellBookItem.LESSER_ARCANUM);
         Registry.register(Registries.ITEM, "magisterium:awaken_the_flame_page", PageItem.AWAKEN_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", PageItem.QUENCH_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", PageItem.GLYPHIC_IGNITION);
@@ -81,6 +82,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:magic_barrier_page", PageItem.MAGIC_BARRIER);
         Registry.register(Registries.ITEM, "magisterium:dispel_magic_page", PageItem.DISPEL_MAGIC);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy_pages", PageItem.ELEMENTS_OF_PYROMANCY);
+        Registry.register(Registries.ITEM, "magisterium:lesser_arcanum_pages", PageItem.LESSER_ARCANUM);
         Registry.register(Registries.ITEM, "magisterium:bookmark", BookmarkItem.INSTANCE);
         Registry.register(Registries.ITEM, "magisterium:blaze_rune", RuneItem.BLAZE);
         Registry.register(Registries.ITEM, "magisterium:wind_rune", RuneItem.WIND);
@@ -114,6 +116,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(filledBook);
 
                     entries.add(SpellBookItem.ELEMENTS_OF_PYROMANCY);
+                    entries.add(SpellBookItem.LESSER_ARCANUM);
 
                     entries.add(PageItem.AWAKEN_THE_FLAME);
                     entries.add(PageItem.QUENCH_THE_FLAME);
@@ -125,6 +128,7 @@ public class Magisterium implements ModInitializer {
                     entries.add(PageItem.MAGIC_BARRIER);
                     entries.add(PageItem.DISPEL_MAGIC);
                     entries.add(PageItem.ELEMENTS_OF_PYROMANCY);
+                    entries.add(PageItem.LESSER_ARCANUM);
                     entries.add(BookmarkItem.INSTANCE);
 
                     entries.add(RuneItem.BLAZE);

@@ -30,6 +30,7 @@ public class PageItem extends Item {
     public static final Item DISPEL_MAGIC = createSpellPage("dispel_magic");
 
     public static final Item ELEMENTS_OF_PYROMANCY = createPageStack("elements_of_pyromancy");
+    public static final Item LESSER_ARCANUM = createPageStack("lesser_arcanum");
 
     private static Item createSpellPage(String name) {
         var id = Identifier.of("magisterium", name + "_page");

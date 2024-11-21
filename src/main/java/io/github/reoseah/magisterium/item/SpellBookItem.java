@@ -36,7 +36,7 @@ public class SpellBookItem extends Item {
             .packetCodec(PacketCodecs.VAR_INT) //
             .build();
 
-    public static final Item SPELL_BOOK = create("spell_book", settings -> new SpellBookItem(settings.rarity(Rarity.UNCOMMON).modelId(Identifier.of("magisterium", "spell_book_in_hand"))));
+    public static final Item SPELL_BOOK = create("spell_book", settings -> new SpellBookItem(settings.rarity(Rarity.RARE).modelId(Identifier.of("magisterium", "spell_book_in_hand"))));
     public static final Item ELEMENTS_OF_PYROMANCY = create("elements_of_pyromancy", settings -> {
         var pages = DefaultedList.ofSize(18, ItemStack.EMPTY);
         pages.set(0, PageItem.ELEMENTS_OF_PYROMANCY.getDefaultStack());
@@ -45,7 +45,17 @@ public class SpellBookItem extends Item {
         pages.set(3, PageItem.GLYPHIC_IGNITION.getDefaultStack());
         pages.set(4, PageItem.CONFLAGRATE.getDefaultStack());
 
-        return new SpellBookItem(settings.component(CONTENTS, pages));
+        return new SpellBookItem(settings.rarity(Rarity.UNCOMMON).component(CONTENTS, pages));
+    });
+    public static final Item LESSER_ARCANUM = create("lesser_arcanum", settings -> {
+        var pages = DefaultedList.ofSize(18, ItemStack.EMPTY);
+        pages.set(0, PageItem.LESSER_ARCANUM.getDefaultStack());
+        pages.set(1, PageItem.MAGIC_BARRIER.getDefaultStack());
+        pages.set(2, PageItem.ARCANE_LIFT.getDefaultStack());
+        pages.set(3, PageItem.ILLUSORY_WALL.getDefaultStack());
+        pages.set(4, PageItem.DISPEL_MAGIC.getDefaultStack());
+
+        return new SpellBookItem(settings.rarity(Rarity.UNCOMMON).component(CONTENTS, pages));
     });
 
     public static Item create(String name, Function<Settings, Item> constructor) {
