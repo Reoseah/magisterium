@@ -1,29 +1,31 @@
 {
   "elements": [
     {
-      "type": "magisterium:heading",
-      "text": {
-        "translate": "magisterium.page.magisterium.quench_the_flame.heading",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.page.magisterium.quench_the_flame.description"
-      }
-    },
-    {
-      "type": "magisterium:spell",
-      "effect": "magisterium:quench_the_flame",
-      "duration": 4,
-      "text": {
-        "translate": "magisterium.page.magisterium.quench_the_flame.spell",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:page_break"
+      "type": "magisterium:group",
+      "elements": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.page.magisterium.quench_the_flame.heading",
+            "font": "magisterium:small_caps"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.quench_the_flame.description"
+          }
+        },
+        {
+          "type": "magisterium:spell",
+          "effect": "magisterium:quench_the_flame",
+          "duration": 4,
+          "text": {
+            "translate": "magisterium.page.magisterium.quench_the_flame.spell",
+            "font": "magisterium:small_caps"
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,35 +1,37 @@
 {
   "elements": [
     {
-      "type": "magisterium:heading",
-      "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.heading",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.description.0"
-      }
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.description.1"
-      }
-    },
-    {
-      "type": "magisterium:spell",
-      "effect": "magisterium:dispel_magic",
-      "duration": 4,
-      "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.spell",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:page_break"
+      "type": "magisterium:group",
+      "elements": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.page.magisterium.dispel_magic.heading",
+            "font": "magisterium:small_caps"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.dispel_magic.description.0"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.dispel_magic.description.1"
+          }
+        },
+        {
+          "type": "magisterium:spell",
+          "effect": "magisterium:dispel_magic",
+          "duration": 4,
+          "text": {
+            "translate": "magisterium.page.magisterium.dispel_magic.spell",
+            "font": "magisterium:small_caps"
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,35 +1,37 @@
 {
   "elements": [
     {
-      "type": "magisterium:heading",
-      "text": {
-        "translate": "magisterium.page.magisterium.glyphic_ignition.heading",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.page.magisterium.glyphic_ignition.components"
-      }
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.page.magisterium.glyphic_ignition.description"
-      }
-    },
-    {
-      "type": "magisterium:spell",
-      "effect": "magisterium:glyphic_ignition",
-      "duration": 3,
-      "text": {
-        "translate": "magisterium.page.magisterium.glyphic_ignition.spell",
-        "font": "magisterium:small_caps"
-      }
-    },
-    {
-      "type": "magisterium:page_break"
+      "type": "magisterium:group",
+      "elements": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.page.magisterium.glyphic_ignition.heading",
+            "font": "magisterium:small_caps"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.glyphic_ignition.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.glyphic_ignition.description"
+          }
+        },
+        {
+          "type": "magisterium:spell",
+          "effect": "magisterium:glyphic_ignition",
+          "duration": 3,
+          "text": {
+            "translate": "magisterium.page.magisterium.glyphic_ignition.spell",
+            "font": "magisterium:small_caps"
+          }
+        }
+      ]
     }
   ]
 }
