@@ -6,7 +6,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.cold_snap.heading"
+            "translate": "magisterium.page.magisterium.cold_snap.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -32,7 +33,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.cold_snap.heading"
+            "translate": "magisterium.page.magisterium.cold_snap.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -63,7 +65,8 @@
           "effect": "magisterium:cold_snap",
           "duration": 10,
           "text": {
-            "translate": "magisterium.page.magisterium.cold_snap.spell"
+            "translate": "magisterium.page.magisterium.cold_snap.spell",
+            "font": "magisterium:small_caps"
           }
         }
       ]

@@ -6,7 +6,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.arcane_lift.heading"
+            "translate": "magisterium.page.magisterium.arcane_lift.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -26,7 +27,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.arcane_lift.heading"
+            "translate": "magisterium.page.magisterium.arcane_lift.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -45,7 +47,8 @@
           "effect": "magisterium:arcane_lift",
           "duration": 8,
           "text": {
-            "translate": "magisterium.page.magisterium.arcane_lift.spell"
+            "translate": "magisterium.page.magisterium.arcane_lift.spell",
+            "font": "magisterium:small_caps"
           }
         }
       ]

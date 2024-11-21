@@ -8,19 +8,33 @@
       "top": {
         "type": "magisterium:heading",
         "text": {
-          "translate": "magisterium.page.magisterium.elements_of_pyromancy.header"
+          "translate": "magisterium.page.magisterium.elements_of_pyromancy.header",
+          "font": "magisterium:small_caps"
         }
       },
       "center": {
-        "type": "magisterium:heading",
-        "text": {
-          "translate": "magisterium.page.magisterium.elements_of_pyromancy.title"
-        }
+        "type": "magisterium:group",
+        "elements": [
+          {
+            "type": "magisterium:heading",
+            "text": {
+              "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.0"
+            }
+          },
+          {
+            "type": "magisterium:heading",
+            "text": {
+              "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.1",
+              "font": "magisterium:small_caps"
+            }
+          }
+        ]
       },
       "bottom": {
         "type": "magisterium:heading",
         "text": {
-          "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer"
+          "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer",
+          "font": "magisterium:small_caps"
         }
       }
     },
@@ -30,7 +44,8 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface"
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface",
+        "font": "magisterium:small_caps"
       }
     },
     {
@@ -72,17 +87,118 @@
     {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.6"
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.preface.6",
+        "font": "magisterium:small_caps"
       }
     },
     {
       "type": "magisterium:page_break"
     },
     {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.basics",
+        "font": "magisterium:small_caps"
+      }
+    },
+    {
       "type": "magisterium:paragraph",
       "text": {
-        "translate": "magisterium.wip"
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.basics.0"
       }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.basics.1"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.basics.2"
+      }
+    },
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.ingredients",
+        "font": "magisterium:small_caps"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.ingredients.0"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.ingredients.1"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.ingredients.2"
+      }
+    },
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.arcane_glyphs",
+        "font": "magisterium:small_caps"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.arcane_glyphs.0"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.arcane_glyphs.1"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.arcane_glyphs.2"
+      }
+    },
+    {
+      "type": "magisterium:page_break"
+    },
+    {
+      "type": "magisterium:heading",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.afterword",
+        "font": "magisterium:small_caps"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.afterword.0"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.afterword.1"
+      }
+    },
+    {
+      "type": "magisterium:paragraph",
+      "text": {
+        "translate": "magisterium.page.magisterium.elements_of_pyromancy.afterword.2"
+      }
+    },
+    {
+      "type": "magisterium:page_break"
     },
     {
       "type": "magisterium:page_break"

@@ -3,7 +3,8 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.page.magisterium.quench_the_flame.heading"
+        "translate": "magisterium.page.magisterium.quench_the_flame.heading",
+        "font": "magisterium:small_caps"
       }
     },
     {
@@ -17,7 +18,8 @@
       "effect": "magisterium:quench_the_flame",
       "duration": 4,
       "text": {
-        "translate": "magisterium.page.magisterium.quench_the_flame.spell"
+        "translate": "magisterium.page.magisterium.quench_the_flame.spell",
+        "font": "magisterium:small_caps"
       }
     },
     {

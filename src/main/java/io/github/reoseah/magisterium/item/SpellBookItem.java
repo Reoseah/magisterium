@@ -96,9 +96,13 @@ public class SpellBookItem extends Item {
         var bookData = BookLoader.getInstance().books.get(bookId);
         if (bookData != null && bookData.supportInsertion) {
             var pages = stack.get(CONTENTS);
-            if (pages != null && !pages.isEmpty()) {
+            if (pages != null) {
                 var nonEmptyCount = pages.stream().filter(page -> !page.isEmpty()).count();
-                tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));
+                if (nonEmptyCount > 0) {
+                    tooltip.add(Text.translatable("item.magisterium.spell_book.pages", nonEmptyCount).formatted(Formatting.GRAY));
+                } else {
+                    tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
+                }
             } else {
                 tooltip.add(Text.translatable("item.magisterium.spell_book.empty").formatted(Formatting.GRAY));
             }

@@ -6,7 +6,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.illusory_wall.heading"
+            "translate": "magisterium.page.magisterium.illusory_wall.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -26,7 +27,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.illusory_wall.heading"
+            "translate": "magisterium.page.magisterium.illusory_wall.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {

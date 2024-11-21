@@ -6,7 +6,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.magic_barrier.heading"
+            "translate": "magisterium.page.magisterium.magic_barrier.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -26,7 +27,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.magic_barrier.heading"
+            "translate": "magisterium.page.magisterium.magic_barrier.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -56,7 +58,8 @@
           "type": "magisterium:spell",
           "effect": "magisterium:magic_barrier",
           "text": {
-            "translate": "magisterium.page.magisterium.magic_barrier.spell"
+            "translate": "magisterium.page.magisterium.magic_barrier.spell",
+            "font": "magisterium:small_caps"
           },
           "duration": 10
         }

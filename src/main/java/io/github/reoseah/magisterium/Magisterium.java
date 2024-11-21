@@ -167,6 +167,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(PageElement.REGISTRY, "magisterium:fold", Fold.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:bookmark", BookmarkPage.CODEC);
         Registry.register(PageElement.REGISTRY, "magisterium:title_page", TitlePage.CODEC);
+        Registry.register(PageElement.REGISTRY, "magisterium:group", Group.CODEC);
 
         Registry.register(SpellEffect.REGISTRY, "magisterium:empty", EmptySpellEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:awaken_the_flame", AwakenFlameEffect.CODEC);

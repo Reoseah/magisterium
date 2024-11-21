@@ -3,7 +3,8 @@
     {
       "type": "magisterium:heading",
       "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.heading"
+        "translate": "magisterium.page.magisterium.dispel_magic.heading",
+        "font": "magisterium:small_caps"
       }
     },
     {
@@ -23,7 +24,8 @@
       "effect": "magisterium:dispel_magic",
       "duration": 4,
       "text": {
-        "translate": "magisterium.page.magisterium.dispel_magic.spell"
+        "translate": "magisterium.page.magisterium.dispel_magic.spell",
+        "font": "magisterium:small_caps"
       }
     },
     {

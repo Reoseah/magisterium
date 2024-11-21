@@ -6,7 +6,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.conflagrate.heading"
+            "translate": "magisterium.page.magisterium.conflagrate.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -32,7 +33,8 @@
         {
           "type": "magisterium:heading",
           "text": {
-            "translate": "magisterium.page.magisterium.conflagrate.heading"
+            "translate": "magisterium.page.magisterium.conflagrate.heading",
+            "font": "magisterium:small_caps"
           }
         },
         {
@@ -63,7 +65,8 @@
           "effect": "magisterium:conflagrate",
           "duration": 10,
           "text": {
-            "translate": "magisterium.page.magisterium.conflagrate.spell"
+            "translate": "magisterium.page.magisterium.conflagrate.spell",
+            "font": "magisterium:small_caps"
           }
         }
       ]
