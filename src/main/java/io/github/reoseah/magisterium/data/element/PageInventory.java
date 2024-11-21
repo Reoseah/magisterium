@@ -14,7 +14,7 @@ import net.minecraft.util.dynamic.Codecs;
 import java.util.List;
 import java.util.Optional;
 
-public class PageInventory extends SimpleBlock {
+public class PageInventory implements NormalPageElement {
     public static final MapCodec<PageInventory> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             Codecs.POSITIVE_INT.optionalFieldOf("height", 0).forGetter(inventory -> inventory.height), //
             SlotProperties.CODEC.codec().listOf().fieldOf("slots").forGetter(inventory -> inventory.slots), //
@@ -37,13 +37,13 @@ public class PageInventory extends SimpleBlock {
     }
 
     @Override
-    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         return this.height;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         return new Widget(properties, x, y, background, slots);
     }
 

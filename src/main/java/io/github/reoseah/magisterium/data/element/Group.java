@@ -8,14 +8,14 @@ import net.minecraft.client.gui.Drawable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group extends SimpleBlock {
+public class Group implements NormalPageElement {
     public static final MapCodec<Group> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            SimpleBlock.CODEC.listOf().fieldOf("elements").forGetter(group -> group.elements) //
+            NormalPageElement.CODEC.listOf().fieldOf("elements").forGetter(group -> group.elements) //
     ).apply(instance, Group::new));
 
-    private final List<SimpleBlock> elements;
+    private final List<NormalPageElement> elements;
 
-    public Group(List<SimpleBlock> elements) {
+    public Group(List<NormalPageElement> elements) {
         this.elements = elements;
     }
 
@@ -25,7 +25,7 @@ public class Group extends SimpleBlock {
     }
 
     @Override
-    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         var height = 0;
         for (var element : this.elements) {
             if (height != 0) {
@@ -37,7 +37,7 @@ public class Group extends SimpleBlock {
     }
 
     @Override
-    protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         var dy = 0;
         var drawables = new ArrayList<Drawable>(this.elements.size());
         for (var element : this.elements) {

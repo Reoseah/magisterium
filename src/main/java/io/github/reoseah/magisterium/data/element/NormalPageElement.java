@@ -7,17 +7,17 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
-public abstract class SimpleBlock implements PageElement {
-    public static final Codec<SimpleBlock> CODEC = PageElement.CODEC.flatXmap(element -> {
-        if (element instanceof SimpleBlock simpleBlock) {
-            return DataResult.success(simpleBlock);
+public interface NormalPageElement extends PageElement {
+    Codec<NormalPageElement> CODEC = PageElement.CODEC.flatXmap(element -> {
+        if (element instanceof NormalPageElement normalElement) {
+            return DataResult.success(normalElement);
         }
         return DataResult.error(() -> "Not a simple page element: " + element);
     }, DataResult::success);
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
+    default void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
         int elementHeight = this.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
 
         int elementY = builder.getCurrentY() + (builder.isNewPage() ? 0 : this.getTopMargin());
@@ -34,7 +34,7 @@ public abstract class SimpleBlock implements PageElement {
      * @return number of pixels to offset from the previous element
      */
     @Environment(EnvType.CLIENT)
-    protected int getTopMargin() {
+    default int getTopMargin() {
         return 4;
     }
 
@@ -42,7 +42,7 @@ public abstract class SimpleBlock implements PageElement {
      * @return how many pixels this element wants to take on a page
      */
     @Environment(EnvType.CLIENT)
-    protected abstract int getHeight(int width, int pageHeight, TextRenderer textRenderer);
+    int getHeight(int width, int pageHeight, TextRenderer textRenderer);
 
     /**
      * Return a renderer for this element.
@@ -54,5 +54,5 @@ public abstract class SimpleBlock implements PageElement {
      * @see SlotPropertiesProvider
      */
     @Environment(EnvType.CLIENT)
-    protected abstract Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer);
+    Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer);
 }

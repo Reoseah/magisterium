@@ -25,7 +25,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 // TODO: have the utterance text shortly highlight to indicate finishing
-public class Spell extends SimpleBlock {
+public class Spell implements NormalPageElement {
     public static final MapCodec<Spell> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.CODEC.fieldOf("text").forGetter(spell -> spell.text), //
             Identifier.CODEC.fieldOf("effect").forGetter(spell -> spell.effect), //
@@ -49,7 +49,7 @@ public class Spell extends SimpleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, width - 12);
         var linesAsString = lines.stream().map(t -> {
             StringBuilder builder = new StringBuilder();
@@ -73,13 +73,13 @@ public class Spell extends SimpleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getTopMargin() {
-        return super.getTopMargin() + 2;
+    public int getTopMargin() {
+        return NormalPageElement.super.getTopMargin() + 2;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         return new UtteranceWidget(this.text, x, y, properties, properties.pageWidth, textRenderer);
     }
 

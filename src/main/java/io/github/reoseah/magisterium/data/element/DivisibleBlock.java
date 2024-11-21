@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 
-public abstract class DivisibleBlock extends SimpleBlock {
+public abstract class DivisibleBlock implements NormalPageElement {
     @Override
     @Environment(EnvType.CLIENT)
     public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
@@ -16,7 +16,7 @@ public abstract class DivisibleBlock extends SimpleBlock {
                 && builder.isWrapAllowed()
                 && this.canDivide(elementHeight, builder.getMaxY() - elementY, textRenderer);
         if (!canDivide) {
-            super.visit(builder, properties, textRenderer);
+            NormalPageElement.super.visit(builder, properties, textRenderer);
             return;
         }
 

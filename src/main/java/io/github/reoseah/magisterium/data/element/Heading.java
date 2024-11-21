@@ -11,7 +11,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
 
-public class Heading extends SimpleBlock {
+public class Heading implements NormalPageElement {
     public static final MapCodec<Heading> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.CODEC.fieldOf("text").forGetter(heading -> heading.text) //
     ).apply(instance, Heading::new));
@@ -29,19 +29,19 @@ public class Heading extends SimpleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         return textRenderer.getWrappedLinesHeight(this.text, width);
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getTopMargin() {
-        return super.getTopMargin() + 2;
+    public int getTopMargin() {
+        return NormalPageElement.super.getTopMargin() + 2;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, properties.pageWidth);
         var offsets = new IntArrayList(lines.size());
         for (var line : lines) {

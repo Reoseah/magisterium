@@ -27,13 +27,13 @@ public class Paragraph extends DivisibleBlock {
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         return textRenderer.getWrappedLinesHeight(this.text, width);
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    protected Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
         var lines = textRenderer.wrapLines(this.text, properties.pageWidth);
         return (matrices, mouseX, mouseY, delta) -> {
             for (int i = 0; i < lines.size(); i++) {

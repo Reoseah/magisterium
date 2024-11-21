@@ -6,14 +6,14 @@ import net.minecraft.client.font.TextRenderer;
 
 public class TitlePage implements PageElement {
     public static final MapCodec<TitlePage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            SimpleBlock.CODEC.fieldOf("top").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.top), //
-            SimpleBlock.CODEC.fieldOf("center").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.center), //
-            SimpleBlock.CODEC.fieldOf("bottom").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.bottom) //
+            NormalPageElement.CODEC.fieldOf("top").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.top), //
+            NormalPageElement.CODEC.fieldOf("center").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.center), //
+            NormalPageElement.CODEC.fieldOf("bottom").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.bottom) //
     ).apply(instance, TitlePage::new));
 
-    public final SimpleBlock top, center, bottom;
+    public final NormalPageElement top, center, bottom;
 
-    public TitlePage(SimpleBlock top, SimpleBlock center, SimpleBlock bottom) {
+    public TitlePage(NormalPageElement top, NormalPageElement center, NormalPageElement bottom) {
         this.top = top;
         this.center = center;
         this.bottom = bottom;
