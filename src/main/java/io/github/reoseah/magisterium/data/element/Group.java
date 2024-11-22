@@ -3,7 +3,9 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +51,53 @@ public class Group implements NormalPageElement {
 
             dy += element.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
         }
-        return (context, mouseX, mouseY, delta) -> {
-            for (var drawable : drawables) {
+        return new GroupDrawable(drawables);
+    }
+
+    private static class GroupDrawable implements Drawable, Element {
+        private final ArrayList<Drawable> drawables;
+
+        public GroupDrawable(ArrayList<Drawable> drawables) {
+            this.drawables = drawables;
+        }
+
+        @Override
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            for (var drawable : this.drawables) {
                 drawable.render(context, mouseX, mouseY, delta);
             }
-        };
+        }
+
+        @Override
+        public void setFocused(boolean focused) {
+
+        }
+
+        @Override
+        public boolean isFocused() {
+            return false;
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            for (var drawable : this.drawables) {
+                if (drawable instanceof Element element //
+                        && element.mouseClicked(mouseX, mouseY, button)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean mouseReleased(double mouseX, double mouseY, int button) {
+            for (var drawable : this.drawables) {
+                if (drawable instanceof Element element //
+                        && element.mouseReleased(mouseX, mouseY, button)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

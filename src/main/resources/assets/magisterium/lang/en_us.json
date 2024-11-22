@@ -66,7 +66,7 @@
   "magisterium.page.magisterium.illusory_wall.spell": "Paries fallax, videaris firmus et altus!\n\nTangant te frustra, solidum videre sed umbra sis.\n\nVeritas abscondita, umbra permane!",
   "magisterium.page.magisterium.arcane_lift": "Arcane Lift",
   "magisterium.page.magisterium.arcane_lift.heading": "arcane lift",
-  "magisterium.page.magisterium.arcane_lift.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: a three by three circle of arcane glyphs, bottle of liquid magic",
+  "magisterium.page.magisterium.arcane_lift.components": "ᴄᴏᴍᴘᴏɴᴇɴᴛs: a three by three circle of arcane glyphs",
   "magisterium.page.magisterium.arcane_lift.description": "Summon a rising stream of arcane energy that lifts the creatures and objects into the air.",
   "magisterium.page.magisterium.arcane_lift.spell": "Arcanum levare, aethera tangamus!\n\nCorpora et mens surgant, in altum eleventur!",
   "magisterium.page.magisterium.dispel_magic": "Dispel Magic",
@@ -113,5 +113,7 @@
   "magisterium.page.magisterium.lesser_arcanum.header.1": "On the Fundamentals of Magic Beyond Elemental Bounds",
   "magisterium.page.magisterium.lesser_arcanum.footer.0": "Reginald Soren Highmoor",
   "magisterium.page.magisterium.lesser_arcanum.footer.1": "Arcanist of the Sapphire Sigil",
+  "magisterium.page.magisterium.lesser_arcanum.manifesto": "A treatise on the arcane arts encompassing the principles of pure magic, its limitless applications, and practical solutions to challenges both mundane and extraordinary.",
+  "magisterium.page.magisterium.lesser_arcanum.manifesto.1": "Penned in the\nYear of Whispers,\nThird Cycle",
   "magisterium.wip": "Work in progress..."
 }

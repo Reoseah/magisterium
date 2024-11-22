@@ -1,59 +1,76 @@
 {
   "elements": [
     {
-      "type": "magisterium:page_break"
-    },
-    {
-      "type": "magisterium:title_page",
-      "top": {
-        "type": "magisterium:group",
-        "elements": [
-          {
-            "type": "magisterium:heading",
-            "text": {
-              "translate": "magisterium.page.magisterium.lesser_arcanum.header.0"
-            }
+      "type": "magisterium:fold",
+      "right": [
+        {
+          "type": "magisterium:title_page",
+          "top": {
+            "type": "magisterium:group",
+            "elements": [
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.header.0"
+                }
+              },
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.header.1",
+                  "font": "magisterium:small_caps"
+                }
+              }
+            ]
           },
-          {
-            "type": "magisterium:heading",
-            "text": {
-              "translate": "magisterium.page.magisterium.lesser_arcanum.header.1",
-              "font": "magisterium:small_caps"
-            }
+          "bottom": {
+            "type": "magisterium:group",
+            "elements": [
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.footer.0",
+                  "font": "magisterium:small_caps"
+                }
+              },
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.footer.1",
+                  "font": "magisterium:small_caps"
+                }
+              }
+            ]
           }
-        ]
-      },
-      "bottom": {
-        "type": "magisterium:group",
-        "elements": [
-          {
-            "type": "magisterium:heading",
-            "text": {
-              "translate": "magisterium.page.magisterium.lesser_arcanum.footer.0",
-              "font": "magisterium:small_caps"
-            }
-          },
-          {
-            "type": "magisterium:heading",
-            "text": {
-              "translate": "magisterium.page.magisterium.lesser_arcanum.footer.1",
-              "font": "magisterium:small_caps"
-            }
+        }
+      ]
+    },
+    {
+      "type": "magisterium:fold",
+      "right": [
+        {
+          "type": "magisterium:title_page",
+          "center": {
+            "type": "magisterium:group",
+            "elements": [
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.manifesto",
+                  "font": "magisterium:small_caps"
+                }
+              },
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.lesser_arcanum.manifesto.1",
+                  "font": "magisterium:small_caps"
+                }
+              }
+            ]
           }
-        ]
-      }
-    },
-    {
-      "type": "magisterium:page_break"
-    },
-    {
-      "type": "magisterium:paragraph",
-      "text": {
-        "translate": "magisterium.wip"
-      }
-    },
-    {
-      "type": "magisterium:page_break"
+        }
+      ]
     }
   ]
 }

@@ -39,7 +39,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public final Context context;
     public final Property currentPage;
-    public final Property isUttering;
+    public final Property isReadingSpell;
     public final Inventory inventory = new SpellBookInventory(this);
 
     private long utteranceStart;
@@ -55,7 +55,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         super(TYPE, syncId);
         this.context = context;
         this.currentPage = this.addProperty(context.createProperty(SpellBookItem.CURRENT_PAGE));
-        this.isUttering = this.addProperty(Property.create());
+        this.isReadingSpell = this.addProperty(Property.create());
 
         for (int i = 0; i < 16; i++) {
             this.addSlot(new SpellBookSlot(this.inventory, i, Integer.MIN_VALUE, Integer.MIN_VALUE));
@@ -87,14 +87,14 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 .orElse(EmptySpellEffect.INSTANCE);
 
         if (this.spellEffect != EmptySpellEffect.INSTANCE) {
-            this.isUttering.set(1);
+            this.isReadingSpell.set(1);
             this.utteranceStart = player.getWorld().getTime();
             this.lastSoundTime = null;
         }
     }
 
     public void stopUtterance() {
-        this.isUttering.set(0);
+        this.isReadingSpell.set(0);
         this.utteranceStart = 0;
         this.spellEffect = null;
         this.lastSoundTime = null;

@@ -1,45 +1,44 @@
 {
   "elements": [
     {
-      "type": "magisterium:page_break"
-    },
-    {
-      "type": "magisterium:title_page",
-      "top": {
-        "type": "magisterium:heading",
-        "text": {
-          "translate": "magisterium.page.magisterium.elements_of_pyromancy.header",
-          "font": "magisterium:small_caps"
-        }
-      },
-      "center": {
-        "type": "magisterium:group",
-        "elements": [
-          {
+      "type": "magisterium:fold",
+      "right": [
+        {
+          "type": "magisterium:title_page",
+          "top": {
             "type": "magisterium:heading",
             "text": {
-              "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.0"
+              "translate": "magisterium.page.magisterium.elements_of_pyromancy.header",
+              "font": "magisterium:small_caps"
             }
           },
-          {
+          "center": {
+            "type": "magisterium:group",
+            "elements": [
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.0"
+                }
+              },
+              {
+                "type": "magisterium:heading",
+                "text": {
+                  "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.1",
+                  "font": "magisterium:small_caps"
+                }
+              }
+            ]
+          },
+          "bottom": {
             "type": "magisterium:heading",
             "text": {
-              "translate": "magisterium.page.magisterium.elements_of_pyromancy.title.1",
+              "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer",
               "font": "magisterium:small_caps"
             }
           }
-        ]
-      },
-      "bottom": {
-        "type": "magisterium:heading",
-        "text": {
-          "translate": "magisterium.page.magisterium.elements_of_pyromancy.footer",
-          "font": "magisterium:small_caps"
         }
-      }
-    },
-    {
-      "type": "magisterium:page_break"
+      ]
     },
     {
       "type": "magisterium:heading",

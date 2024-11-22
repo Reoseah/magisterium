@@ -6,12 +6,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Fold implements PageElement {
     public static final MapCodec<Fold> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
-            NormalPageElement.CODEC.listOf().fieldOf("left").forGetter(fold -> fold.left), //
-            NormalPageElement.CODEC.listOf().fieldOf("right").forGetter(fold -> fold.right) //
+            NormalPageElement.CODEC.listOf().fieldOf("left").orElse(Collections.emptyList()).forGetter(fold -> fold.left), //
+            NormalPageElement.CODEC.listOf().fieldOf("right").orElse(Collections.emptyList()).forGetter(fold -> fold.right) //
     ).apply(instance, Fold::new));
 
     private final List<NormalPageElement> left, right;

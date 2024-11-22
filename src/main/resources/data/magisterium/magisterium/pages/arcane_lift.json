@@ -32,17 +32,6 @@
           }
         },
         {
-          "type": "magisterium:inventory",
-          "slots": [
-            {
-              "x": 42,
-              "y": 0,
-              "background": "magisterium:item/placeholder/bottle",
-              "ingredient": "minecraft:experience_bottle"
-            }
-          ]
-        },
-        {
           "type": "magisterium:spell",
           "effect": "magisterium:arcane_lift",
           "duration": 8,

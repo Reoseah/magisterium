@@ -148,7 +148,7 @@ public class Spell implements NormalPageElement {
             float ratio = (readTime / Spell.this.duration);
 
             if (ratio > 1) {
-                if (this.handler.isUttering.get() == 0) {
+                if (this.handler.isReadingSpell.get() == 0) {
                     this.mouseDown = false;
                     this.mouseDownTime = 0;
                 }
@@ -160,7 +160,9 @@ public class Spell implements NormalPageElement {
                 ctx.drawText(textRenderer, lines.get(i), x + properties.spellButtonWidth, linesY.getInt(i), 0x000000, false);
                 if (coloredCharacters > 0) {
                     int color = ratio > 1 ? 0xdd4c1e : 0xce1e00;
-                    ctx.drawText(textRenderer, linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length())), x + properties.spellButtonWidth, linesY.getInt(i), color, false);
+                    var substring = linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length()));
+                    var literal = Text.literal(substring).styled(style -> style.withFont(Identifier.of("magisterium", "small_caps")));
+                    ctx.drawText(textRenderer, literal, x + properties.spellButtonWidth, linesY.getInt(i), color, false);
                     coloredCharacters -= linesAsString.get(i).length();
                 }
             }

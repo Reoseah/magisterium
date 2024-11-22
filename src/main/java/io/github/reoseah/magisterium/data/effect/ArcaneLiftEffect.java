@@ -6,7 +6,6 @@ import io.github.reoseah.magisterium.block.ArcaneLiftBlock;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.dynamic.Codecs;
 
 public class ArcaneLiftEffect extends SpellEffect {
@@ -29,14 +28,6 @@ public class ArcaneLiftEffect extends SpellEffect {
 
     @Override
     public void finish(ServerPlayerEntity player, Inventory inventory, SpellBookScreenHandler.Context screenContext) {
-        if (inventory.getStack(0).isEmpty()) {
-            player.sendMessage(Text.translatable("magisterium.missing_spell_ingredients"), true);
-            player.closeHandledScreen();
-            return;
-        }
-        var stack = inventory.getStack(0);
-        stack.decrement(1);
-
         var world = player.getWorld();
         var pos = player.getBlockPos();
 

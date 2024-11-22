@@ -3,8 +3,9 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Drawable;
 
-public class TitlePage implements PageElement {
+public class TitlePage implements NormalPageElement {
     public static final MapCodec<TitlePage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             NormalPageElement.CODEC.fieldOf("top").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.top), //
             NormalPageElement.CODEC.fieldOf("center").orElse(EmptyPageElement.INSTANCE).forGetter(titlePage -> titlePage.center), //
@@ -22,6 +23,11 @@ public class TitlePage implements PageElement {
     @Override
     public MapCodec<? extends PageElement> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
+        return pageHeight;
     }
 
     @Override
@@ -47,5 +53,25 @@ public class TitlePage implements PageElement {
         builder.setCurrentY(properties.pageHeight - bottomHeight);
         builder.addWidget(bottomDrawable);
         builder.advancePage();
+    }
+
+    @Override
+    public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
+        var topHeight = this.top.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
+        var topDrawable = this.top.createWidget(x, y, properties, properties.pageHeight, textRenderer);
+
+        var bottomHeight = this.bottom.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
+        var bottomDrawable = this.bottom.createWidget(x, properties.pageY + properties.pageHeight - bottomHeight, properties, properties.pageHeight, textRenderer);
+
+        var heightLeft = properties.pageY + properties.pageHeight - topHeight - bottomHeight;
+        var centerHeight = this.center.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
+        var centerY = y + topHeight + (heightLeft - centerHeight) / 2;
+        var centerDrawable = this.center.createWidget(x, centerY, properties, centerHeight, textRenderer);
+
+        return (context, mouseX, mouseY, delta) -> {
+            topDrawable.render(context, mouseX, mouseY, delta);
+            centerDrawable.render(context, mouseX, mouseY, delta);
+            bottomDrawable.render(context, mouseX, mouseY, delta);
+        };
     }
 }
