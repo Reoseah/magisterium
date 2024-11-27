@@ -3,7 +3,7 @@ package io.github.reoseah.magisterium.data.effect;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.reoseah.magisterium.block.IllusoryWallBlock;
-import io.github.reoseah.magisterium.block.IllusoryWallBlockEntity;
+import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.Blocks;

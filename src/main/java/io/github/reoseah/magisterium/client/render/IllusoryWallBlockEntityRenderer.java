@@ -1,5 +1,6 @@
-package io.github.reoseah.magisterium.block;
+package io.github.reoseah.magisterium.client.render;
 
+import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayers;
@@ -11,10 +12,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.random.Random;
 
 public class IllusoryWallBlockEntityRenderer implements BlockEntityRenderer<IllusoryWallBlockEntity> {
-    private final BlockRenderManager blockRenderManager;
+    private final BlockRenderManager renderManager;
 
     public IllusoryWallBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-        this.blockRenderManager = ctx.getRenderManager();
+        this.renderManager = ctx.getRenderManager();
     }
 
     @Override
@@ -23,7 +24,7 @@ public class IllusoryWallBlockEntityRenderer implements BlockEntityRenderer<Illu
         if (state.getRenderType() == BlockRenderType.MODEL) {
             var world = entity.getWorld();
             var pos = entity.getPos();
-            this.blockRenderManager.getModelRenderer().render(world, this.blockRenderManager.getModel(state), state, pos, matrices, vertexConsumers.getBuffer(RenderLayers.getMovingBlockLayer(state)), false, Random.create(), 1, OverlayTexture.DEFAULT_UV);
+            this.renderManager.getModelRenderer().render(world, this.renderManager.getModel(state), state, pos, matrices, vertexConsumers.getBuffer(RenderLayers.getMovingBlockLayer(state)), false, Random.create(), 1, OverlayTexture.DEFAULT_UV);
         }
     }
 }

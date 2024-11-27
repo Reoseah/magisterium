@@ -2,6 +2,8 @@ package io.github.reoseah.magisterium;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
+import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
 import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
@@ -64,11 +66,14 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:arcane_lift", ArcaneLiftBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:magic_barrier", MagicBarrierBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:arcane_resonator", ArcaneResonatorBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlockEntity.TYPE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:arcane_resonator", ArcaneResonatorBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
+        Registry.register(Registries.ITEM, "magisterium:arcane_resonator", ArcaneResonatorBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:lesser_arcanum", SpellBookItem.LESSER_ARCANUM);
@@ -98,6 +103,7 @@ public class Magisterium implements ModInitializer {
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
+                    entries.add(ArcaneResonatorBlock.INSTANCE);
                     entries.add(SpellBookItem.SPELL_BOOK);
 
                     var filledBook = new ItemStack(SpellBookItem.SPELL_BOOK);

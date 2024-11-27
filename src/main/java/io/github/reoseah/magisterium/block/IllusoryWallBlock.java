@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
+import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;

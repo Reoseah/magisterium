@@ -1,5 +1,6 @@
-package io.github.reoseah.magisterium.block;
+package io.github.reoseah.magisterium.block.entity;
 
+import io.github.reoseah.magisterium.block.IllusoryWallBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
