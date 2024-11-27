@@ -191,12 +191,12 @@ public class Magisterium implements ModInitializer {
         if (state.getBlock() instanceof LecternBlock && be instanceof LecternBlockEntity lectern) {
             var book = lectern.getBook();
             if (book.isEmpty() && stack.isOf(SpellBookItem.INSTANCE)) {
-                if (MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+                if (player.canModifyBlocks() && player.canModifyAt(world, pos)) {
                     return LecternBlock.putBookIfAbsent(player, world, pos, state, stack) ? ActionResult.SUCCESS : ActionResult.PASS;
                 }
                 return ActionResult.PASS;
             } else if (book.isOf(SpellBookItem.INSTANCE)) {
-                if (player.isSneaking() && MagisteriumPlaygrounds.canModifyWorld(world, pos, player)) {
+                if (player.isSneaking() && player.canModifyBlocks() && player.canModifyAt(world, pos)) {
                     lectern.setBook(ItemStack.EMPTY);
                     LecternBlock.setHasBook(player, world, pos, state, false);
                     if (!player.getInventory().insertStack(book)) {
