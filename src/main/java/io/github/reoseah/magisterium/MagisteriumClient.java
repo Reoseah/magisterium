@@ -9,9 +9,10 @@ import io.github.reoseah.magisterium.client.render.ArcaneResonatorRenderer;
 import io.github.reoseah.magisterium.client.render.IllusoryWallBlockEntityRenderer;
 import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.SpellPage;
-import io.github.reoseah.magisterium.network.SpellParticlePayload;
-import io.github.reoseah.magisterium.network.SyncronizeBookDataPayload;
-import io.github.reoseah.magisterium.network.SyncronizePageDataPayload;
+import io.github.reoseah.magisterium.network.s2c.FinishSpellPayload;
+import io.github.reoseah.magisterium.network.s2c.SpellParticlePayload;
+import io.github.reoseah.magisterium.network.s2c.SyncronizeBookDataPayload;
+import io.github.reoseah.magisterium.network.s2c.SyncronizePageDataPayload;
 import io.github.reoseah.magisterium.particle.EnergyParticle;
 import io.github.reoseah.magisterium.particle.GlyphParticle;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
@@ -67,11 +68,18 @@ public class MagisteriumClient implements ClientModInitializer {
         });
         ClientPlayNetworking.registerGlobalReceiver(SyncronizePageDataPayload.ID, (payload, context) -> pages = payload.pages());
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, MagisteriumClient::spawnSpellParticles);
+        ClientPlayNetworking.registerGlobalReceiver(FinishSpellPayload.ID, MagisteriumClient::finishSpell);
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             BookLoader.disconnectClientSide();
             pages = null;
         });
+    }
+
+    private static void finishSpell(FinishSpellPayload payload, ClientPlayNetworking.Context context) {
+        if (context.client().currentScreen instanceof SpellBookScreen screen) {
+            screen.finishSpell();
+        }
     }
 
     private static void spawnSpellParticles(SpellParticlePayload payload, ClientPlayNetworking.Context context) {

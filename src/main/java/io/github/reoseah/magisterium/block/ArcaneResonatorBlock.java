@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -21,6 +22,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.block.WireOrientation;
+import net.minecraft.world.tick.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
 public class ArcaneResonatorBlock extends BlockWithEntity {
@@ -29,18 +32,18 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
     public static final MapCodec<ArcaneResonatorBlock> CODEC = createCodec(ArcaneResonatorBlock::new);
 
     public static final Block INSTANCE = new ArcaneResonatorBlock(Settings.create() //
+            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium", "arcane_resonator"))) //
             .breakInstantly() //
             .nonOpaque() //
             .luminance(state -> state.get(POWERED) ? 13 : 0) //
-            .strength(0) //
-            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium", "arcane_resonator"))));
+            .strength(0));
     public static final Item ITEM = new BlockItem(INSTANCE, new Item.Settings() //
             .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of("magisterium", "arcane_resonator"))) //
             .useBlockPrefixedTranslationKey());
 
     public ArcaneResonatorBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(POWERED, false));
+        this.setDefaultState(this.getDefaultState().with(POWERED, false));
     }
 
     @Override
@@ -55,12 +58,32 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
 
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockPos blockPos = pos.down();
-        return this.canPlaceAbove(world, blockPos, world.getBlockState(blockPos));
+        var below = pos.down();
+        return world.getBlockState(below).isSideSolid(world, below, Direction.UP, SideShapeType.RIGID);
     }
 
-    protected boolean canPlaceAbove(WorldView world, BlockPos pos, BlockState state) {
-        return state.isSideSolid(world, pos, Direction.UP, SideShapeType.RIGID);
+    @Override
+    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if (state.get(POWERED)) {
+            world.setBlockState(pos, state.with(POWERED, false));
+            updateNeighbors(world, pos, state);
+        }
+    }
+
+    @Override
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
+        if (state.canPlaceAt(world, pos)) {
+            world.scheduleBlockTick(pos, this, 1, TickPriority.NORMAL);
+        } else {
+            var entity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+            dropStacks(state, world, pos, entity);
+
+            world.removeBlock(pos, false);
+
+            for (var direction : Direction.values()) {
+                world.updateNeighborsAlways(pos.offset(direction), this);
+            }
+        }
     }
 
     @Override
@@ -95,9 +118,7 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
     }
 
     private static void updateNeighbors(World world, BlockPos pos, BlockState state) {
-        var block = state.getBlock();
-        world.updateNeighborsAlways(pos, block);
-        world.updateNeighborsAlways(pos.down(), block);
+        world.updateNeighborsAlways(pos, state.getBlock());
     }
 
     @Override

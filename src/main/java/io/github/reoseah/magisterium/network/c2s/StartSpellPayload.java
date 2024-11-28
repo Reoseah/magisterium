@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.network;
+package io.github.reoseah.magisterium.network.c2s;
 
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -7,12 +7,12 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public record StartUtterancePayload(Identifier id) implements CustomPayload {
-    public static final CustomPayload.Id<StartUtterancePayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:start_reading"));
-    public static final PacketCodec<PacketByteBuf, StartUtterancePayload> CODEC = CustomPayload.codecOf(StartUtterancePayload::write, StartUtterancePayload::new);
+public record StartSpellPayload(Identifier id) implements CustomPayload {
+    public static final CustomPayload.Id<StartSpellPayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:start_spell"));
+    public static final PacketCodec<PacketByteBuf, StartSpellPayload> CODEC = CustomPayload.codecOf(StartSpellPayload::write, StartSpellPayload::read);
 
-    public StartUtterancePayload(PacketByteBuf buf) {
-        this(Identifier.PACKET_CODEC.decode(buf));
+    public static StartSpellPayload read(PacketByteBuf buf) {
+        return new StartSpellPayload(Identifier.PACKET_CODEC.decode(buf));
     }
 
     @Override
@@ -24,7 +24,7 @@ public record StartUtterancePayload(Identifier id) implements CustomPayload {
         Identifier.PACKET_CODEC.encode(buf, this.id);
     }
 
-    public static void receive(StartUtterancePayload payload, ServerPlayNetworking.Context context) {
+    public static void receive(StartSpellPayload payload, ServerPlayNetworking.Context context) {
         if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
             handler.startUtterance(payload.id(), context.player());
         }

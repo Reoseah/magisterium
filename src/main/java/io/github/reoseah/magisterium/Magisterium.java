@@ -11,7 +11,14 @@ import io.github.reoseah.magisterium.data.SpellPageLoader;
 import io.github.reoseah.magisterium.data.effect.*;
 import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.*;
-import io.github.reoseah.magisterium.network.*;
+import io.github.reoseah.magisterium.network.c2s.SpellBookScreenStatePayload;
+import io.github.reoseah.magisterium.network.c2s.StartSpellPayload;
+import io.github.reoseah.magisterium.network.c2s.StopSpellPayload;
+import io.github.reoseah.magisterium.network.c2s.UseBookmarkPayload;
+import io.github.reoseah.magisterium.network.s2c.FinishSpellPayload;
+import io.github.reoseah.magisterium.network.s2c.SpellParticlePayload;
+import io.github.reoseah.magisterium.network.s2c.SyncronizeBookDataPayload;
+import io.github.reoseah.magisterium.network.s2c.SyncronizePageDataPayload;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
@@ -200,16 +207,17 @@ public class Magisterium implements ModInitializer {
 
         PayloadTypeRegistry.playS2C().register(SyncronizePageDataPayload.ID, SyncronizePageDataPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SyncronizeBookDataPayload.ID, SyncronizeBookDataPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(FinishSpellPayload.ID, FinishSpellPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SpellParticlePayload.ID, SpellParticlePayload.CODEC);
 
         PayloadTypeRegistry.playC2S().register(SpellBookScreenStatePayload.ID, SpellBookScreenStatePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(StartUtterancePayload.ID, StartUtterancePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(StopUtterancePayload.ID, StopUtterancePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(StartSpellPayload.ID, StartSpellPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(StopSpellPayload.ID, StopSpellPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(UseBookmarkPayload.ID, UseBookmarkPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(SpellBookScreenStatePayload.ID, SpellBookScreenStatePayload::receive);
-        ServerPlayNetworking.registerGlobalReceiver(StartUtterancePayload.ID, StartUtterancePayload::receive);
-        ServerPlayNetworking.registerGlobalReceiver(StopUtterancePayload.ID, StopUtterancePayload::receive);
+        ServerPlayNetworking.registerGlobalReceiver(StartSpellPayload.ID, StartSpellPayload::receive);
+        ServerPlayNetworking.registerGlobalReceiver(StopSpellPayload.ID, StopSpellPayload::receive);
         ServerPlayNetworking.registerGlobalReceiver(UseBookmarkPayload.ID, UseBookmarkPayload::receive);
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {

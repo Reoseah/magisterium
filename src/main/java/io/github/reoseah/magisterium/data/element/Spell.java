@@ -3,15 +3,13 @@ package io.github.reoseah.magisterium.data.element;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.reoseah.magisterium.network.StartUtterancePayload;
-import io.github.reoseah.magisterium.network.StopUtterancePayload;
-import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.network.c2s.StartSpellPayload;
+import io.github.reoseah.magisterium.network.c2s.StopSpellPayload;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -80,19 +78,18 @@ public class Spell implements NormalPageElement {
     @Override
     @Environment(EnvType.CLIENT)
     public Drawable createWidget(int x, int y, BookProperties properties, int maxHeight, TextRenderer textRenderer) {
-        return new UtteranceWidget(this.text, x, y, properties, properties.pageWidth, textRenderer);
+        return new SpellWidget(this, this.text, x, y, properties, properties.pageWidth, textRenderer);
     }
 
-    // TODO make this a static class
     @Environment(EnvType.CLIENT)
-    private class UtteranceWidget implements Drawable, Element {
+    public static class SpellWidget implements Drawable, Element {
+        private final Spell spell;
+
         private final int buttonX;
         private final int buttonY;
 
         private final BookProperties properties;
         private final TextRenderer textRenderer;
-        private final SpellBookScreenHandler handler = (SpellBookScreenHandler) MinecraftClient.getInstance().player.currentScreenHandler;
-
         private final List<OrderedText> lines;
         private final List<String> linesAsString;
         private final IntList linesY;
@@ -102,7 +99,8 @@ public class Spell implements NormalPageElement {
         private boolean mouseDown = false;
         private long mouseDownTime = 0L;
 
-        public UtteranceWidget(Text text, int x, int y, BookProperties properties, int width, TextRenderer textRenderer) {
+        public SpellWidget(Spell spell, Text text, int x, int y, BookProperties properties, int width, TextRenderer textRenderer) {
+            this.spell = spell;
             this.properties = properties;
             this.textRenderer = textRenderer;
 
@@ -135,6 +133,11 @@ public class Spell implements NormalPageElement {
             this.x = x;
         }
 
+        public void finish() {
+            this.mouseDown = false;
+            this.mouseDownTime = 0;
+        }
+
         @Override
         public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
             if (this.mouseDown || mouseX > buttonX && mouseY > buttonY
@@ -145,14 +148,7 @@ public class Spell implements NormalPageElement {
             }
 
             float readTime = this.mouseDown ? (System.currentTimeMillis() - this.mouseDownTime) / 1000F : 0;
-            float ratio = (readTime / Spell.this.duration);
-
-            if (ratio > 1) {
-                if (this.handler.isReadingSpell.get() == 0) {
-                    this.mouseDown = false;
-                    this.mouseDownTime = 0;
-                }
-            }
+            float ratio = (readTime / spell.duration);
 
             int coloredCharacters = Math.round(this.textLength * ratio);
 
@@ -175,7 +171,7 @@ public class Spell implements NormalPageElement {
                 this.mouseDown = true;
                 this.mouseDownTime = System.currentTimeMillis();
 
-                ClientPlayNetworking.send(new StartUtterancePayload(effect));
+                ClientPlayNetworking.send(new StartSpellPayload(spell.effect));
                 return true;
             }
             return false;
@@ -187,7 +183,7 @@ public class Spell implements NormalPageElement {
                 this.mouseDown = false;
                 this.mouseDownTime = 0;
 
-                ClientPlayNetworking.send(new StopUtterancePayload());
+                ClientPlayNetworking.send(StopSpellPayload.INSTANCE);
                 return true;
             }
             return false;

@@ -27,6 +27,20 @@ public class Group implements NormalPageElement {
     }
 
     @Override
+    public void visit(BookLayout.Builder builder, BookProperties properties, TextRenderer textRenderer) {
+        var height = this.getHeight(properties.pageWidth, properties.pageHeight, textRenderer);
+        if (builder.getMaxY() - builder.getCurrentY() < height && !builder.isNewPage()) {
+            builder.advancePage();
+        }
+
+        builder.allowWrap(false);
+        for (var element : this.elements) {
+            element.visit(builder, properties, textRenderer);
+        }
+        builder.allowWrap(true);
+    }
+
+    @Override
     public int getHeight(int width, int pageHeight, TextRenderer textRenderer) {
         var height = 0;
         for (var element : this.elements) {

@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.network;
+package io.github.reoseah.magisterium.network.s2c;
 
 import io.github.reoseah.magisterium.data.SpellPage;
 import net.minecraft.network.RegistryByteBuf;

@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.network;
+package io.github.reoseah.magisterium.network.c2s;
 
 import io.github.reoseah.magisterium.data.element.SlotProperties;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
@@ -12,6 +12,14 @@ public record SpellBookScreenStatePayload(SlotProperties[] slots) implements Cus
     public static final CustomPayload.Id<SpellBookScreenStatePayload> ID = new CustomPayload.Id<>(Identifier.of("magisterium:spell_book_screen_state"));
     public static final PacketCodec<RegistryByteBuf, SpellBookScreenStatePayload> CODEC = CustomPayload.codecOf(SpellBookScreenStatePayload::write, SpellBookScreenStatePayload::read);
 
+    public static SpellBookScreenStatePayload read(RegistryByteBuf buf) {
+        var layout = new SlotProperties[buf.readVarInt()];
+        for (int i = 0; i < layout.length; i++) {
+            layout[i] = SlotProperties.read(buf);
+        }
+        return new SpellBookScreenStatePayload(layout);
+    }
+
     @Override
     public Id<? extends CustomPayload> getId() {
         return ID;
@@ -22,14 +30,6 @@ public record SpellBookScreenStatePayload(SlotProperties[] slots) implements Cus
         for (SlotProperties configuration : this.slots) {
             configuration.write(buf);
         }
-    }
-
-    public static SpellBookScreenStatePayload read(RegistryByteBuf buf) {
-        var layout = new SlotProperties[buf.readVarInt()];
-        for (int i = 0; i < layout.length; i++) {
-            layout[i] = SlotProperties.read(buf);
-        }
-        return new SpellBookScreenStatePayload(layout);
     }
 
     public static void receive(SpellBookScreenStatePayload payload, ServerPlayNetworking.Context context) {

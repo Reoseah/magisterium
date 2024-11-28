@@ -1,4 +1,4 @@
-package io.github.reoseah.magisterium.network;
+package io.github.reoseah.magisterium.network.s2c;
 
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

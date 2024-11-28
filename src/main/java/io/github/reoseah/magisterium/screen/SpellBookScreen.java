@@ -6,8 +6,9 @@ import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.PageItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
-import io.github.reoseah.magisterium.network.SpellBookScreenStatePayload;
-import io.github.reoseah.magisterium.network.UseBookmarkPayload;
+import io.github.reoseah.magisterium.network.c2s.SpellBookScreenStatePayload;
+import io.github.reoseah.magisterium.network.c2s.UseBookmarkPayload;
+import io.github.reoseah.magisterium.util.RomanNumbers;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
@@ -326,5 +327,18 @@ public class SpellBookScreen extends HandledScreen<SpellBookScreenHandler> {
             return mouseX < left || mouseX >= (left + this.backgroundWidth);
         }
         return super.isClickOutsideBounds(mouseX, mouseY, left, top, button);
+    }
+
+    public void finishSpell() {
+        for (var element : this.layout.getPage(this.page)) {
+            if (element instanceof Spell.SpellWidget widget) {
+                widget.finish();
+            }
+        }
+        for (var element : this.layout.getPage(this.page + 1)) {
+            if (element instanceof Spell.SpellWidget widget) {
+                widget.finish();
+            }
+        }
     }
 }

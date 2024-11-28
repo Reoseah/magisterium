@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class SpellBookSlot extends Slot {
-    protected SlotProperties config;
+    public SlotProperties config;
 
     public SpellBookSlot(Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
@@ -22,10 +22,6 @@ public class SpellBookSlot extends Slot {
         } else {
             ((MutableSlot) this).magisterium$setPos(Integer.MIN_VALUE, Integer.MIN_VALUE);
         }
-    }
-
-    public SlotProperties getConfiguration() {
-        return this.config;
     }
 
     @Override

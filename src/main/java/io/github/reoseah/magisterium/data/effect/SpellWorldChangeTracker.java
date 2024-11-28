@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.data.effect;
 
-import io.github.reoseah.magisterium.network.SpellParticlePayload;
+import io.github.reoseah.magisterium.network.s2c.SpellParticlePayload;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -27,10 +27,6 @@ public class SpellWorldChangeTracker {
     public SpellWorldChangeTracker(ServerPlayerEntity player) {
         this.player = player;
         this.world = player.getServerWorld();
-    }
-
-    public void setHasSucceeded(boolean hasSucceeded) {
-        this.hasSucceeded = hasSucceeded;
     }
 
     public boolean trySetBlockState(BlockPos pos, BlockState state) {
