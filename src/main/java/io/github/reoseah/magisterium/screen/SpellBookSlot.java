@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 public class SpellBookSlot extends Slot {
     public SlotProperties config;
 
-    public SpellBookSlot(Inventory inventory, int index, int x, int y) {
-        super(inventory, index, x, y);
+    public SpellBookSlot(Inventory inventory, int index) {
+        super(inventory, index, Integer.MIN_VALUE, Integer.MIN_VALUE);
     }
 
     public void setConfiguration(@Nullable SlotProperties config) {

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": "minecraft:redstone",
+    "L": "minecraft:lapis_lazuli",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "LR",
+    "RL",
+    "SS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "magisterium:arcane_resonator"
+  },
+  "show_notification": false
+}

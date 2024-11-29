@@ -26,7 +26,7 @@ public record StartSpellPayload(Identifier id) implements CustomPayload {
 
     public static void receive(StartSpellPayload payload, ServerPlayNetworking.Context context) {
         if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-            handler.startUtterance(payload.id(), context.player());
+            handler.startSpell(payload.id(), context.player());
         }
     }
 }

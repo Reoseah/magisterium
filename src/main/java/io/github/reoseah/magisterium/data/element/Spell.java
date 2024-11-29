@@ -22,13 +22,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-// TODO: have the utterance text shortly highlight to indicate finishing
 public class Spell implements NormalPageElement {
     public static final MapCodec<Spell> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group( //
             TextCodecs.CODEC.fieldOf("text").forGetter(spell -> spell.text), //
             Identifier.CODEC.fieldOf("effect").forGetter(spell -> spell.effect), //
             Codec.FLOAT.fieldOf("duration").forGetter(spell -> spell.duration) //
     ).apply(instance, Spell::new));
+    public static final int READ_TEXT_COLOR = 0xce1e00;
+    public static final int FINISHED_TEXT_COLOR = 0xdd4c1e;
 
     protected final Text text;
     protected final Identifier effect;
@@ -119,7 +120,7 @@ public class Spell implements NormalPageElement {
 
             this.linesY = new IntArrayList(linesAsString.size());
             int nextY = y;
-            for (String line : linesAsString) {
+            for (var line : linesAsString) {
                 this.linesY.add(nextY);
                 if (line.isEmpty()) {
                     nextY += 4;
@@ -155,7 +156,7 @@ public class Spell implements NormalPageElement {
             for (int i = 0; i < lines.size(); i++) {
                 ctx.drawText(textRenderer, lines.get(i), x + properties.spellButtonWidth, linesY.getInt(i), 0x000000, false);
                 if (coloredCharacters > 0) {
-                    int color = ratio > 1 ? 0xdd4c1e : 0xce1e00;
+                    int color = ratio > 1 ? FINISHED_TEXT_COLOR : READ_TEXT_COLOR;
                     var substring = linesAsString.get(i).substring(0, Math.min(coloredCharacters, linesAsString.get(i).length()));
                     var literal = Text.literal(substring).styled(style -> style.withFont(Identifier.of("magisterium", "small_caps")));
                     ctx.drawText(textRenderer, literal, x + properties.spellButtonWidth, linesY.getInt(i), color, false);

@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
+import io.github.reoseah.magisterium.block.ArcaneResonatorBlock;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
 import io.github.reoseah.magisterium.data.effect.SpellEffect;
@@ -38,12 +39,17 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public static final int PREVIOUS_PAGE_BUTTON = 0;
     public static final int NEXT_PAGE_BUTTON = 1;
 
-    public final Context context;
-    public final Property currentPage;
-    public final Inventory inventory = new SpellBookInventory(this);
-    private final Inventory spellBook;
+    private final SpellBookScreenHandler.Context context;
+    private @Nullable SpellBookScreenHandler.SpellReadingState state;
 
-    private @Nullable SpellReadingState spellState;
+    public final Property currentPage;
+    private final Inventory inventory = new SpellBookInventory(this);
+    // the book doesn't need syncing after the screen is opened,
+    // moreover it is not yet available when the screen is being constructed on the client
+    // which prevents some fields in its class from being final and initialized in constructor
+    // so perhaps one day use custom packet to open the screen instead
+    // such that it contains the relevant book data in payload?
+    private final Inventory spellBook;
 
     public SpellBookScreenHandler(int syncId, PlayerInventory playerInv) {
         this(syncId, playerInv, new ClientContext());
@@ -55,7 +61,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.currentPage = this.addProperty(context.getComponentAsProperty(SpellBookItem.CURRENT_PAGE));
 
         for (int i = 0; i < 16; i++) {
-            this.addSlot(new SpellBookSlot(this.inventory, i, Integer.MIN_VALUE, Integer.MIN_VALUE));
+            this.addSlot(new SpellBookSlot(this.inventory, i));
         }
 
         for (int x = 0; x < 9; x++) {
@@ -81,7 +87,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
         });
     }
 
-    public void startUtterance(Identifier id, ServerPlayerEntity player) {
+    public ItemStack getSpellBook() {
+        return this.spellBook.getStack(0);
+    }
+
+    public void startSpell(Identifier id, ServerPlayerEntity player) {
         var effect = SpellEffectLoader.getInstance().effects.entrySet() //
                 .stream() //
                 .filter(entry -> entry.getKey().equals(id)) //
@@ -90,12 +100,18 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 .orElse(EmptySpellEffect.INSTANCE);
 
         if (effect != EmptySpellEffect.INSTANCE) {
-            this.spellState = SpellReadingState.start(effect, player);
+            this.state = SpellReadingState.start(effect, player);
         }
     }
 
-    public void stopUtterance() {
-        this.spellState = null;
+    public void stopSpell() {
+        this.state = null;
+    }
+
+    public void applySlotProperties(SlotProperties[] properties) {
+        for (int i = 0; i < 16; i++) {
+            ((SpellBookSlot) this.slots.get(i)).setConfiguration(i < properties.length ? properties[i] : null);
+        }
     }
 
     @Override
@@ -112,29 +128,36 @@ public class SpellBookScreenHandler extends ScreenHandler {
             }
             slot.onQuickTransfer(stack, previous);
         } else {
-            var validSlotIndexes = new IntArraySet();
-            int total = 0;
+            // collect valid slots
+            var validIndexes = new IntArraySet();
+            int validSlotsCurrentCount = 0;
             for (int i = 0; i < 16; i++) {
-                var definition = ((SpellBookSlot) this.getSlot(i)).config;
-                if (definition != null && !definition.output && (definition.ingredient.isEmpty() || definition.ingredient.get().test(stack))) {
-                    var slotStack = this.getSlot(i).getStack();
-                    if (slotStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(slotStack, stack)) {
-                        validSlotIndexes.add(i);
-                        total += slotStack.getCount();
+                var config = ((SpellBookSlot) this.getSlot(i)).config;
+                if (config == null || config.output) {
+                    continue;
+                }
+                if (config.ingredient.isEmpty() || config.ingredient.get().test(stack)) {
+                    var current = this.getSlot(i).getStack();
+                    if (current.isEmpty() || ItemStack.areItemsAndComponentsEqual(current, stack)) {
+                        validIndexes.add(i);
+                        validSlotsCurrentCount += current.getCount();
                     }
                 }
             }
 
-            if (!validSlotIndexes.isEmpty()) {
-                int targetCount = (total + stack.getCount()) / validSlotIndexes.size();
-                for (int idx : validSlotIndexes) {
-                    int slotCount = this.getSlot(idx).getStack().getCount();
-                    int toAdd = Math.min(targetCount - slotCount, this.getSlot(idx).getMaxItemCount(stack) - slotCount);
-                    if (toAdd > 0) {
-                        stack = this.getSlot(idx).insertStack(stack, toAdd);
+            if (!validIndexes.isEmpty()) {
+                // try insert equally
+                int targetCount = (validSlotsCurrentCount + stack.getCount()) / validIndexes.size();
+                for (int idx : validIndexes) {
+                    int currentCount = this.getSlot(idx).getStack().getCount();
+                    int maxCount = this.getSlot(idx).getMaxItemCount(stack);
+                    int insertCount = Math.min(targetCount - currentCount, maxCount - currentCount);
+                    if (insertCount > 0) {
+                        stack = this.getSlot(idx).insertStack(stack, insertCount);
                     }
                 }
-                for (int idx : validSlotIndexes) {
+                // insert remaining
+                for (int idx : validIndexes) {
                     if (stack.isEmpty()) {
                         break;
                     }
@@ -172,8 +195,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
             return false;
         }
 
-        if (player instanceof ServerPlayerEntity serverPlayer && this.spellState != null) {
-            this.spellState.tick(serverPlayer, this);
+        if (player instanceof ServerPlayerEntity serverPlayer && this.state != null) {
+            boolean finished = this.state.tick(serverPlayer, this);
+            if (finished) {
+                this.state = null;
+            }
         }
 
         return true;
@@ -181,42 +207,24 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
-        switch (id) {
-            case PREVIOUS_PAGE_BUTTON -> {
-                int page = this.currentPage.get();
-                if (page < 2) {
-                    return false;
-                }
-                this.changePage(page - 2, player);
-
-                return true;
-            }
-            case NEXT_PAGE_BUTTON -> {
-                int page = this.currentPage.get();
-                this.changePage(page + 2, player);
-
-                return true;
-            }
+        if (id < PREVIOUS_PAGE_BUTTON || id > NEXT_PAGE_BUTTON) {
+            return false;
         }
-        return false;
-    }
-
-    private void changePage(int page, PlayerEntity player) {
-        this.currentPage.set(page);
+        int page = this.currentPage.get();
+        int nextPage = switch (id) {
+            case PREVIOUS_PAGE_BUTTON -> page - 2;
+            case NEXT_PAGE_BUTTON -> page + 2;
+            default -> throw new IllegalArgumentException();
+        };
+        if (nextPage < 0) {
+            return false;
+        }
         this.dropInventory(player, this.inventory);
         for (int i = 0; i < 16; i++) {
             ((SpellBookSlot) this.slots.get(i)).setConfiguration(null);
         }
-    }
-
-    public void applySlotProperties(SlotProperties[] properties) {
-        for (int i = 0; i < 16; i++) {
-            ((SpellBookSlot) this.slots.get(i)).setConfiguration(i < properties.length ? properties[i] : null);
-        }
-    }
-
-    public ItemStack getSpellBook() {
-        return this.spellBook.getStack(0);
+        this.currentPage.set(nextPage);
+        return true;
     }
 
     public static abstract class Context {
@@ -225,23 +233,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         public abstract Property getComponentAsProperty(ComponentType<Integer> component);
 
         public abstract boolean canUse(PlayerEntity player);
-    }
-
-    public static class ClientContext extends Context {
-        @Override
-        public ItemStack getStack() {
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public Property getComponentAsProperty(ComponentType<Integer> component) {
-            return Property.create();
-        }
-
-        @Override
-        public boolean canUse(PlayerEntity player) {
-            return true;
-        }
     }
 
     public static class LecternContext extends Context {
@@ -324,6 +315,23 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
     }
 
+    public static class ClientContext extends Context {
+        @Override
+        public ItemStack getStack() {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public Property getComponentAsProperty(ComponentType<Integer> component) {
+            return Property.create();
+        }
+
+        @Override
+        public boolean canUse(PlayerEntity player) {
+            return true;
+        }
+    }
+
     public static class SpellReadingState {
         private final SpellEffect effect;
         private final long startTime;
@@ -338,26 +346,35 @@ public class SpellBookScreenHandler extends ScreenHandler {
             var world = player.getWorld();
             var time = world.getTime();
 
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1.0f);
+            world.playSound(null, player.getX(), player.getEyeY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1);
 
             return new SpellReadingState(effect, time);
         }
 
-        public void tick(ServerPlayerEntity player, SpellBookScreenHandler handler) {
+        public boolean tick(ServerPlayerEntity player, SpellBookScreenHandler handler) {
             var world = player.getWorld();
             var recipeTicks = this.effect.duration * world.getTickManager().getTickRate();
             long time = world.getTime();
             if (time - this.startTime >= recipeTicks) {
                 this.effect.finish(player, handler.inventory, handler.context);
-
                 ServerPlayNetworking.send(player, FinishSpellPayload.INSTANCE);
-                handler.stopUtterance();
-            }
 
+                for (var pos : BlockPos.iterate(
+                        player.getBlockPos().add(-16, -16, -16),
+                        player.getBlockPos().add(16, 16, 16))) {
+                    var state = world.getBlockState(pos);
+                    if (state.isOf(ArcaneResonatorBlock.INSTANCE)) {
+                        ArcaneResonatorBlock.INSTANCE.onSpellFinish(state, world, pos, player, this.effect);
+                    }
+                }
+
+                return true;
+            }
             if (time - this.lastSoundTime >= 25) {
-                world.playSound(null, player.getX(), player.getY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1.0f);
+                world.playSound(null, player.getX(), player.getEyeY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1);
                 this.lastSoundTime = time;
             }
+            return false;
         }
     }
 }

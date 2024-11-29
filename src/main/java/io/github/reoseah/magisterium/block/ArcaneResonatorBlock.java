@@ -2,6 +2,7 @@ package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.data.effect.SpellEffect;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -10,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -31,7 +33,7 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final MapCodec<ArcaneResonatorBlock> CODEC = createCodec(ArcaneResonatorBlock::new);
 
-    public static final Block INSTANCE = new ArcaneResonatorBlock(Settings.create() //
+    public static final ArcaneResonatorBlock INSTANCE = new ArcaneResonatorBlock(Settings.create() //
             .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium", "arcane_resonator"))) //
             .breakInstantly() //
             .nonOpaque() //
@@ -72,9 +74,7 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
 
     @Override
     protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
-        if (state.canPlaceAt(world, pos)) {
-            world.scheduleBlockTick(pos, this, 1, TickPriority.NORMAL);
-        } else {
+        if (!state.canPlaceAt(world, pos)) {
             var entity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
             dropStacks(state, world, pos, entity);
 
@@ -104,11 +104,13 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (state.get(POWERED)) {
-            double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5);
-            double y = pos.getY() + 0.4 + (random.nextDouble() - 0.5);
-            double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5);
+            for (int i = 0; i < 2; i++) {
+                double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5);
+                double y = pos.getY() + 0.4 + (random.nextDouble() - 0.5);
+                double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5);
 
-            world.addParticle(DustParticleEffect.DEFAULT, x, y, z, 0, 0, 0);
+                world.addParticle(DustParticleEffect.DEFAULT, x, y, z, 0, 0, 0);
+            }
         }
     }
 
@@ -139,5 +141,10 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
     @Override
     protected boolean hasSidedTransparency(BlockState state) {
         return true;
+    }
+
+    public void onSpellFinish(BlockState state, World world, BlockPos pos, ServerPlayerEntity player, SpellEffect effect) {
+        world.setBlockState(pos, state.with(POWERED, true));
+        world.scheduleBlockTick(pos, this, 20, TickPriority.NORMAL);
     }
 }
