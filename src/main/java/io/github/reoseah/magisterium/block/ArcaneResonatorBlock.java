@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
-import io.github.reoseah.magisterium.data.effect.SpellEffect;
+import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -25,7 +25,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.block.WireOrientation;
-import net.minecraft.world.tick.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
 public class ArcaneResonatorBlock extends BlockWithEntity {
@@ -143,8 +142,27 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
         return true;
     }
 
-    public void onSpellFinish(BlockState state, World world, BlockPos pos, ServerPlayerEntity player, SpellEffect effect) {
-        world.setBlockState(pos, state.with(POWERED, true));
-        world.scheduleBlockTick(pos, this, 20, TickPriority.NORMAL);
+    public void onSpellStart(ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
+        var world = player.getWorld();
+        var pos = player.getBlockPos();
+        for (var ipos : BlockPos.iterate(pos.add(-16, -16, -16), pos.add(16, 16, 16))) {
+            if (world.getBlockEntity(ipos) instanceof ArcaneResonatorBlockEntity be) {
+                be.users.add(context);
+                world.setBlockState(ipos, this.getDefaultState().with(POWERED, true));
+            }
+        }
+    }
+
+    public void onSpellFinish(ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
+        var world = player.getWorld();
+        var pos = player.getBlockPos();
+        for (var ipos : BlockPos.iterate(pos.add(-16, -16, -16), pos.add(16, 16, 16))) {
+            if (world.getBlockEntity(ipos) instanceof ArcaneResonatorBlockEntity be) {
+                be.users.remove(context);
+                if (be.users.isEmpty()) {
+                    world.setBlockState(ipos, this.getDefaultState().with(POWERED, false));
+                }
+            }
+        }
     }
 }

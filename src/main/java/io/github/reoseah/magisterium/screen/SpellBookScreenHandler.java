@@ -44,11 +44,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public final Property currentPage;
     private final Inventory inventory = new SpellBookInventory(this);
-    // the book doesn't need syncing after the screen is opened,
-    // moreover it is not yet available when the screen is being constructed on the client
+    // this is just to sync book data to the client by using a hidden slot
+    // it is not yet available when the screen is being constructed on the client
     // which prevents some fields in its class from being final and initialized in constructor
     // so perhaps one day use custom packet to open the screen instead
-    // such that it contains the relevant book data in payload?
+    // sending the relevant book data in the packet payload?
     private final Inventory spellBook;
 
     public SpellBookScreenHandler(int syncId, PlayerInventory playerInv) {
@@ -100,12 +100,13 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 .orElse(EmptySpellEffect.INSTANCE);
 
         if (effect != EmptySpellEffect.INSTANCE) {
-            this.state = SpellReadingState.start(effect, player);
+            this.state = SpellReadingState.start(effect, player, this.context);
         }
     }
 
-    public void stopSpell() {
+    public void stopSpell(ServerPlayerEntity player) {
         this.state = null;
+        ArcaneResonatorBlock.INSTANCE.onSpellFinish(player, this.context);
     }
 
     public void applySlotProperties(SlotProperties[] properties) {
@@ -184,6 +185,9 @@ public class SpellBookScreenHandler extends ScreenHandler {
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
         this.dropInventory(player, this.inventory);
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            ArcaneResonatorBlock.INSTANCE.onSpellFinish(serverPlayer, this.context);
+        }
     }
 
     @Override
@@ -342,11 +346,13 @@ public class SpellBookScreenHandler extends ScreenHandler {
             this.lastSoundTime = this.startTime = time;
         }
 
-        public static SpellReadingState start(SpellEffect effect, ServerPlayerEntity player) {
+        public static SpellReadingState start(SpellEffect effect, ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
             var world = player.getWorld();
             var time = world.getTime();
 
             world.playSound(null, player.getX(), player.getEyeY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1);
+
+            ArcaneResonatorBlock.INSTANCE.onSpellStart(player, context);
 
             return new SpellReadingState(effect, time);
         }
@@ -359,14 +365,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
                 this.effect.finish(player, handler.inventory, handler.context);
                 ServerPlayNetworking.send(player, FinishSpellPayload.INSTANCE);
 
-                for (var pos : BlockPos.iterate(
-                        player.getBlockPos().add(-16, -16, -16),
-                        player.getBlockPos().add(16, 16, 16))) {
-                    var state = world.getBlockState(pos);
-                    if (state.isOf(ArcaneResonatorBlock.INSTANCE)) {
-                        ArcaneResonatorBlock.INSTANCE.onSpellFinish(state, world, pos, player, this.effect);
-                    }
-                }
+                ArcaneResonatorBlock.INSTANCE.onSpellFinish(player, handler.context);
 
                 return true;
             }

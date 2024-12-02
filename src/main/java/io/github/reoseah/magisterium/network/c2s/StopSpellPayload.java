@@ -20,7 +20,7 @@ public enum StopSpellPayload implements CustomPayload {
 
     public static void receive(StopSpellPayload payload, ServerPlayNetworking.Context context) {
         if (context.player().currentScreenHandler instanceof SpellBookScreenHandler handler) {
-            handler.stopSpell();
+            handler.stopSpell(context.player());
         }
     }
 }
