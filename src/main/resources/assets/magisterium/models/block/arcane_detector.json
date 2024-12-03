@@ -1,9 +1,9 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "magisterium:block/arcane_resonator",
+    "particle": "magisterium:block/arcane_detector",
     "slab": "block/smooth_stone",
-    "top": "magisterium:block/arcane_resonator"
+    "top": "magisterium:block/arcane_detector"
   },
   "elements": [
     {

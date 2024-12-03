@@ -1,13 +1,13 @@
 package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
-import io.github.reoseah.magisterium.block.ArcaneResonatorBlock;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
 import io.github.reoseah.magisterium.data.effect.SpellEffect;
 import io.github.reoseah.magisterium.data.element.SlotProperties;
 import io.github.reoseah.magisterium.item.SpellBookItem;
 import io.github.reoseah.magisterium.network.s2c.FinishSpellPayload;
+import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.LecternBlock;
@@ -106,7 +106,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
     public void stopSpell(ServerPlayerEntity player) {
         this.state = null;
-        ArcaneResonatorBlock.INSTANCE.onSpellFinish(player, this.context);
+        ActiveSpellTracker.get(player.getServerWorld()).onSpellEnd(player);
     }
 
     public void applySlotProperties(SlotProperties[] properties) {
@@ -186,7 +186,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         super.onClosed(player);
         this.dropInventory(player, this.inventory);
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            ArcaneResonatorBlock.INSTANCE.onSpellFinish(serverPlayer, this.context);
+            this.stopSpell(serverPlayer);
         }
     }
 
@@ -347,25 +347,25 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
 
         public static SpellReadingState start(SpellEffect effect, ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
-            var world = player.getWorld();
+            var world = player.getServerWorld();
             var time = world.getTime();
 
             world.playSound(null, player.getX(), player.getEyeY(), player.getZ(), MagisteriumSounds.CHANT, SoundCategory.PLAYERS, 0.25F, 1);
 
-            ArcaneResonatorBlock.INSTANCE.onSpellStart(player, context);
+            ActiveSpellTracker.get(world).onSpellStart(player, player.getBlockPos());
 
             return new SpellReadingState(effect, time);
         }
 
         public boolean tick(ServerPlayerEntity player, SpellBookScreenHandler handler) {
-            var world = player.getWorld();
+            var world = player.getServerWorld();
             var recipeTicks = this.effect.duration * world.getTickManager().getTickRate();
             long time = world.getTime();
             if (time - this.startTime >= recipeTicks) {
                 this.effect.finish(player, handler.inventory, handler.context);
                 ServerPlayNetworking.send(player, FinishSpellPayload.INSTANCE);
 
-                ArcaneResonatorBlock.INSTANCE.onSpellFinish(player, handler.context);
+                ActiveSpellTracker.get(world).onSpellEnd(player);
 
                 return true;
             }

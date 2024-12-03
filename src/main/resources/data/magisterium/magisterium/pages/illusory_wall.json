@@ -46,7 +46,8 @@
           "effect": "magisterium:illusory_wall",
           "duration": 8,
           "text": {
-            "translate": "magisterium.page.magisterium.illusory_wall.spell"
+            "translate": "magisterium.page.magisterium.illusory_wall.spell",
+            "font": "magisterium:small_caps"
           }
         }
       ]

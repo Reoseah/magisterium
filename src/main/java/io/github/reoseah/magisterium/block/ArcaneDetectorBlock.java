@@ -1,8 +1,9 @@
 package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
-import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -27,22 +28,24 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.block.WireOrientation;
 import org.jetbrains.annotations.Nullable;
 
-public class ArcaneResonatorBlock extends BlockWithEntity {
+import java.util.UUID;
+
+public class ArcaneDetectorBlock extends BlockWithEntity implements SpellActivityListener {
     public static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
     public static final BooleanProperty POWERED = Properties.POWERED;
-    public static final MapCodec<ArcaneResonatorBlock> CODEC = createCodec(ArcaneResonatorBlock::new);
+    public static final MapCodec<ArcaneDetectorBlock> CODEC = createCodec(ArcaneDetectorBlock::new);
 
-    public static final ArcaneResonatorBlock INSTANCE = new ArcaneResonatorBlock(Settings.create() //
-            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium", "arcane_resonator"))) //
+    public static final ArcaneDetectorBlock INSTANCE = new ArcaneDetectorBlock(Settings.create() //
+            .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium", "arcane_detector"))) //
             .breakInstantly() //
             .nonOpaque() //
             .luminance(state -> state.get(POWERED) ? 13 : 0) //
             .strength(0));
     public static final Item ITEM = new BlockItem(INSTANCE, new Item.Settings() //
-            .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of("magisterium", "arcane_resonator"))) //
+            .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of("magisterium", "arcane_detector"))) //
             .useBlockPrefixedTranslationKey());
 
-    public ArcaneResonatorBlock(Settings settings) {
+    public ArcaneDetectorBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.getDefaultState().with(POWERED, false));
     }
@@ -115,7 +118,7 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new ArcaneResonatorBlockEntity(pos, state);
+        return new ArcaneDetectorBlockEntity(pos, state);
     }
 
     private static void updateNeighbors(World world, BlockPos pos, BlockState state) {
@@ -142,27 +145,26 @@ public class ArcaneResonatorBlock extends BlockWithEntity {
         return true;
     }
 
-    public void onSpellStart(ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
-        var world = player.getWorld();
-        var pos = player.getBlockPos();
-        for (var ipos : BlockPos.iterate(pos.add(-16, -16, -16), pos.add(16, 16, 16))) {
-            if (world.getBlockEntity(ipos) instanceof ArcaneResonatorBlockEntity be) {
-                be.users.add(context);
-                world.setBlockState(ipos, this.getDefaultState().with(POWERED, true));
-            }
+    @Override
+    public boolean onSpellStart(ServerWorld world, BlockPos pos, UUID player) {
+        if (world.getBlockEntity(pos) instanceof ArcaneDetectorBlockEntity be) {
+            be.users.add(player);
+
+            world.setBlockState(pos, this.getDefaultState().with(POWERED, true));
+            return true;
         }
+        return false;
     }
 
-    public void onSpellFinish(ServerPlayerEntity player, SpellBookScreenHandler.Context context) {
-        var world = player.getWorld();
-        var pos = player.getBlockPos();
-        for (var ipos : BlockPos.iterate(pos.add(-16, -16, -16), pos.add(16, 16, 16))) {
-            if (world.getBlockEntity(ipos) instanceof ArcaneResonatorBlockEntity be) {
-                be.users.remove(context);
-                if (be.users.isEmpty()) {
-                    world.setBlockState(ipos, this.getDefaultState().with(POWERED, false));
-                }
+    @Override
+    public boolean onSpellEnd(ServerWorld world, BlockPos pos, UUID player) {
+        if (world.getBlockEntity(pos) instanceof ArcaneDetectorBlockEntity be) {
+            be.users.remove(player);
+            if (be.users.isEmpty()) {
+                world.setBlockState(pos, this.getDefaultState().with(POWERED, false));
             }
+            return true;
         }
+        return false;
     }
 }

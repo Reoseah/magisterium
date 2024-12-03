@@ -2,7 +2,7 @@ package io.github.reoseah.magisterium;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.reoseah.magisterium.block.*;
-import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
 import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
 import io.github.reoseah.magisterium.data.BookLoader;
@@ -22,7 +22,11 @@ import io.github.reoseah.magisterium.network.s2c.SyncronizePageDataPayload;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
@@ -46,6 +50,7 @@ import net.minecraft.registry.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -55,6 +60,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,14 +79,14 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:illusory_wall", IllusoryWallBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:arcane_lift", ArcaneLiftBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:magic_barrier", MagicBarrierBlock.INSTANCE);
-        Registry.register(Registries.BLOCK, "magisterium:arcane_resonator", ArcaneResonatorBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:arcane_detector", ArcaneDetectorBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlockEntity.TYPE);
-        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:arcane_resonator", ArcaneResonatorBlockEntity.TYPE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:arcane_detector", ArcaneDetectorBlockEntity.TYPE);
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
-        Registry.register(Registries.ITEM, "magisterium:arcane_resonator", ArcaneResonatorBlock.ITEM);
+        Registry.register(Registries.ITEM, "magisterium:arcane_detector", ArcaneDetectorBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:lesser_arcanum", SpellBookItem.LESSER_ARCANUM);
@@ -110,7 +116,7 @@ public class Magisterium implements ModInitializer {
                 .displayName(Text.translatable("itemGroup.magisterium")) //
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
-                    entries.add(ArcaneResonatorBlock.INSTANCE);
+                    entries.add(ArcaneDetectorBlock.INSTANCE);
                     entries.add(SpellBookItem.SPELL_BOOK);
 
                     var filledBook = new ItemStack(SpellBookItem.SPELL_BOOK);
@@ -204,6 +210,7 @@ public class Magisterium implements ModInitializer {
 
         UseBlockCallback.EVENT.register(Magisterium::interact);
         LootTableEvents.MODIFY.register(Magisterium::modifyLootTable);
+        ServerTickEvents.END_WORLD_TICK.register(world -> ActiveSpellTracker.get(world).onTick());
 
         PayloadTypeRegistry.playS2C().register(SyncronizePageDataPayload.ID, SyncronizePageDataPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SyncronizeBookDataPayload.ID, SyncronizeBookDataPayload.CODEC);

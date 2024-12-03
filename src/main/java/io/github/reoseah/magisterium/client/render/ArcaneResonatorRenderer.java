@@ -1,7 +1,7 @@
 package io.github.reoseah.magisterium.client.render;
 
-import io.github.reoseah.magisterium.block.ArcaneResonatorBlock;
-import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.block.ArcaneDetectorBlock;
+import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayers;
@@ -15,9 +15,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 
-public class ArcaneResonatorRenderer implements BlockEntityRenderer<ArcaneResonatorBlockEntity> {
-    public static final Identifier CRYSTAL = Identifier.of("magisterium:block/arcane_resonator_crystal");
-    public static final Identifier CRYSTAL_ON = Identifier.of("magisterium:block/arcane_resonator_crystal_on");
+public class ArcaneResonatorRenderer implements BlockEntityRenderer<ArcaneDetectorBlockEntity> {
+    public static final Identifier CRYSTAL = Identifier.of("magisterium:block/arcane_detector_crystal");
+    public static final Identifier CRYSTAL_ON = Identifier.of("magisterium:block/arcane_detector_crystal_on");
 
     private final BlockRenderManager renderManager;
 
@@ -26,8 +26,8 @@ public class ArcaneResonatorRenderer implements BlockEntityRenderer<ArcaneResona
     }
 
     @Override
-    public void render(ArcaneResonatorBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        boolean powered = entity.getCachedState().get(ArcaneResonatorBlock.POWERED);
+    public void render(ArcaneDetectorBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        boolean powered = entity.getCachedState().get(ArcaneDetectorBlock.POWERED);
         var model = MinecraftClient.getInstance().getBakedModelManager().getModel(powered ? CRYSTAL_ON : CRYSTAL);
         var world = entity.getWorld();
         var pos = entity.getPos();

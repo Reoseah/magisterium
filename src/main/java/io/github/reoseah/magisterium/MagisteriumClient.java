@@ -3,7 +3,7 @@ package io.github.reoseah.magisterium;
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.MagicBarrierBlock;
-import io.github.reoseah.magisterium.block.entity.ArcaneResonatorBlockEntity;
+import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
 import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.client.render.ArcaneResonatorRenderer;
 import io.github.reoseah.magisterium.client.render.IllusoryWallBlockEntityRenderer;
@@ -44,11 +44,11 @@ public class MagisteriumClient implements ClientModInitializer {
         HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);
 
         BlockEntityRendererFactories.register(IllusoryWallBlockEntity.TYPE, IllusoryWallBlockEntityRenderer::new);
-        BlockEntityRendererFactories.register(ArcaneResonatorBlockEntity.TYPE, ArcaneResonatorRenderer::new);
+        BlockEntityRendererFactories.register(ArcaneDetectorBlockEntity.TYPE, ArcaneResonatorRenderer::new);
 
         ModelLoadingPlugin.register(pluginContext -> {
-            pluginContext.addModels(Identifier.of("magisterium:block/arcane_resonator_crystal"));
-            pluginContext.addModels(Identifier.of("magisterium:block/arcane_resonator_crystal_on"));
+            pluginContext.addModels(Identifier.of("magisterium:block/arcane_detector_crystal"));
+            pluginContext.addModels(Identifier.of("magisterium:block/arcane_detector_crystal_on"));
         });
 
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.ENERGY, EnergyParticle.Factory::new);

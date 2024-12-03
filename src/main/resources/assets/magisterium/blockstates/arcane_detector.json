@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "magisterium:block/arcane_detector"
+    },
+    "powered=true": {
+      "model": "magisterium:block/arcane_detector_on"
+    }
+  }
+}

@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "magisterium:block/arcane_resonator_crystal",
-		"particle": "magisterium:block/arcane_resonator_crystal"
+		"0": "magisterium:block/arcane_detector_crystal",
+		"particle": "magisterium:block/arcane_detector_crystal"
 	},
 	"elements": [
 		{

@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "magisterium:arcane_resonator"
+          "name": "magisterium:arcane_detector"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "magisterium:blocks/arcane_resonator"
+  "random_sequence": "magisterium:blocks/arcane_detector"
 }
