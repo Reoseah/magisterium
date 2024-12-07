@@ -5,6 +5,7 @@
   "block.magisterium.illusory_wall": "Illusory Wall",
   "block.magisterium.arcane_lift": "Arcane Lift",
   "block.magisterium.arcane_detector": "Arcane Detector",
+  "block.magisterium.candlestick": "Enchanted Candlestick",
   "item.magisterium.spell_book": "Spell Tome",
   "item.magisterium.spell_book.empty": "Empty",
   "item.magisterium.spell_book.pages": "%s Entries",

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "magisterium:block/candlestick"
+    },
+    "lit=true": {
+      "model": "magisterium:block/candlestick_lit"
+    }
+  }
+}

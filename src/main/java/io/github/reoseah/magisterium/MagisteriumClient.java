@@ -1,6 +1,7 @@
 package io.github.reoseah.magisterium;
 
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
+import io.github.reoseah.magisterium.block.EnchantedCandlestickBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
 import io.github.reoseah.magisterium.block.MagicBarrierBlock;
 import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
@@ -38,7 +39,7 @@ public class MagisteriumClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE, MagicBarrierBlock.INSTANCE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ArcaneTableBlock.INSTANCE, GlyphBlock.INSTANCE, EnchantedCandlestickBlock.INSTANCE);
 
         HandledScreens.register(SpellBookScreenHandler.TYPE, SpellBookScreen::new);
         HandledScreens.register(ArcaneTableScreenHandler.TYPE, ArcaneTableScreen::new);

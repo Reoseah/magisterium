@@ -24,9 +24,7 @@ import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
@@ -50,7 +48,6 @@ import net.minecraft.registry.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -60,7 +57,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +76,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.BLOCK, "magisterium:arcane_lift", ArcaneLiftBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:magic_barrier", MagicBarrierBlock.INSTANCE);
         Registry.register(Registries.BLOCK, "magisterium:arcane_detector", ArcaneDetectorBlock.INSTANCE);
+        Registry.register(Registries.BLOCK, "magisterium:candlestick", EnchantedCandlestickBlock.INSTANCE);
 
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:illusory_wall", IllusoryWallBlockEntity.TYPE);
         Registry.register(Registries.BLOCK_ENTITY_TYPE, "magisterium:magic_barrier", MagicBarrierBlockEntity.TYPE);
@@ -87,6 +84,7 @@ public class Magisterium implements ModInitializer {
 
         Registry.register(Registries.ITEM, "magisterium:arcane_table", ArcaneTableBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:arcane_detector", ArcaneDetectorBlock.ITEM);
+        Registry.register(Registries.ITEM, "magisterium:candlestick", EnchantedCandlestickBlock.ITEM);
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:lesser_arcanum", SpellBookItem.LESSER_ARCANUM);
