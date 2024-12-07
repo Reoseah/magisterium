@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.block;
 
-import io.github.reoseah.magisterium.data.effect.WorldUtil;
+import io.github.reoseah.magisterium.util.WorldUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -20,7 +20,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -31,6 +30,7 @@ import net.minecraft.world.tick.ScheduledTickView;
 public class EnchantedCandlestickBlock extends Block {
     public static final VoxelShape SHAPE = Block.createCuboidShape(6, 0, 6, 10, 16, 10);
     public static final BooleanProperty LIT = Properties.LIT;
+
     private static final TagKey<Block> AFFECTED_BLOCKS = TagKey.of(RegistryKeys.BLOCK, Identifier.of("magisterium:enchanted_candlestick_affectable"));
 
     public static final Block INSTANCE = new EnchantedCandlestickBlock(Settings.create() //

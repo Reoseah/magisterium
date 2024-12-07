@@ -1,0 +1,13 @@
+{
+  "type": "magisterium:craft_item",
+  "duration": 8,
+  "ingredients": [
+    "minecraft:blaze_powder",
+    "minecraft:candle",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "id": "magisterium:candlestick",
+    "count": 1
+  }
+}

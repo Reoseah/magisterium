@@ -40,10 +40,10 @@ public class SpellBookItem extends Item {
     public static final Item ELEMENTS_OF_PYROMANCY = create("elements_of_pyromancy", settings -> {
         var pages = DefaultedList.ofSize(18, ItemStack.EMPTY);
         pages.set(0, PageItem.ELEMENTS_OF_PYROMANCY.getDefaultStack());
-        pages.set(1, PageItem.AWAKEN_THE_FLAME.getDefaultStack());
-        pages.set(2, PageItem.QUENCH_THE_FLAME.getDefaultStack());
-        pages.set(3, PageItem.GLYPHIC_IGNITION.getDefaultStack());
-        pages.set(4, PageItem.CONFLAGRATE.getDefaultStack());
+        pages.set(1, PageItem.ENCHANTED_CANDLESTICK.getDefaultStack());
+//        pages.set(2, PageItem.QUENCH_THE_FLAME.getDefaultStack());
+        pages.set(2, PageItem.GLYPHIC_IGNITION.getDefaultStack());
+        pages.set(3, PageItem.CONFLAGRATE.getDefaultStack());
 
         return new SpellBookItem(settings.rarity(Rarity.UNCOMMON).component(CONTENTS, pages));
     });

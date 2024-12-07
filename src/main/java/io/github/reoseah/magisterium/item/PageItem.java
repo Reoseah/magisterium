@@ -19,6 +19,7 @@ public class PageItem extends Item {
             .build();
 
     // TODO: on 1.21.4, have just single item and change texture through the new item model overrides?
+    public static final Item ENCHANTED_CANDLESTICK = createSpellPage("enchant_candlestick");
     public static final Item AWAKEN_THE_FLAME = createSpellPage("awaken_the_flame");
     public static final Item QUENCH_THE_FLAME = createSpellPage("quench_the_flame");
     public static final Item GLYPHIC_IGNITION = createSpellPage("glyphic_ignition");

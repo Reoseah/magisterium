@@ -2,10 +2,17 @@ package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumClient;
 import io.github.reoseah.magisterium.data.BookLoader;
-import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.BookmarkItem;
 import io.github.reoseah.magisterium.item.PageItem;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.magisterium.page.BookLayout;
+import io.github.reoseah.magisterium.magisterium.page.BookProperties;
+import io.github.reoseah.magisterium.magisterium.page.Bookmark;
+import io.github.reoseah.magisterium.magisterium.page.SlotProperties;
+import io.github.reoseah.magisterium.magisterium.page.element.BookmarkPage;
+import io.github.reoseah.magisterium.magisterium.page.element.Heading;
+import io.github.reoseah.magisterium.magisterium.page.element.Paragraph;
+import io.github.reoseah.magisterium.magisterium.page.element.Spell;
 import io.github.reoseah.magisterium.network.c2s.SpellBookScreenStatePayload;
 import io.github.reoseah.magisterium.network.c2s.UseBookmarkPayload;
 import io.github.reoseah.magisterium.util.RomanNumbers;

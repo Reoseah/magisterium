@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.network.c2s;
 
-import io.github.reoseah.magisterium.data.element.SlotProperties;
+import io.github.reoseah.magisterium.magisterium.page.SlotProperties;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryByteBuf;

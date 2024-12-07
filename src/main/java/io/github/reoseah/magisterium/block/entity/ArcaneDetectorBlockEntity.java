@@ -1,8 +1,6 @@
 package io.github.reoseah.magisterium.block.entity;
 
 import io.github.reoseah.magisterium.block.ArcaneDetectorBlock;
-import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
-import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

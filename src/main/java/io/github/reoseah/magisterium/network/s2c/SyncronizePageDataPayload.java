@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.network.s2c;
 
-import io.github.reoseah.magisterium.data.SpellPage;
+import io.github.reoseah.magisterium.magisterium.page.SpellPage;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;

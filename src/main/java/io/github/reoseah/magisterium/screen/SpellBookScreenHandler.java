@@ -2,10 +2,10 @@ package io.github.reoseah.magisterium.screen;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
-import io.github.reoseah.magisterium.data.effect.EmptySpellEffect;
-import io.github.reoseah.magisterium.data.effect.SpellEffect;
-import io.github.reoseah.magisterium.data.element.SlotProperties;
 import io.github.reoseah.magisterium.item.SpellBookItem;
+import io.github.reoseah.magisterium.magisterium.effect.EmptySpellEffect;
+import io.github.reoseah.magisterium.magisterium.effect.SpellEffect;
+import io.github.reoseah.magisterium.magisterium.page.SlotProperties;
 import io.github.reoseah.magisterium.network.s2c.FinishSpellPayload;
 import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -43,7 +43,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     private @Nullable SpellBookScreenHandler.SpellReadingState state;
 
     public final Property currentPage;
-    private final Inventory inventory = new SpellBookInventory(this);
+    private final SpellBookInventory inventory = new SpellBookInventory(this);
     // this is just to sync book data to the client by using a hidden slot
     // it is not yet available when the screen is being constructed on the client
     // which prevents some fields in its class from being final and initialized in constructor
@@ -133,7 +133,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             var validIndexes = new IntArraySet();
             int validSlotsCurrentCount = 0;
             for (int i = 0; i < 16; i++) {
-                var config = ((SpellBookSlot) this.getSlot(i)).config;
+                var config = ((SpellBookSlot) this.getSlot(i)).properties;
                 if (config == null || config.output) {
                     continue;
                 }

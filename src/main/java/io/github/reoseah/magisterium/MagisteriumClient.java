@@ -3,13 +3,12 @@ package io.github.reoseah.magisterium;
 import io.github.reoseah.magisterium.block.ArcaneTableBlock;
 import io.github.reoseah.magisterium.block.EnchantedCandlestickBlock;
 import io.github.reoseah.magisterium.block.GlyphBlock;
-import io.github.reoseah.magisterium.block.MagicBarrierBlock;
 import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
 import io.github.reoseah.magisterium.block.entity.IllusoryWallBlockEntity;
 import io.github.reoseah.magisterium.client.render.ArcaneResonatorRenderer;
 import io.github.reoseah.magisterium.client.render.IllusoryWallBlockEntityRenderer;
 import io.github.reoseah.magisterium.data.BookLoader;
-import io.github.reoseah.magisterium.data.SpellPage;
+import io.github.reoseah.magisterium.magisterium.page.SpellPage;
 import io.github.reoseah.magisterium.network.s2c.FinishSpellPayload;
 import io.github.reoseah.magisterium.network.s2c.SpellParticlePayload;
 import io.github.reoseah.magisterium.network.s2c.SyncronizeBookDataPayload;
@@ -63,10 +62,7 @@ public class MagisteriumClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_SPARK, GlyphParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(MagisteriumParticles.BARRIER_ENERGY, GlyphParticle.Factory::new);
 
-        ClientPlayNetworking.registerGlobalReceiver(SyncronizeBookDataPayload.ID, (payload, context) -> {
-            var books = payload.books();
-            BookLoader.setClientSide(books);
-        });
+        ClientPlayNetworking.registerGlobalReceiver(SyncronizeBookDataPayload.ID, (payload, context) -> BookLoader.setClientSide(payload.books()));
         ClientPlayNetworking.registerGlobalReceiver(SyncronizePageDataPayload.ID, (payload, context) -> pages = payload.pages());
         ClientPlayNetworking.registerGlobalReceiver(SpellParticlePayload.ID, MagisteriumClient::spawnSpellParticles);
         ClientPlayNetworking.registerGlobalReceiver(FinishSpellPayload.ID, MagisteriumClient::finishSpell);

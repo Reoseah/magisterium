@@ -1,5 +1,6 @@
 package io.github.reoseah.magisterium.data;
 
+import io.github.reoseah.magisterium.magisterium.page.SpellPage;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.resource.JsonDataLoader;

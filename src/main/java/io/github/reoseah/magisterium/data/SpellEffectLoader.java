@@ -1,6 +1,6 @@
 package io.github.reoseah.magisterium.data;
 
-import io.github.reoseah.magisterium.data.effect.SpellEffect;
+import io.github.reoseah.magisterium.magisterium.effect.SpellEffect;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.resource.JsonDataLoader;

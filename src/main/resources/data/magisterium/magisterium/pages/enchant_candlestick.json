@@ -1,0 +1,89 @@
+{
+  "elements": [
+    {
+      "type": "magisterium:fold",
+      "left": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.heading",
+            "font": "magisterium:small_caps"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.components"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.description.0"
+          }
+        },
+        {
+          "type": "magisterium:paragraph",
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.description.1"
+          }
+        }
+      ],
+      "right": [
+        {
+          "type": "magisterium:heading",
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.heading",
+            "font": "magisterium:small_caps"
+          }
+        },
+        {
+          "type": "magisterium:inventory",
+          "slots": [
+            {
+              "x": 27,
+              "y": 0,
+              "ingredient": "minecraft:blaze_powder",
+              "background": "magisterium:item/placeholder/blaze_powder"
+            },
+            {
+              "x": 27,
+              "y": 18,
+              "ingredient": "minecraft:candle",
+              "background": "magisterium:item/placeholder/candle"
+            },
+            {
+              "x": 27,
+              "y": 36,
+              "ingredient": "minecraft:iron_ingot",
+              "background": "magisterium:item/placeholder/ingot"
+            },
+            {
+              "x": 70,
+              "y": 18,
+              "output": true
+            }
+          ],
+          "background": {
+            "texture": "magisterium:textures/gui/spell_book.png",
+            "x": 50,
+            "y": 20,
+            "width": 8,
+            "height": 10,
+            "u": 202,
+            "v": 242
+          }
+        },
+        {
+          "type": "magisterium:spell",
+          "effect": "magisterium:enchant_candlestick",
+          "duration": 8,
+          "text": {
+            "translate": "magisterium.page.magisterium.enchant_candlestick.spell",
+            "font": "magisterium:small_caps"
+          }
+        }
+      ]
+    }
+  ]
+}

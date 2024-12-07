@@ -8,9 +8,9 @@ import io.github.reoseah.magisterium.block.entity.MagicBarrierBlockEntity;
 import io.github.reoseah.magisterium.data.BookLoader;
 import io.github.reoseah.magisterium.data.SpellEffectLoader;
 import io.github.reoseah.magisterium.data.SpellPageLoader;
-import io.github.reoseah.magisterium.data.effect.*;
-import io.github.reoseah.magisterium.data.element.*;
 import io.github.reoseah.magisterium.item.*;
+import io.github.reoseah.magisterium.magisterium.effect.*;
+import io.github.reoseah.magisterium.magisterium.page.element.*;
 import io.github.reoseah.magisterium.network.c2s.SpellBookScreenStatePayload;
 import io.github.reoseah.magisterium.network.c2s.StartSpellPayload;
 import io.github.reoseah.magisterium.network.c2s.StopSpellPayload;
@@ -22,6 +22,7 @@ import io.github.reoseah.magisterium.network.s2c.SyncronizePageDataPayload;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
 import io.github.reoseah.magisterium.screen.ArcaneTableScreenHandler;
 import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
+import io.github.reoseah.magisterium.util.WorldUtil;
 import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -88,6 +89,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(Registries.ITEM, "magisterium:spell_book", SpellBookItem.SPELL_BOOK);
         Registry.register(Registries.ITEM, "magisterium:elements_of_pyromancy", SpellBookItem.ELEMENTS_OF_PYROMANCY);
         Registry.register(Registries.ITEM, "magisterium:lesser_arcanum", SpellBookItem.LESSER_ARCANUM);
+        Registry.register(Registries.ITEM, "magisterium:enchanted_candlestick_page", PageItem.ENCHANTED_CANDLESTICK);
         Registry.register(Registries.ITEM, "magisterium:awaken_the_flame_page", PageItem.AWAKEN_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:quench_the_flame_page", PageItem.QUENCH_THE_FLAME);
         Registry.register(Registries.ITEM, "magisterium:glyphic_ignition_page", PageItem.GLYPHIC_IGNITION);
@@ -115,6 +117,7 @@ public class Magisterium implements ModInitializer {
                 .entries((displayContext, entries) -> {
                     entries.add(ArcaneTableBlock.INSTANCE);
                     entries.add(ArcaneDetectorBlock.INSTANCE);
+                    entries.add(EnchantedCandlestickBlock.INSTANCE);
                     entries.add(SpellBookItem.SPELL_BOOK);
 
                     var filledBook = new ItemStack(SpellBookItem.SPELL_BOOK);
@@ -201,6 +204,7 @@ public class Magisterium implements ModInitializer {
         Registry.register(SpellEffect.REGISTRY, "magisterium:dispel_magic", DispelMagicEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:magic_barrier", MagicBarrierEffect.CODEC);
         Registry.register(SpellEffect.REGISTRY, "magisterium:command", ExecuteCommandEffect.CODEC);
+        Registry.register(SpellEffect.REGISTRY, "magisterium:craft_item", CraftItemEffect.CODEC);
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellPageLoader.ID, SpellPageLoader::new);
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SpellEffectLoader.ID, SpellEffectLoader::new);

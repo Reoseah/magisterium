@@ -1,8 +1,8 @@
 package io.github.reoseah.magisterium.block;
 
 import io.github.reoseah.magisterium.MagisteriumSounds;
-import io.github.reoseah.magisterium.data.effect.SpellWorldChangeTracker;
 import io.github.reoseah.magisterium.particle.MagisteriumParticles;
+import io.github.reoseah.magisterium.util.SpellWorldChangeTracker;
 import net.minecraft.block.*;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.Entity;

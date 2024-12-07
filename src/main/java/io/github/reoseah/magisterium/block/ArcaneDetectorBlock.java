@@ -2,7 +2,6 @@ package io.github.reoseah.magisterium.block;
 
 import com.mojang.serialization.MapCodec;
 import io.github.reoseah.magisterium.block.entity.ArcaneDetectorBlockEntity;
-import io.github.reoseah.magisterium.screen.SpellBookScreenHandler;
 import io.github.reoseah.magisterium.world.state.ActiveSpellTracker;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -30,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class ArcaneDetectorBlock extends BlockWithEntity implements SpellActivityListener {
+public class ArcaneDetectorBlock extends BlockWithEntity implements ActiveSpellTracker.ActiveSpellListener {
     public static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final MapCodec<ArcaneDetectorBlock> CODEC = createCodec(ArcaneDetectorBlock::new);

@@ -2,7 +2,6 @@ package io.github.reoseah.magisterium.world.state;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import io.github.reoseah.magisterium.block.SpellActivityListener;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
@@ -65,7 +64,7 @@ public class ActiveSpellTracker extends PersistentState {
 
     public void onSpellStart(ServerPlayerEntity player, BlockPos origin) {
         for (var pos : BlockPos.iterate(origin.add(16, 16, 16), origin.add(-16, -16, -16))) {
-            if (this.world.getBlockState(pos).getBlock() instanceof SpellActivityListener listener) {
+            if (this.world.getBlockState(pos).getBlock() instanceof ActiveSpellListener listener) {
                 if (listener.onSpellStart(this.world, pos, player.getUuid())) {
                     this.spellEndListeners.put(player.getUuid(), pos.toImmutable());
                 }
@@ -75,7 +74,7 @@ public class ActiveSpellTracker extends PersistentState {
 
     public void onSpellEnd(ServerPlayerEntity player) {
         this.spellEndListeners.get(player.getUuid()).removeIf(listener -> {
-            if (this.world.getBlockState(listener).getBlock() instanceof SpellActivityListener spellListener) {
+            if (this.world.getBlockState(listener).getBlock() instanceof ActiveSpellListener spellListener) {
                 return spellListener.onSpellEnd(this.world, listener, player.getUuid());
             }
             return false;
@@ -87,11 +86,17 @@ public class ActiveSpellTracker extends PersistentState {
         if (this.firstTick) {
             this.firstTick = false;
             for (var entry : this.spellEndListeners.entries()) {
-                if (this.world.getBlockState(entry.getValue()).getBlock() instanceof SpellActivityListener listener) {
+                if (this.world.getBlockState(entry.getValue()).getBlock() instanceof ActiveSpellListener listener) {
                     listener.onSpellEnd(this.world, entry.getValue(), entry.getKey());
                 }
             }
             this.spellEndListeners.clear();
         }
+    }
+
+    public interface ActiveSpellListener {
+        boolean onSpellStart(ServerWorld world, BlockPos pos, UUID player);
+
+        boolean onSpellEnd(ServerWorld world, BlockPos pos, UUID player);
     }
 }
